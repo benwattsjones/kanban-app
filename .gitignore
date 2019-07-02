@@ -1,3 +1,4 @@
 *.o
-src/recources.c
+src/resources.c
+kanban-app
 

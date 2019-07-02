@@ -1,5 +1,5 @@
-#ifndef __EXAMPLEAPP_H
-#define __EXAMPLEAPP_H
+#ifndef KANBAN_APP_H
+#define KANBAN_APP_H
 
 #include <gtk/gtk.h>
 
@@ -15,7 +15,7 @@
    Note example_app_get_type() function is defined by G_DEFINE_TYPE in exampleapp.c.
    NOTE: macros all cast to pointer of types not types themselves??
 */
-#define EXAMPLE_APP_TYPE (example_app_get_type ())
+#define KANBAN_APP_TYPE (kanban_app_get_type ())
 /* This convenience macro does the following:
     - defines ExampleApp type as a typedef of struct _ExampleApp. This struct
       must be defined in the .c file before G_DEFINE_TYPE is used.
@@ -28,10 +28,10 @@
     - name of the module (in ALL_CAPS)
     - name of the parent type (in CamelCase)
 */
-G_DECLARE_FINAL_TYPE (ExampleApp, example_app, EXAMPLE, APP, GtkApplication)
+G_DECLARE_FINAL_TYPE (KanbanApp, kanban_app, KANBAN, APP, GtkApplication)
 
 
-ExampleApp     *example_app_new         (void);
+KanbanApp     *kanban_app_new         (void);
 
 
-#endif /* __EXAMPLEAPP_H */
+#endif /* KANBAN_APP_H */

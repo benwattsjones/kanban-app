@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "exampleapp.h"
+#include "kanban-app.h"
 
 /* "Building Applications"
    A GTK application consists of a number of files:
@@ -71,5 +71,5 @@ main (int argc, char *argv[])
   /* example_app_new() is fulilling the roles of both gtk_application_new()
      and g_signal_connect() for "activate" signal. This comes from exampleapp.h,
      and makes an ExampleApp object, inheriting GtkApplication. */
-  return g_application_run (G_APPLICATION (example_app_new ()), argc, argv);
+  return g_application_run (G_APPLICATION (kanban_app_new ()), argc, argv);
 }
