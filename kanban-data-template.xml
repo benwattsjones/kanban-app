@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- NOTES:
+  * Use elements not attributes for data as more powerful, flexible and
+    easy to work with. Attributes used for non-user-determined metadata
+    (ID strings).
+  * If XML is to be used, will want to write a DTD (document type definition),
+    to standardize the structure.
+  * XML data files may grow very large (especially with large archive of
+    'done' cards). May wish to switch to less verbose format, or have
+    combination of XML with equivalent binary format for machine.
+-->
+
+<kanbanboard>
+
+  <column id="unique-immutable-col-id-string">
+    <heading>Column name (e.g. Buy Potatoes)</heading>
+
+    <card id="Unique-immutable-card-id-string">
+      <heading>Title of card task (e.g. Buy Potatoes)</heading>
+      <owner>John Doe</owner>
+      <history>
+        <created>
+          <orig-column-id>orig-col-id-string</orig-column-id>
+          <date>
+            <year>2018</year>
+            <month>08</month>
+            <day>20</day>
+          </date>
+        </created>
+        <moved>
+          <old-column-id>old-col-id-string</old-column-id>
+          <new-column-id>new-col-id-string</new-column-id>
+          <date>
+            <year>2018</year>
+            <month>08</month>
+            <day>28</day>
+          </date>
+        </moved>
+        <finished>
+          <date>
+            <year>2018</year>
+            <month>09</month>
+            <day>03</day>
+          </date>
+        </finished>
+      </history>
+      <content>Details of task. Markdown format?</content>
+    </card>
+
+  </column>
+
+</kanbanboard>
+
