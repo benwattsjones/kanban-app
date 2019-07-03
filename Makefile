@@ -4,7 +4,7 @@ CFLAGS = $(shell $(PKGCONFIG) --cflags gtk+-3.0) -fexceptions -fpie -Wl,-pie -fs
 LIBS = $(shell $(PKGCONFIG) --libs gtk+-3.0)
 GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources gio-2.0)
 
-SRC = src/kanban-app.c src/kanban-app-win.c src/main.c
+SRC = src/kanban-app.c src/kanban-app-win.c src/main.c src/command-line-handler.c
 BUILT_SRC = src/resources.c
 
 OBJS = $(notdir $(BUILT_SRC:.c=.o) $(SRC:.c=.o))

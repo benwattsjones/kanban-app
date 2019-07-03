@@ -66,11 +66,23 @@ kanban_app_open (GApplication  *app,
   gtk_window_present (GTK_WINDOW (win));
 }
 
-static void
-kanban_app_class_init (KanbanAppClass *class)
+gint
+kanban_app_handle_local_options (GApplication *app,
+                                 GVariantDict *options)
 {
-  G_APPLICATION_CLASS (class)->activate = kanban_app_activate;
-  G_APPLICATION_CLASS (class)->open = kanban_app_open;
+  if (g_variant_dict_contains(options, "version"))
+    g_print("option found\n");
+  else
+    g_print("option not found\n");
+  return -1;
+}
+
+static void
+kanban_app_class_init (KanbanAppClass *klass)
+{
+  G_APPLICATION_CLASS (klass)->activate = kanban_app_activate;
+  G_APPLICATION_CLASS (klass)->open = kanban_app_open;
+  G_APPLICATION_CLASS (klass)->handle_local_options = kanban_app_handle_local_options;
 }
 
 KanbanApp *

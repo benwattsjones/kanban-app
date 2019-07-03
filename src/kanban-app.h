@@ -23,7 +23,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanApp, kanban_app, KANBAN, APP, GtkApplication)
 
-KanbanApp     *kanban_app_new         (void);
+KanbanApp *kanban_app_new (void);
 
 G_END_DECLS
 

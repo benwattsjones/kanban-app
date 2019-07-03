@@ -1,4 +1,4 @@
-/* src/main.c
+/* src/command-line-handler.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,16 +12,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#ifndef COMMAND_LINE_HANDLER_H
+#define COMMAND_LINE_HANDLER_H
+
 #include <gtk/gtk.h>
 
-#include "command-line-handler.h"
-#include "kanban-app.h"
+G_BEGIN_DECLS
 
+void set_recognised_cmd_options (int argc, char *argv[]);
 
-int
-main (int argc, char *argv[])
-{
-  set_recognised_cmd_options(argc, argv);
-  return g_application_run (G_APPLICATION (kanban_app_new ()), argc, argv);
-}
+G_END_DECLS
+
+#endif /* COMMAND_LINE_HANDLER_H */
 
