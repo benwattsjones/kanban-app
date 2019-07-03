@@ -15,23 +15,39 @@
 #include <gtk/gtk.h>
 
 #include "kanban-app.h"
+
 #include "kanban-app-win.h"
+
+
+#define NO_ARGUEMENT_PLACEHOLDER NULL
+#define ARG_DATA_IS_NULL NULL
+#define SUCCESS_KANBAN_PROGRAM_CODE 0
+#define CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE -1
+
 
 struct _KanbanApp
 {
   GtkApplication parent_instance;
 };
 
+static GOptionEntry entries[] =
+{
+  { "version", 'V', G_OPTION_FLAG_NONE,
+    G_OPTION_ARG_NONE, ARG_DATA_IS_NULL,
+    "Display program version and exit", NO_ARGUEMENT_PLACEHOLDER },
+  { NULL }
+};
+
+
 G_DEFINE_TYPE(KanbanApp, kanban_app, GTK_TYPE_APPLICATION)
 
-/* Registered with G_DEFINE_TYPE (specifically with _get_type call). 
-   Called by g_object_new(). Used to initialize ojbect before construction
-   properties are set.
-*/
+
 static void
 kanban_app_init (KanbanApp *app)
 {
-  (void) app;
+  g_application_set_option_context_parameter_string (G_APPLICATION (app), 
+    "- description of program for help");
+  g_application_add_main_option_entries (G_APPLICATION (app), entries);
 }
 
 static void
@@ -66,14 +82,20 @@ kanban_app_open (GApplication  *app,
   gtk_window_present (GTK_WINDOW (win));
 }
 
-gint
+static gint
 kanban_app_handle_local_options (GApplication *app,
                                  GVariantDict *options)
 {
-  if (g_variant_dict_contains(options, "version"))
-    g_print("option found\n");
+  (void) app;
+  if (g_variant_dict_contains (options, "version"))
+    {
+      g_print("Kanban App version information\n");
+      return SUCCESS_KANBAN_PROGRAM_CODE;
+    }
   else
-    g_print("option not found\n");
+    {
+      return CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE;
+    }
   return -1;
 }
 

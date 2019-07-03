@@ -14,14 +14,12 @@
 
 #include <gtk/gtk.h>
 
-#include "command-line-handler.h"
 #include "kanban-app.h"
 
 
 int
 main (int argc, char *argv[])
 {
-  set_recognised_cmd_options(argc, argv);
   return g_application_run (G_APPLICATION (kanban_app_new ()), argc, argv);
 }
 
