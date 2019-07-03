@@ -11,7 +11,7 @@ G_DECLARE_FINAL_TYPE (KanbanAppWindow, kanban_app_window, KANBAN, APP_WINDOW, Gt
 
 KanbanAppWindow        *kanban_app_window_new          (KanbanApp *app);
 void                    kanban_app_window_open         (KanbanAppWindow *win,
-                                                         GFile            *file);
+                                                        GFile           *file);
 
 
 #endif /* KANBAN_APP_WIN_H */
