@@ -1,4 +1,6 @@
 *.o
 src/resources.c
 kanban-app
+*.swp
+/notes
 
