@@ -1,6 +1,6 @@
 CC ?= gcc
 PKGCONFIG = $(shell which pkg-config)
-CFLAGS = $(shell $(PKGCONFIG) --cflags gtk+-3.0)
+CFLAGS = $(shell $(PKGCONFIG) --cflags gtk+-3.0) -fexceptions -fpie -Wl,-pie -fstack-clash-protection -fstack-protector-strong -g -O3 -Wall -Wextra -Wpedantic -std=gnu11
 LIBS = $(shell $(PKGCONFIG) --libs gtk+-3.0)
 GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources gio-2.0)
 

@@ -22,7 +22,7 @@ struct _KanbanAppWindow
   GtkApplicationWindow parent_instance;
 };
 
-G_DEFINE_TYPE(KanbanAppWindow, kanban_app_window, GTK_TYPE_APPLICATION_WINDOW);
+G_DEFINE_TYPE(KanbanAppWindow, kanban_app_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
 kanban_app_window_init (KanbanAppWindow *win)
@@ -47,4 +47,6 @@ void
 kanban_app_window_open (KanbanAppWindow *win,
                         GFile           *file)
 {
+    (void) win;
+    (void) file;
 }

@@ -22,7 +22,7 @@ struct _KanbanApp
   GtkApplication parent_instance;
 };
 
-G_DEFINE_TYPE(KanbanApp, kanban_app, GTK_TYPE_APPLICATION);
+G_DEFINE_TYPE(KanbanApp, kanban_app, GTK_TYPE_APPLICATION)
 
 /* Registered with G_DEFINE_TYPE (specifically with _get_type call). 
    Called by g_object_new(). Used to initialize ojbect before construction
@@ -31,6 +31,7 @@ G_DEFINE_TYPE(KanbanApp, kanban_app, GTK_TYPE_APPLICATION);
 static void
 kanban_app_init (KanbanApp *app)
 {
+  (void) app;
 }
 
 static void
@@ -48,6 +49,7 @@ kanban_app_open (GApplication  *app,
                   gint           n_files,
                   const gchar   *hint)
 {
+  (void) hint;
   GList *windows;
   KanbanAppWindow *win;
   int i;
