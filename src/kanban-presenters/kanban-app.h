@@ -1,4 +1,4 @@
-/* src/kanban-app.h
+/* src/kanban-presenters/kanban-app.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -23,7 +23,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanApp, kanban_app, KANBAN, APP, GtkApplication)
 
-KanbanApp *kanban_app_new (void);
+int initialize_kanban_presenter (int argc, char *argv[]);
 
 G_END_DECLS
 

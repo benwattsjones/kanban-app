@@ -1,4 +1,4 @@
-/* src/kanban-app.c
+/* src/kanban-presenters/kanban-app.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -16,7 +16,7 @@
 
 #include "kanban-app.h"
 
-#include "kanban-app-win.h"
+#include "../kanban-views/kanban-app-win.h"
 
 
 #define NO_ARGUEMENT_PLACEHOLDER NULL
@@ -53,10 +53,7 @@ kanban_app_init (KanbanApp *app)
 static void
 kanban_app_activate (GApplication *app)
 {
-  KanbanAppWindow *win;
-
-  win = kanban_app_window_new (KANBAN_APP (app));
-  gtk_window_present (GTK_WINDOW (win));
+  initialize_kanban_view (KANBAN_APP (app));
 }
 
 static void
@@ -66,20 +63,9 @@ kanban_app_open (GApplication  *app,
                   const gchar   *hint)
 {
   (void) hint;
-  GList *windows;
-  KanbanAppWindow *win;
-  int i;
-
-  windows = gtk_application_get_windows (GTK_APPLICATION (app));
-  if (windows)
-    win = KANBAN_APP_WINDOW (windows->data);
-  else
-    win = kanban_app_window_new (KANBAN_APP (app));
-
-  for (i = 0; i < n_files; i++)
-    kanban_app_window_open (win, files[i]);
-
-  gtk_window_present (GTK_WINDOW (win));
+  (void) n_files;
+  (void) files;
+  (void) app;
 }
 
 static gint
@@ -107,12 +93,15 @@ kanban_app_class_init (KanbanAppClass *klass)
   G_APPLICATION_CLASS (klass)->handle_local_options = kanban_app_handle_local_options;
 }
 
-KanbanApp *
-kanban_app_new (void)
+int
+initialize_kanban_presenter (int argc, char *argv[])
 {
-  return g_object_new (KANBAN_APP_TYPE,
-                       "application-id", "com.benwattsjones.kanban",
-                       "flags", G_APPLICATION_HANDLES_OPEN,
-                       NULL);
+  KanbanApp *app = g_object_new (KANBAN_APP_TYPE,
+                                 "application-id", "com.benwattsjones.kanban",
+                                 "flags", G_APPLICATION_HANDLES_OPEN,
+                                 NULL);
+  int status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref(app);
+  return status;
 }
 
