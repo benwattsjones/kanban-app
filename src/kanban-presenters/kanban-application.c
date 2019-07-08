@@ -1,4 +1,4 @@
-/* src/kanban-presenters/kanban-app.c
+/* src/kanban-presenters/kanban-application.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,9 +14,9 @@
 
 #include <gtk/gtk.h>
 
-#include "kanban-app.h"
+#include "kanban-application.h"
 
-#include "../kanban-views/kanban-app-win.h"
+#include "../kanban-views/kanban-window.h"
 
 
 #define NO_ARGUEMENT_PLACEHOLDER NULL
@@ -25,7 +25,7 @@
 #define CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE -1
 
 
-struct _KanbanApp
+struct _KanbanApplication
 {
   GtkApplication parent_instance;
 };
@@ -39,11 +39,11 @@ static GOptionEntry entries[] =
 };
 
 
-G_DEFINE_TYPE(KanbanApp, kanban_app, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE(KanbanApplication, kanban_application, GTK_TYPE_APPLICATION)
 
 
 static void
-kanban_app_init (KanbanApp *app)
+kanban_application_init (KanbanApplication *app)
 {
   g_application_set_option_context_parameter_string (G_APPLICATION (app), 
     "- description of program for help");
@@ -51,16 +51,16 @@ kanban_app_init (KanbanApp *app)
 }
 
 static void
-kanban_app_activate (GApplication *app)
+kanban_application_activate (GApplication *app)
 {
-  initialize_kanban_view (KANBAN_APP (app));
+  initialize_kanban_view (KANBAN_APPLICATION (app));
 }
 
 static void
-kanban_app_open (GApplication  *app,
-                  GFile        **files,
-                  gint           n_files,
-                  const gchar   *hint)
+kanban_application_open (GApplication  *app,
+                         GFile        **files,
+                         gint           n_files,
+                         const gchar   *hint)
 {
   (void) hint;
   (void) n_files;
@@ -69,8 +69,8 @@ kanban_app_open (GApplication  *app,
 }
 
 static gint
-kanban_app_handle_local_options (GApplication *app,
-                                 GVariantDict *options)
+kanban_application_handle_local_options (GApplication *app,
+                                         GVariantDict *options)
 {
   (void) app;
   if (g_variant_dict_contains (options, "version"))
@@ -78,28 +78,25 @@ kanban_app_handle_local_options (GApplication *app,
       g_print("Kanban App version information\n");
       return SUCCESS_KANBAN_PROGRAM_CODE;
     }
-  else
-    {
-      return CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE;
-    }
-  return -1;
+  return CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE;
 }
 
 static void
-kanban_app_class_init (KanbanAppClass *klass)
+kanban_application_class_init (KanbanApplicationClass *klass)
 {
-  G_APPLICATION_CLASS (klass)->activate = kanban_app_activate;
-  G_APPLICATION_CLASS (klass)->open = kanban_app_open;
-  G_APPLICATION_CLASS (klass)->handle_local_options = kanban_app_handle_local_options;
+  GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
+  application_class->activate = kanban_application_activate;
+  application_class->open = kanban_application_open;
+  application_class->handle_local_options = kanban_application_handle_local_options;
 }
 
 int
 initialize_kanban_presenter (int argc, char *argv[])
 {
-  KanbanApp *app = g_object_new (KANBAN_APP_TYPE,
-                                 "application-id", "com.benwattsjones.kanban",
-                                 "flags", G_APPLICATION_HANDLES_OPEN,
-                                 NULL);
+  KanbanApplication *app = g_object_new (KANBAN_APPLICATION_TYPE,
+                                         "application-id", "com.benwattsjones.kanban",
+                                         "flags", G_APPLICATION_HANDLES_OPEN,
+                                         NULL);
   int status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref(app);
   return status;

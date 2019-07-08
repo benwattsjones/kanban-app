@@ -4,8 +4,8 @@ CFLAGS = $(shell $(PKGCONFIG) --cflags gtk+-3.0) -fexceptions -fpie -Wl,-pie -fs
 LIBS = $(shell $(PKGCONFIG) --libs gtk+-3.0)
 GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources gio-2.0)
 
-SRC = src/kanban-presenters/kanban-app.c \
-	  src/kanban-views/kanban-app-win.c \
+SRC = src/kanban-presenters/kanban-application.c \
+	  src/kanban-views/kanban-window.c \
 	  src/main.c
 BUILT_SRC = src/resources.c
 

@@ -1,4 +1,4 @@
-/* src/kanban-views/kanban-app-win.c
+/* src/kanban-views/kanban-window.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,44 +14,44 @@
 
 #include <gtk/gtk.h>
 
-#include "kanban-app-win.h"
+#include "kanban-window.h"
 
-#include "../kanban-presenters/kanban-app.h"
+#include "../kanban-presenters/kanban-application.h"
 
-struct _KanbanAppWindow
+struct _KanbanWindow
 {
   GtkApplicationWindow parent_instance;
 };
 
-G_DEFINE_TYPE(KanbanAppWindow, kanban_app_window, GTK_TYPE_APPLICATION_WINDOW)
+G_DEFINE_TYPE(KanbanWindow, kanban_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
-kanban_app_window_init (KanbanAppWindow *win)
+kanban_window_init (KanbanWindow *win)
 {
   gtk_widget_init_template (GTK_WIDGET (win));
 }
 
 void
-kanban_app_window_open (KanbanAppWindow *win,
-                        GFile           *file)
+kanban_window_open (KanbanWindow *win,
+                    GFile        *file)
 {
   (void) win;
   (void) file;
 }
 
 static void
-kanban_app_window_class_init (KanbanAppWindowClass *class)
+kanban_window_class_init (KanbanWindowClass *class)
 {
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/com/benwattsjones/kanban/window.ui");
 }
 
 void
-initialize_kanban_view (KanbanApp *app)
+initialize_kanban_view (KanbanApplication *app)
 {
-  KanbanAppWindow *win = g_object_new (KANBAN_APP_WINDOW_TYPE, "application",
-                                       app, NULL);
+  KanbanWindow *win = g_object_new (KANBAN_WINDOW_TYPE, 
+                                    "application", app, 
+                                    NULL);
   gtk_window_present (GTK_WINDOW (win));
 }
-
 

@@ -14,7 +14,7 @@
 
 #include <gtk/gtk.h>
 
-#include "kanban-presenters/kanban-app.h"
+#include "kanban-presenters/kanban-application.h"
 
 
 int
