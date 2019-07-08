@@ -1,4 +1,4 @@
-/* src/kanban-views/kanban-window.h
+/* src/kanban-presenters/presenter-view-interface.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,20 +12,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_WINDOW_H
-#define KANBAN_WINDOW_H
+#ifndef PRESENTER_VIEW_INTERFACE_H
+#define PRESENTER_VIEW_INTERFACE_H
 
 #include <gtk/gtk.h>
 
+#include "kanban-application.h"
+
 G_BEGIN_DECLS
 
-#define KANBAN_WINDOW_TYPE (kanban_window_get_type ())
+/* Function must be implemented by the view as the entry point. */
+void initialize_kanban_view (KanbanApplication *app);
 
-G_DECLARE_FINAL_TYPE (KanbanWindow, kanban_window, KANBAN, WINDOW, GtkApplicationWindow)
-
-void kanban_app_window_open (KanbanWindow *win,
-                             GFile *file);
 G_END_DECLS
 
-#endif /* KANBAN_WINDOW_H */
+#endif /* PRESENTER_VIEW_INTERFACE_H */
 

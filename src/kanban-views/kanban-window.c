@@ -16,7 +16,7 @@
 
 #include "kanban-window.h"
 
-#include "../kanban-presenters/kanban-application.h"
+#include "../kanban-presenters/presenter-view-interface.h"
 
 struct _KanbanWindow
 {

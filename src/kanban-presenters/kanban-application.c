@@ -16,7 +16,7 @@
 
 #include "kanban-application.h"
 
-#include "../kanban-views/kanban-window.h"
+#include "presenter-view-interface.h"
 
 
 #define NO_ARGUEMENT_PLACEHOLDER NULL
