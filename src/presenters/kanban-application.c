@@ -19,11 +19,14 @@
 #include "presenter-view-interface.h"
 
 
-#define NO_ARGUEMENT_PLACEHOLDER NULL
-#define ARG_DATA_IS_NULL NULL
-#define SUCCESS_KANBAN_PROGRAM_CODE 0
-#define CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE -1
+#define NULL_ARGUEMENT_PLACEHOLDER NULL
+#define NULL_ARG_DATA NULL
 
+enum
+{
+  CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE = -1,
+  SUCCESS_KANBAN_PROGRAM_CODE = 0,
+};
 
 struct _KanbanApplication
 {
@@ -33,8 +36,8 @@ struct _KanbanApplication
 static GOptionEntry entries[] =
 {
   { "version", 'V', G_OPTION_FLAG_NONE,
-    G_OPTION_ARG_NONE, ARG_DATA_IS_NULL,
-    "Display program version and exit", NO_ARGUEMENT_PLACEHOLDER },
+    G_OPTION_ARG_NONE, NULL_ARG_DATA,
+    "Display program version and exit", NULL_ARGUEMENT_PLACEHOLDER },
   { NULL }
 };
 
