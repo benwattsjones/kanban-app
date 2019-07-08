@@ -1,4 +1,4 @@
-/* src/kanban-app.h
+/* src/views/kanban-window.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,20 +12,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_APP_H
-#define KANBAN_APP_H
+#ifndef KANBAN_WINDOW_H
+#define KANBAN_WINDOW_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define KANBAN_APP_TYPE (kanban_app_get_type ())
+#define KANBAN_WINDOW_TYPE (kanban_window_get_type ())
 
-G_DECLARE_FINAL_TYPE (KanbanApp, kanban_app, KANBAN, APP, GtkApplication)
+G_DECLARE_FINAL_TYPE (KanbanWindow, kanban_window, KANBAN, WINDOW, GtkApplicationWindow)
 
-KanbanApp *kanban_app_new (void);
-
+void kanban_app_window_open (KanbanWindow *win,
+                             GFile *file);
 G_END_DECLS
 
-#endif /* KANBAN_APP_H */
+#endif /* KANBAN_WINDOW_H */
 

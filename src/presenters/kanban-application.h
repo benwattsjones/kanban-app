@@ -1,4 +1,4 @@
-/* src/main.c
+/* src/presenters/kanban-application.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,13 +12,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#ifndef KANBAN_APPLICATION_H
+#define KANBAN_APPLICATION_H
+
 #include <gtk/gtk.h>
 
-#include "presenters/kanban-application.h"
+G_BEGIN_DECLS
 
-int
-main (int argc, char *argv[])
-{
-  return initialize_kanban_presenter(argc, argv);
-}
+#define KANBAN_APPLICATION_TYPE (kanban_application_get_type ())
+
+G_DECLARE_FINAL_TYPE (KanbanApplication, kanban_application, KANBAN, APPLICATION, GtkApplication)
+
+int initialize_kanban_presenter (int argc, char *argv[]);
+
+G_END_DECLS
+
+#endif /* KANBAN_APPLICATION_H */
 

@@ -1,4 +1,4 @@
-/* src/main.c
+/* src/kanban-presenters/presenter-view-interface.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,13 +12,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#ifndef PRESENTER_VIEW_INTERFACE_H
+#define PRESENTER_VIEW_INTERFACE_H
+
 #include <gtk/gtk.h>
 
-#include "presenters/kanban-application.h"
+#include "kanban-application.h"
 
-int
-main (int argc, char *argv[])
-{
-  return initialize_kanban_presenter(argc, argv);
-}
+G_BEGIN_DECLS
+
+/* Function must be implemented by the view as the entry point. */
+void initialize_kanban_view (KanbanApplication *app);
+
+G_END_DECLS
+
+#endif /* PRESENTER_VIEW_INTERFACE_H */
 
