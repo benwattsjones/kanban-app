@@ -1,4 +1,4 @@
-/* src/kanban-views/kanban-window.c
+/* src/views/kanban-window.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -16,7 +16,7 @@
 
 #include "kanban-window.h"
 
-#include "../kanban-presenters/presenter-view-interface.h"
+#include "../presenters/presenter-view-interface.h"
 
 struct _KanbanWindow
 {

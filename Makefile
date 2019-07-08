@@ -4,8 +4,8 @@ CFLAGS = $(shell $(PKGCONFIG) --cflags gtk+-3.0) -fexceptions -fpie -Wl,-pie -fs
 LIBS = $(shell $(PKGCONFIG) --libs gtk+-3.0)
 GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources gio-2.0)
 
-SRC = src/kanban-presenters/kanban-application.c \
-	  src/kanban-views/kanban-window.c \
+SRC = src/presenters/kanban-application.c \
+	  src/views/kanban-window.c \
 	  src/main.c
 BUILT_SRC = src/resources.c
 
@@ -19,16 +19,16 @@ src/resources.c: data/kanban-app.gresource.xml data/window.ui
 %.o: src/%.c 
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
-%.o: src/kanban-presenters/%.c
+%.o: src/presenters/%.c
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
-%.o: src/kanban-views/%.c
+%.o: src/views/%.c
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
-%.o: src/kanban-models/%.c
+%.o: src/models/%.c
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
-%.o: src/kanban-storage/%.c
+%.o: src/storage/%.c
 	$(CC) -c -o $(@F) $(CFLAGS) $<
 
 kanban-app: $(OBJS)
@@ -38,3 +38,4 @@ clean:
 	rm -f $(BUILT_SRC)
 	rm -f $(OBJS)
 	rm -f kanban-app
+

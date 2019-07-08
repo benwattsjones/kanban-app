@@ -14,8 +14,7 @@
 
 #include <gtk/gtk.h>
 
-#include "kanban-presenters/kanban-application.h"
-
+#include "presenters/kanban-application.h"
 
 int
 main (int argc, char *argv[])

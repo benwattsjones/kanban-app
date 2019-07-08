@@ -1,4 +1,4 @@
-/* src/kanban-presenters/kanban-application.c
+/* src/presenters/kanban-application.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *

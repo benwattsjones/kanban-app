@@ -1,4 +1,4 @@
-/* src/kanban-views/kanban-window.h
+/* src/views/kanban-window.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
