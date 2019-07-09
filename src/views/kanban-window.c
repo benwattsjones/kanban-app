@@ -26,23 +26,15 @@ struct _KanbanWindow
 G_DEFINE_TYPE(KanbanWindow, kanban_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
-kanban_window_init (KanbanWindow *win)
+kanban_window_init (KanbanWindow *self)
 {
-  gtk_widget_init_template (GTK_WIDGET (win));
-}
-
-void
-kanban_window_open (KanbanWindow *win,
-                    GFile        *file)
-{
-  (void) win;
-  (void) file;
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
-kanban_window_class_init (KanbanWindowClass *class)
+kanban_window_class_init (KanbanWindowClass *klass)
 {
-  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
+  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
                                                "/com/benwattsjones/kanban/window.ui");
 }
 
