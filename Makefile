@@ -13,8 +13,8 @@ OBJS = $(notdir $(BUILT_SRC:.c=.o) $(SRC:.c=.o))
 
 all: kanban-app
 
-src/resources.c: data/kanban-app.gresource.xml data/window.ui
-	$(GLIB_COMPILE_RESOURCES) data/kanban-app.gresource.xml --target=$@ --sourcedir=data/ --generate-source
+src/resources.c: src/views/kanban-app.gresource.xml src/views/window.ui
+	$(GLIB_COMPILE_RESOURCES) src/views/kanban-app.gresource.xml --target=$@ --sourcedir=src/views/ --generate-source
 
 %.o: src/%.c 
 	$(CC) -c -o $(@F) $(CFLAGS) $<
