@@ -2,14 +2,28 @@
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
   <template class="KanbanWindow" parent="GtkApplicationWindow">
-    <property name="default-width">600</property>
-    <property name="default-height">400</property>
+    <property name="default-width">900</property>
+    <property name="default-height">500</property>
+    
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">True</property>
         <property name="title">Kanban board name [filters]</property>
         <property name="has-subtitle">False</property>
         <property name="show-close-button">True</property>
+        <child>
+          <object class="GtkMenuButton" id="show-kanban-headerbar-button">
+            <property name="visible">True</property>
+            <property name="label">Show Kanban</property>
+            <property name="always-show-image">True</property>
+            <property name="image">show-kanban-button-image</property>
+            <property name="image-position">GTK_POS_RIGHT</property>
+            <property name="popover">show-kanban-dropdown-menu</property>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
         <child>
           <object class="GtkMenuButton" id="kanban-headerbar-menu-button">
             <property name="visible">True</property>
@@ -28,6 +42,7 @@
       </object>
     </child>
   </template>
+
   <object class="GtkPopover" id="kanban-headerbar-dropdown-menu">
     <property name="relative-to">kanban-headerbar-menu-button</property>
     <child>
@@ -55,4 +70,39 @@
       </object>
     </child>
   </object>
+
+  <object class="GtkImage" id="show-kanban-button-image">
+    <property name="visible">True</property>
+    <property name="icon-name">go-down-symbolic</property>
+  </object>
+  <object class="GtkPopover" id="show-kanban-dropdown-menu">
+    <property name="relative-to">show-kanban-headerbar-button</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkModelButton">
+            <property name="visible">True</property>
+            <property name="text">Kanban board:</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="visible">True</property>
+            <property name="text">Categories:</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkModelButton">
+            <property name="visible">True</property>
+            <property name="text">Owner:</property>
+          </object>
+        </child>
+      </object>
+    </child>
+
+  </object>
+
 </interface>
+
