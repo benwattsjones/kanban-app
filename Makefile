@@ -5,7 +5,9 @@ LIBS = $(shell $(PKGCONFIG) --libs gtk+-3.0)
 GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources gio-2.0)
 
 SRC = src/presenters/kanban-application.c \
+	  src/presenters/model-observer.c \
 	  src/views/kanban-window.c \
+	  src/models/model-presenter-interface.c \
 	  src/main.c
 BUILT_SRC = src/resources.c
 

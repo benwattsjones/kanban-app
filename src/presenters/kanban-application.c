@@ -17,6 +17,7 @@
 #include "kanban-application.h"
 
 #include "presenter-view-interface.h"
+#include "model-observer.h"
 
 
 #define NULL_ARGUEMENT_PLACEHOLDER NULL
@@ -31,6 +32,7 @@ enum
 struct _KanbanApplication
 {
   GtkApplication parent_instance;
+  KanbanViewModelPtr viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -57,6 +59,8 @@ static void
 kanban_application_activate (GApplication *app)
 {
   initialize_kanban_view (KANBAN_APPLICATION (app));
+  KanbanApplication *self = KANBAN_APPLICATION (app);
+  self->viewmodel = create_kanban_viewmodel ();
 }
 
 static void
@@ -85,12 +89,21 @@ kanban_application_handle_local_options (GApplication *app,
 }
 
 static void
+kanban_application_shutdown (GApplication *app)
+{
+  KanbanApplication *self = KANBAN_APPLICATION (app);
+  destroy_kanban_viewmodel (self->viewmodel);
+  G_APPLICATION_CLASS (kanban_application_parent_class)->shutdown (app);
+}
+
+static void
 kanban_application_class_init (KanbanApplicationClass *klass)
 {
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
   application_class->activate = kanban_application_activate;
   application_class->open = kanban_application_open;
   application_class->handle_local_options = kanban_application_handle_local_options;
+  application_class->shutdown = kanban_application_shutdown;
 }
 
 int
