@@ -12,9 +12,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <unistd.h> /* remove with usleep testing stub */
 #include <stdlib.h>
 #include <assert.h>
+
+#include "kanban-cards.h"
 
 #include "model-presenter-interface.h"
 
@@ -87,27 +88,16 @@ detach_observer(const KanbanModelObserver *observer)
   remove_observer_from_list (observer);
 }
 
-static void 
-change_kanban(int new_data)
+void 
+emit_kanban_card_change_signal(const KanbanCard *card_data)
 {
-  KanbanModelData new_kanban_data = { .data = new_data };
   ObserversListNode *observers_iter = observers_linked_list.next;
   KanbanModelObserver *active_observer;
   while (observers_iter != NULL)
     {
       active_observer = &observers_iter->observer_item;
-      active_observer->notification(active_observer->instance, &new_kanban_data);
+      active_observer->notification (active_observer->instance, card_data);
       observers_iter = observers_iter->next;
     }
-}
-
-void
-test_observers()
-{
-  /* note: usleep is depreciated - only accepted as testing stub */
-  usleep (1000000); 
-  change_kanban (4);
-  usleep (2000000);
-  change_kanban (20);
 }
 

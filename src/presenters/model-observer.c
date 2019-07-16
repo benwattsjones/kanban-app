@@ -19,20 +19,24 @@
 #include "model-observer.h"
 
 #include "../models/model-presenter-interface.h"
+#include "../models/kanban-cards.h" /* for test_observers() only */
 
 struct KanbanViewModel
 {
-  int kanban_viewmodel_data;
+  char *heading;
+  char *content;
 };
 
 static void 
-kanban_model_changed(void                  *instance, 
-                     const KanbanModelData *new_data)
+kanban_model_changed(void             *instance, 
+                     const KanbanCard *card_data)
 {
   KanbanViewModelPtr viewmodel = instance;
-  viewmodel->kanban_viewmodel_data = new_data->data;
+  viewmodel->heading = card_data->heading;
+  viewmodel->content = card_data->content;
   assert (viewmodel != NULL);
-  g_print ("Data observed: %d\n", viewmodel->kanban_viewmodel_data);
+  g_print ("Data observed:\nHeading: %s\nContent: %s\n", 
+           viewmodel->heading, viewmodel->content);
 }
 
 KanbanViewModelPtr 

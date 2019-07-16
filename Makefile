@@ -8,6 +8,7 @@ SRC = src/presenters/kanban-application.c \
 	  src/presenters/model-observer.c \
 	  src/views/kanban-window.c \
 	  src/models/model-presenter-interface.c \
+	  src/models/kanban-cards.c \
 	  src/main.c
 BUILT_SRC = src/resources.c
 
