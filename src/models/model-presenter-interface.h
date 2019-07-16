@@ -22,8 +22,8 @@ typedef void (*KanbanChangeNotification) (void             *instance,
 
 typedef struct
 {
-  void *instance;
-  KanbanChangeNotification notification;
+  void                     *instance;
+  KanbanChangeNotification  notification;
 } KanbanModelObserver;
 
 /* PUBLIC: INTERFACE FOR PRESENTER USE */

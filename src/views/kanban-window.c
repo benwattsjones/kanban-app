@@ -12,18 +12,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <gtk/gtk.h>
-
 #include "kanban-window.h"
 
 #include "../presenters/presenter-view-interface.h"
+
+#include <gtk/gtk.h>
 
 struct _KanbanWindow
 {
   GtkApplicationWindow parent_instance;
 };
 
-G_DEFINE_TYPE(KanbanWindow, kanban_window, GTK_TYPE_APPLICATION_WINDOW)
+G_DEFINE_TYPE (KanbanWindow, kanban_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
 kanban_window_init (KanbanWindow *self)

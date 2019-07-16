@@ -15,15 +15,15 @@
 #ifndef KANBAN_TREE_STORE_H
 #define KANBAN_TREE_STORE_H
 
-#include <gtk/gtk.h>
-
 #include "../models/kanban-cards.h"
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-GtkTreeStore *initialize_viewmodel  ();
-void          viewmodel_change_card (const KanbanCard *card_data);
-void          destroy_viewmodel     (GtkTreeStore     *viewmodel);
+GtkTreeStore  *initialize_viewmodel  ();
+void           viewmodel_change_card (const KanbanCard  *card_data);
+void           destroy_viewmodel     (GtkTreeStore      *viewmodel);
 
 G_END_DECLS
 

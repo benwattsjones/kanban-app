@@ -23,8 +23,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanWindow, kanban_window, KANBAN, WINDOW, GtkApplicationWindow)
 
-void kanban_app_window_open (KanbanWindow *win,
-                             GFile *file);
 G_END_DECLS
 
 #endif /* KANBAN_WINDOW_H */

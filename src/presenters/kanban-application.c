@@ -12,13 +12,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <gtk/gtk.h>
-
 #include "kanban-application.h"
 
-#include "presenter-view-interface.h"
 #include "kanban-tree-store.h"
+#include "presenter-view-interface.h"
 
+#include <gtk/gtk.h>
 
 #define NULL_ARGUEMENT_PLACEHOLDER NULL
 #define NULL_ARG_DATA NULL
@@ -31,8 +30,8 @@ enum
 
 struct _KanbanApplication
 {
-  GtkApplication parent_instance;
-  GtkTreeStore *viewmodel;
+  GtkApplication  parent_instance;
+  GtkTreeStore   *viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -114,7 +113,7 @@ initialize_kanban_presenter (int argc, char *argv[])
                                          "flags", G_APPLICATION_HANDLES_OPEN,
                                          NULL);
   int status = g_application_run (G_APPLICATION (app), argc, argv);
-  g_object_unref(app);
+  g_object_unref (app);
   return status;
 }
 

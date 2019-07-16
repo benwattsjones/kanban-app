@@ -17,11 +17,11 @@
 
 typedef struct
 {
-  int card_id;
-  int column_id;
+  int   card_id;
+  int   column_id;
   char *heading;
   char *content;
-  int priority;
+  int   priority;
 } KanbanCard;
 
 void test_observers ();

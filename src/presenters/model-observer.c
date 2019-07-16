@@ -12,15 +12,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "model-observer.h"
+
+#include "kanban-tree-store.h"
+#include "../models/model-presenter-interface.h"
+#include "../models/kanban-cards.h" /* for test_observers() only */
+
 #include <gtk/gtk.h>
 #include <assert.h>
 #include <stdlib.h>
 
-#include "model-observer.h"
-
-#include "../models/model-presenter-interface.h"
-#include "../models/kanban-cards.h" /* for test_observers() only */
-#include "kanban-tree-store.h"
 
 static void 
 kanban_model_changed (void             *instance, 

@@ -15,12 +15,14 @@
 #define KANBAN_TREE_APPEND_TO_END NULL
 #define END_TREE_SET_INSERSION -1
 
-#include <gtk/gtk.h>
-
 #include "kanban-tree-store.h"
-#include "../models/kanban-cards.h"
 
 #include "model-observer.h"
+#include "../models/kanban-cards.h"
+
+#include <gtk/gtk.h>
+
+
 
 /* NOTE:
  *  - columns in kanban board physically, are not the same as columns in tree

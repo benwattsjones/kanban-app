@@ -12,12 +12,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <stdlib.h>
-#include <assert.h>
+#include "model-presenter-interface.h"
 
 #include "kanban-cards.h"
 
-#include "model-presenter-interface.h"
+#include <assert.h>
+#include <stdlib.h>
 
 /* Linked list implementation to store observers list. NOTE:
  *   - The root struct (observers_linked_list) never holds data.
@@ -31,7 +31,7 @@
  */
 typedef struct _ObserversListNode
 {
-  KanbanModelObserver observer_item;
+  KanbanModelObserver        observer_item;
   struct _ObserversListNode *next;
 } ObserversListNode;
 
@@ -75,21 +75,21 @@ remove_observer_from_list(const KanbanModelObserver *observer)
 }
 
 void 
-attach_observer(const KanbanModelObserver *observer)
+attach_observer (const KanbanModelObserver *observer)
 {
   assert (observer != NULL);
   append_observer_to_list (observer);
 }
 
 void 
-detach_observer(const KanbanModelObserver *observer)
+detach_observer (const KanbanModelObserver *observer)
 {
   assert (observer != NULL);
   remove_observer_from_list (observer);
 }
 
 void 
-emit_kanban_card_change_signal(const KanbanCard *card_data)
+emit_kanban_card_change_signal (const KanbanCard *card_data)
 {
   ObserversListNode *observers_iter = observers_linked_list.next;
   KanbanModelObserver *active_observer;

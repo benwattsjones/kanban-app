@@ -15,9 +15,9 @@
 #ifndef PRESENTER_VIEW_INTERFACE_H
 #define PRESENTER_VIEW_INTERFACE_H
 
-#include <gtk/gtk.h>
-
 #include "kanban-application.h"
+
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

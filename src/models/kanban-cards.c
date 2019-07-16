@@ -12,12 +12,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <stdlib.h>
-#include <unistd.h> /* only for usleep test stub - TODO: remove */
+#include "kanban-cards.h"
 
 #include "model-presenter-interface.h"
 
-#include "kanban-cards.h"
+#include <stdlib.h>
+#include <unistd.h> /* only for usleep test stub - TODO: remove */
 
 void
 test_observers()
@@ -30,13 +30,13 @@ test_observers()
   card->content = "Card content\nMultiline!";
   card->priority = 1;
 
-  usleep (1000000); 
+  usleep (500000); 
   emit_kanban_card_change_signal (card);
-  usleep (2000000);
+  usleep (200000);
   card->content = "New Card Content!";
   emit_kanban_card_change_signal (card);
   
-  free(card);
+  free (card);
   card = NULL;
 }
 

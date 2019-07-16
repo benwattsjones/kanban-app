@@ -12,13 +12,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <gtk/gtk.h>
-
 #include "presenters/kanban-application.h"
+
+#include <gtk/gtk.h>
 
 int
 main (int argc, char *argv[])
 {
-  return initialize_kanban_presenter(argc, argv);
+  return initialize_kanban_presenter (argc, argv);
 }
 
