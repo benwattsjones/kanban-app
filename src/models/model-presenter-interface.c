@@ -12,38 +12,88 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <stddef.h>
-#include <unistd.h>
+#include <unistd.h> /* remove with usleep testing stub */
 #include <stdlib.h>
+#include <assert.h>
 
 #include "model-presenter-interface.h"
 
-static KanbanModelObserver *active_observer;
+/* Linked list implementation to store observers list. NOTE:
+ *   - The root struct (observers_linked_list) never holds data.
+ *     This makes memory management and list access easy.
+ *   - The append and remove functions do not check for duplicates -
+ *     appending duplicates will cause memory leaks and unexpected behaviour.
+ */
+typedef struct _ObserversListNode
+{
+  KanbanModelObserver observer_item;
+  struct _ObserversListNode *next;
+} ObserversListNode;
+
+static ObserversListNode observers_linked_list;
+
+static void
+append_observer_to_list(const KanbanModelObserver *observer)
+{
+  ObserversListNode *iter = &observers_linked_list;
+  while (iter->next != NULL)
+    iter = iter->next;
+  ObserversListNode *node = (ObserversListNode *) malloc (sizeof (ObserversListNode));
+  assert (node != NULL);
+  node->observer_item.instance = observer->instance;
+  node->observer_item.notification = observer->notification;
+  node->next = NULL;
+  iter->next = node;
+}
+
+static void
+remove_observer_from_list(const KanbanModelObserver *observer)
+{
+  ObserversListNode *iter = &observers_linked_list;
+  ObserversListNode *remove_next_node = NULL;
+  ObserversListNode *node_to_remove = NULL;
+  while (iter->next != NULL)
+    {
+      if (iter->next->observer_item.instance == observer->instance &&
+          iter->next->observer_item.notification == observer->notification)
+        {
+          remove_next_node = iter;
+          node_to_remove = iter->next;
+        }
+      iter = iter->next;
+    }
+  if (!node_to_remove)
+    return;
+  remove_next_node->next = node_to_remove->next;
+  free(node_to_remove);
+  node_to_remove = NULL;
+}
 
 void 
 attach_observer(const KanbanModelObserver *observer)
 {
-  // TODO: linked list implementation will not have memory leak!
-  active_observer = malloc (sizeof (KanbanModelObserver)); /* malloc else NULL ptr */
-  active_observer->instance = observer->instance; /* deep copy else segfault */
-  active_observer->notification = observer->notification;
+  assert (observer != NULL);
+  append_observer_to_list (observer);
 }
 
 void 
 detach_observer(const KanbanModelObserver *observer)
 {
-  (void)observer; /* TODO: linked list implementation (will need parameter) */
-  active_observer->instance = NULL;
-  active_observer->notification = NULL;
+  assert (observer != NULL);
+  remove_observer_from_list (observer);
 }
 
 static void 
 change_kanban(int new_data)
 {
   KanbanModelData new_kanban_data = { .data = new_data };
-  if (active_observer->instance != NULL)
+  ObserversListNode *observers_iter = observers_linked_list.next;
+  KanbanModelObserver *active_observer;
+  while (observers_iter != NULL)
     {
+      active_observer = &observers_iter->observer_item;
       active_observer->notification(active_observer->instance, &new_kanban_data);
+      observers_iter = observers_iter->next;
     }
 }
 
