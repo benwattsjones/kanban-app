@@ -12,7 +12,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <gtk/gtk.h> /* for g_print only - may remove in future */
+#include <gtk/gtk.h>
 #include <assert.h>
 #include <stdlib.h>
 
@@ -20,44 +20,39 @@
 
 #include "../models/model-presenter-interface.h"
 #include "../models/kanban-cards.h" /* for test_observers() only */
-
-struct KanbanViewModel
-{
-  char *heading;
-  char *content;
-};
+#include "kanban-tree-store.h"
 
 static void 
-kanban_model_changed(void             *instance, 
-                     const KanbanCard *card_data)
+kanban_model_changed (void             *instance, 
+                      const KanbanCard *card_data)
 {
-  KanbanViewModelPtr viewmodel = instance;
-  viewmodel->heading = card_data->heading;
-  viewmodel->content = card_data->content;
+  GtkTreeStore *viewmodel = instance;
   assert (viewmodel != NULL);
-  g_print ("Data observed:\nHeading: %s\nContent: %s\n", 
-           viewmodel->heading, viewmodel->content);
+  if (card_data->card_id == 0)
+    {
+      // change is to a column. TODO: implement change column funciton.
+    }
+  else
+    {
+      viewmodel_change_card (card_data);
+    }
 }
 
-KanbanViewModelPtr 
-create_kanban_viewmodel()
+void 
+register_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
 {
-  KanbanViewModelPtr viewmodel = malloc (sizeof (*viewmodel));
   assert (viewmodel != NULL);
   KanbanModelObserver observer = { .instance = viewmodel,
                                    .notification = kanban_model_changed };
   attach_observer (&observer);
   test_observers ();
-  return viewmodel;
 }
 
 void
-destroy_kanban_viewmodel(KanbanViewModelPtr viewmodel)
+deregister_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
 {
   KanbanModelObserver observer = { .instance = viewmodel,
                                    .notification = kanban_model_changed };
   detach_observer (&observer);
-  free (viewmodel);
-  viewmodel = NULL;
 }
 

@@ -17,7 +17,7 @@
 #include "kanban-application.h"
 
 #include "presenter-view-interface.h"
-#include "model-observer.h"
+#include "kanban-tree-store.h"
 
 
 #define NULL_ARGUEMENT_PLACEHOLDER NULL
@@ -32,7 +32,7 @@ enum
 struct _KanbanApplication
 {
   GtkApplication parent_instance;
-  KanbanViewModelPtr viewmodel;
+  GtkTreeStore *viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -60,7 +60,7 @@ kanban_application_activate (GApplication *app)
 {
   initialize_kanban_view (KANBAN_APPLICATION (app));
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = create_kanban_viewmodel ();
+  self->viewmodel = initialize_viewmodel ();
 }
 
 static void
@@ -92,7 +92,7 @@ static void
 kanban_application_shutdown (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  destroy_kanban_viewmodel (self->viewmodel);
+  destroy_viewmodel (self->viewmodel);
   G_APPLICATION_CLASS (kanban_application_parent_class)->shutdown (app);
 }
 

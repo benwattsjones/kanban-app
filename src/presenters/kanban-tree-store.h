@@ -1,4 +1,4 @@
-/* src/presenters/model-observer.h
+/* src/presenters/kanban-tree-store.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,17 +12,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef MODEL_OBSERVER_H
-#define MODEL_OBSERVER_H
+#ifndef KANBAN_TREE_STORE_H
+#define KANBAN_TREE_STORE_H
 
 #include <gtk/gtk.h>
 
+#include "../models/kanban-cards.h"
+
 G_BEGIN_DECLS
 
-void register_kanban_viewmodel_observer   (GtkTreeStore *viewmodel);
-void deregister_kanban_viewmodel_observer (GtkTreeStore *viewmodel);
+GtkTreeStore *initialize_viewmodel  ();
+void          viewmodel_change_card (const KanbanCard *card_data);
+void          destroy_viewmodel     (GtkTreeStore     *viewmodel);
 
 G_END_DECLS
 
-#endif /* MODEL_OBSERVER_H */
+#endif /* KANBAN_TREE_STORE_H */
 
