@@ -23,6 +23,10 @@
  *     This makes memory management and list access easy.
  *   - The append and remove functions do not check for duplicates -
  *     appending duplicates will cause memory leaks and unexpected behaviour.
+ *   - NOT thread safe - race condition if observers added or removed during
+ *     call to change_kanban().
+ * These are not big concerns as there is only intended to be one observer
+ * added, and for it to be removed only on program termination.
  */
 typedef struct _ObserversListNode
 {
