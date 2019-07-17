@@ -30,8 +30,8 @@ enum
 
 struct _KanbanApplication
 {
-  GtkApplication  parent_instance;
-  GtkTreeStore   *viewmodel;
+  GtkApplication    parent_instance;
+  KanbanTreeStore  *viewmodel;
 };
 
 static GOptionEntry entries[] =

@@ -21,9 +21,13 @@
 
 G_BEGIN_DECLS
 
-GtkTreeStore  *initialize_viewmodel  ();
-void           viewmodel_change_card (const KanbanCard  *card_data);
-void           destroy_viewmodel     (GtkTreeStore      *viewmodel);
+#define KANBAN_TREE_STORE_TYPE (kanban_tree_store_get_type ())
+
+G_DECLARE_FINAL_TYPE (KanbanTreeStore, kanban_tree_store, KANBAN, TREE_STORE, GtkTreeStore)
+
+KanbanTreeStore  *initialize_viewmodel  ();
+void              viewmodel_change_card (const KanbanCard  *card_data);
+void              destroy_viewmodel     (KanbanTreeStore   *viewmodel);
 
 G_END_DECLS
 

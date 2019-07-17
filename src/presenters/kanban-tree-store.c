@@ -45,46 +45,65 @@ enum
 static char *column_names[] = {"Backlog", "Soon", "In Progress", "On Hold", 
                                "Done", NULL};
 
-GtkTreeStore *
-initialize_viewmodel ()
+struct _KanbanTreeStore
 {
-  GtkTreeStore *viewmodel;
+  GtkTreeStore  parent_instance;
+  gchar       **kanban_column_names;
+};
+
+G_DEFINE_TYPE (KanbanTreeStore, kanban_tree_store, GTK_TYPE_TREE_STORE)
+
+static void
+kanban_tree_store_init (KanbanTreeStore *self)
+{
+  GtkTreeStore *tree = &self->parent_instance;
   GtkTreeIter iter;
   gint column_iter = 0;
-  char *column_name;
+  char *kanban_column_name;
+  GType tree_col_types[] = {G_TYPE_INT, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING,
+                           G_TYPE_INT, G_TYPE_BOOLEAN};
 
-  viewmodel = gtk_tree_store_new (NUM_COLUMNS,
-                                  G_TYPE_INT,
-                                  G_TYPE_INT,
-                                  G_TYPE_STRING,
-                                  G_TYPE_STRING,
-                                  G_TYPE_INT,
-                                  G_TYPE_BOOLEAN);
+  gtk_tree_store_set_column_types (tree, NUM_COLUMNS, tree_col_types);
+
+  // replace with call to model
+  self->kanban_column_names = column_names;
+
   while (TRUE)
     {
-      column_name = column_names[column_iter];
-      if (!column_name)
+      kanban_column_name = self->kanban_column_names[column_iter];
+      if (!kanban_column_name)
         break;
       ++column_iter;
-      gtk_tree_store_append (viewmodel, &iter, KANBAN_TREE_APPEND_TO_END);
-      gtk_tree_store_set (viewmodel, &iter,
+      gtk_tree_store_append (tree, &iter, KANBAN_TREE_APPEND_TO_END);
+      gtk_tree_store_set (tree, &iter,
                           COLUMN_ID_COLUMN, column_iter,
                           CARD_ID_COLUMN, 0,
-                          HEADING_COLUMN, column_name,
+                          HEADING_COLUMN, kanban_column_name,
                           CONTENT_COLUMN, NULL,
                           PRIORITY_COLUMN, column_iter,
                           VISIBLE_COLUMN, FALSE,
                           END_TREE_SET_INSERSION);
     }
+  register_kanban_viewmodel_observer (tree);
+}
 
-  register_kanban_viewmodel_observer (viewmodel);
-  return viewmodel;
+static void
+kanban_tree_store_class_init (KanbanTreeStoreClass *klass)
+{
+  (void) klass;
+}
+
+
+KanbanTreeStore *
+initialize_viewmodel ()
+{
+  return g_object_new (KANBAN_TREE_STORE_TYPE, NULL);
 }
 
 void
-destroy_viewmodel (GtkTreeStore *viewmodel)
+destroy_viewmodel (KanbanTreeStore *viewmodel)
 {
-  deregister_kanban_viewmodel_observer (viewmodel);
+  deregister_kanban_viewmodel_observer (&viewmodel->parent_instance);
   // free - link to eventual destructor
 }
 
