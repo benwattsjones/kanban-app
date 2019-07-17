@@ -54,6 +54,15 @@ struct _KanbanTreeStore
 G_DEFINE_TYPE (KanbanTreeStore, kanban_tree_store, GTK_TYPE_TREE_STORE)
 
 static void
+kanban_tree_store_finalize (GObject *object)
+{
+  KanbanTreeStore *self = KANBAN_TREE_STORE (object);
+  deregister_kanban_viewmodel_observer (&self->parent_instance);
+  g_print ("finalize KanbanTreeStore called\n");
+  G_OBJECT_CLASS (kanban_tree_store_parent_class)->finalize (object);
+}
+
+static void
 kanban_tree_store_init (KanbanTreeStore *self)
 {
   GtkTreeStore *tree = &self->parent_instance;
@@ -90,7 +99,8 @@ kanban_tree_store_init (KanbanTreeStore *self)
 static void
 kanban_tree_store_class_init (KanbanTreeStoreClass *klass)
 {
-  (void) klass;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  object_class->finalize = kanban_tree_store_finalize;
 }
 
 
@@ -103,8 +113,8 @@ initialize_viewmodel ()
 void
 destroy_viewmodel (KanbanTreeStore *viewmodel)
 {
-  deregister_kanban_viewmodel_observer (&viewmodel->parent_instance);
-  // free - link to eventual destructor
+  g_object_unref (viewmodel);
+  viewmodel = NULL;
 }
 
 void
