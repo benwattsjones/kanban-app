@@ -16,18 +16,17 @@
 
 #include "kanban-tree-store.h"
 #include "../models/model-presenter-interface.h"
-#include "../models/kanban-cards.h" /* for test_observers() only */
+#include "../models/kanban-cards.h"
 
-#include <gtk/gtk.h>
 #include <assert.h>
-#include <stdlib.h>
+#include <stddef.h>
 
 
 static void 
 kanban_model_changed (void             *instance, 
                       const KanbanCard *card_data)
 {
-  GtkTreeStore *viewmodel = instance;
+  KanbanTreeStore *viewmodel = instance;
   assert (viewmodel != NULL);
   if (card_data->card_id == 0)
     {
@@ -40,7 +39,7 @@ kanban_model_changed (void             *instance,
 }
 
 void 
-register_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
+register_kanban_viewmodel_observer (KanbanTreeStore *viewmodel)
 {
   assert (viewmodel != NULL);
   KanbanModelObserver observer = { .instance = viewmodel,
@@ -50,7 +49,7 @@ register_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
 }
 
 void
-deregister_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
+deregister_kanban_viewmodel_observer (KanbanTreeStore *viewmodel)
 {
   KanbanModelObserver observer = { .instance = viewmodel,
                                    .notification = kanban_model_changed };

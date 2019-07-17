@@ -57,7 +57,7 @@ static void
 kanban_tree_store_finalize (GObject *object)
 {
   KanbanTreeStore *self = KANBAN_TREE_STORE (object);
-  deregister_kanban_viewmodel_observer (&self->parent_instance);
+  deregister_kanban_viewmodel_observer (self);
   g_print ("finalize KanbanTreeStore called\n");
   G_OBJECT_CLASS (kanban_tree_store_parent_class)->finalize (object);
 }
@@ -93,7 +93,7 @@ kanban_tree_store_init (KanbanTreeStore *self)
                           VISIBLE_COLUMN, FALSE,
                           END_TREE_SET_INSERSION);
     }
-  register_kanban_viewmodel_observer (tree);
+  register_kanban_viewmodel_observer (self);
 }
 
 static void
