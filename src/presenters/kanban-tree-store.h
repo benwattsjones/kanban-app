@@ -26,8 +26,23 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (KanbanTreeStore, kanban_tree_store, KANBAN, TREE_STORE, GtkTreeStore)
 
 KanbanTreeStore  *initialize_viewmodel  ();
-void              viewmodel_change_card (const KanbanCard  *card_data);
-void              destroy_viewmodel     (KanbanTreeStore   *viewmodel);
+void              destroy_viewmodel                (KanbanTreeStore   *viewmodel);
+
+void              kanban_tree_store_change_column  (KanbanTreeStore   *self,
+                                                    gint               column_id,
+                                                    gchar             *heading);
+void              kanban_tree_store_change_content (KanbanTreeStore   *self,
+                                                    gint               card_id,
+                                                    gchar             *heading,
+                                                    gchar             *content);
+void              kanban_tree_store_move_card      (KanbanTreeStore   *self,
+                                                    gint               card_id,
+                                                    gint               column_id,
+                                                    gint               priority);
+void              kanban_tree_store_new_card       (KanbanTreeStore   *self,
+                                                    const KanbanCard  *card_data);
+
+
 
 G_END_DECLS
 

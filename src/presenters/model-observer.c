@@ -28,14 +28,20 @@ kanban_model_changed (void             *instance,
 {
   KanbanTreeStore *viewmodel = instance;
   assert (viewmodel != NULL);
-  if (card_data->card_id == 0)
-    {
-      // change is to a column. TODO: implement change column funciton.
-    }
+  int column_id = card_data->column_id;
+  int card_id = card_data->card_id;
+  char *heading = card_data->heading;
+  char *content = card_data->content;
+  int priority = card_data->priority;
+  
+  if (card_id == 0)
+    kanban_tree_store_change_column (viewmodel, column_id, heading);
+  else if (card_data->column_id == 0)
+    kanban_tree_store_change_content (viewmodel, card_id, heading, content);
+  else if (card_data->heading == NULL)
+    kanban_tree_store_move_card (viewmodel, card_id, column_id, priority);
   else
-    {
-      viewmodel_change_card (card_data);
-    }
+    kanban_tree_store_new_card (viewmodel, card_data);
 }
 
 void 

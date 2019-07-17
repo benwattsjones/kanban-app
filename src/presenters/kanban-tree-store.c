@@ -53,6 +53,42 @@ struct _KanbanTreeStore
 
 G_DEFINE_TYPE (KanbanTreeStore, kanban_tree_store, GTK_TYPE_TREE_STORE)
 
+void
+kanban_tree_store_change_column (KanbanTreeStore *self,
+                                 gint             column_id,
+                                 gchar           *heading)
+{
+  g_print ("Changed column: ID: %d; HEADING: %s\n", column_id, heading);
+}
+
+void
+kanban_tree_store_change_content (KanbanTreeStore *self,
+                                  gint             card_id,
+                                  gchar           *heading,
+                                  gchar           *content)
+{
+  g_print ("Changed card content: ID: %d; HEADING: %s; CONTENT: %s\n", 
+           card_id, heading, content);
+}
+
+void
+kanban_tree_store_move_card (KanbanTreeStore *self,
+                             gint             card_id,
+                             gint             column_id,
+                             gint             priority)
+{
+  g_print ("Moved card: ID: %d, COLUMN: %d, PRIORITY: %d\n",
+           card_id, column_id, priority);
+}
+
+void
+kanban_tree_store_new_card (KanbanTreeStore  *self,
+                            const KanbanCard *card_data)
+{
+  g_print ("New card: HEADING: %s; CONTENT: %s\n",
+           card_data->heading, card_data->content);
+}
+
 static void
 kanban_tree_store_finalize (GObject *object)
 {
@@ -115,12 +151,5 @@ destroy_viewmodel (KanbanTreeStore *viewmodel)
 {
   g_object_unref (viewmodel);
   viewmodel = NULL;
-}
-
-void
-viewmodel_change_card (const KanbanCard *card_data)
-{
-  g_print ("Signal Recieved:\nHeading: %s\nContent: %s\n",
-           card_data->heading, card_data->content);
 }
 
