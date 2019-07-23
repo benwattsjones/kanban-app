@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanTreeStore, kanban_tree_store, KANBAN, TREE_STORE, GtkTreeStore)
 
-KanbanTreeStore  *initialize_viewmodel  ();
+KanbanTreeStore  *initialize_viewmodel             ();
 void              destroy_viewmodel                (KanbanTreeStore   *viewmodel);
 
 void              kanban_tree_store_change_column  (KanbanTreeStore   *self,
