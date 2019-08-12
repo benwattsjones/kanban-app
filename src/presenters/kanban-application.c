@@ -14,7 +14,7 @@
 
 #include "kanban-application.h"
 
-#include "kanban-tree-store.h"
+#include "kanban-list-store.h"
 #include "presenter-view-interface.h"
 
 #include <gtk/gtk.h>
@@ -31,7 +31,7 @@ enum
 struct _KanbanApplication
 {
   GtkApplication    parent_instance;
-  KanbanTreeStore  *viewmodel;
+  KanbanListStore  *viewmodel;
 };
 
 static GOptionEntry entries[] =

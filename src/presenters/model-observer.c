@@ -14,7 +14,7 @@
 
 #include "model-observer.h"
 
-#include "kanban-tree-store.h"
+#include "kanban-list-store.h"
 #include "../models/model-presenter-interface.h"
 #include "../models/kanban-cards.h"
 
@@ -26,7 +26,7 @@ static void
 kanban_model_changed (void             *instance, 
                       const KanbanCard *card_data)
 {
-  KanbanTreeStore *viewmodel = instance;
+  KanbanListStore *viewmodel = instance;
   assert (viewmodel != NULL);
   int column_id = card_data->column_id;
   int card_id = card_data->card_id;
@@ -35,17 +35,17 @@ kanban_model_changed (void             *instance,
   int priority = card_data->priority;
   
   if (card_id == 0)
-    kanban_tree_store_change_column (viewmodel, column_id, heading);
+    kanban_list_store_change_column (viewmodel, column_id, heading);
   else if (card_data->column_id == 0)
-    kanban_tree_store_change_content (viewmodel, card_id, heading, content);
+    kanban_list_store_change_content (viewmodel, card_id, heading, content);
   else if (card_data->heading == NULL)
-    kanban_tree_store_move_card (viewmodel, card_id, column_id, priority);
+    kanban_list_store_move_card (viewmodel, card_id, column_id, priority);
   else
-    kanban_tree_store_new_card (viewmodel, card_data);
+    kanban_list_store_new_card (viewmodel, card_data);
 }
 
 void 
-register_kanban_viewmodel_observer (KanbanTreeStore *viewmodel)
+register_kanban_viewmodel_observer (KanbanListStore *viewmodel)
 {
   assert (viewmodel != NULL);
   KanbanModelObserver observer = { .instance = viewmodel,
@@ -55,7 +55,7 @@ register_kanban_viewmodel_observer (KanbanTreeStore *viewmodel)
 }
 
 void
-deregister_kanban_viewmodel_observer (KanbanTreeStore *viewmodel)
+deregister_kanban_viewmodel_observer (KanbanListStore *viewmodel)
 {
   KanbanModelObserver observer = { .instance = viewmodel,
                                    .notification = kanban_model_changed };

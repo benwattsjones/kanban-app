@@ -18,7 +18,7 @@
 
 struct _KanbanCardViewModel
 {
-  GObject *parent_instance;
+  GObject  parent_instance;
   gint     card_id;
   gint     column_id; /* may wish to replace with a column object */
   gchar   *heading;

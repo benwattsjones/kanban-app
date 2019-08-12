@@ -1,4 +1,4 @@
-/* src/presenters/kanban-tree-store.c
+/* src/presenters/kanban-list-store.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,17 +12,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define KANBAN_TREE_APPEND_TO_END NULL
-#define END_TREE_SET_INSERSION -1
+//#define KANBAN_TREE_APPEND_TO_END NULL
+//#define END_TREE_SET_INSERSION -1
 
-#include "kanban-tree-store.h"
+#include "kanban-list-store.h"
 
+#include "kanban-card-viewmodel.h"
 #include "model-observer.h"
 #include "../models/kanban-cards.h"
 
+#include <gio/gio.h>
 #include <gtk/gtk.h>
 
-
+// TODO: Clean up and remove old comments from change.
 
 /* NOTE:
  *  - columns in kanban board physically, are not the same as columns in tree
@@ -30,6 +32,7 @@
  *    columns as having card_id of 0.
  */
 
+/*
 enum
 {
   COLUMN_ID_COLUMN = 0,
@@ -44,17 +47,56 @@ enum
 
 static char *column_names[] = {"Backlog", "Soon", "In Progress", "On Hold", 
                                "Done", NULL};
+*/
 
-struct _KanbanTreeStore
+struct _KanbanListStore
 {
-  GtkTreeStore  parent_instance;
-  gchar       **kanban_column_names;
+  GObject               parent_instance;
+
+  guint                 num_cards;
+  gchar               **kanban_column_names;
+
+  KanbanCardViewModel  *card_list[10]; // TODO: replace stub with GHashTable /similer
 };
 
-G_DEFINE_TYPE (KanbanTreeStore, kanban_tree_store, GTK_TYPE_TREE_STORE)
+static void g_list_model_iface_init (GListModelInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (KanbanListStore, kanban_list_store, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                g_list_model_iface_init))
+
+/* GListModel iface */
+
+static GType
+kanban_list_model_get_type (GListModel *model)
+{
+  (void) model;
+  return KANBAN_CARD_VIEWMODEL_TYPE;
+}
+
+static guint
+kanban_list_model_get_n_items (GListModel *model)
+{
+  return (KANBAN_LIST_STORE (model))->num_cards;
+}
+
+static gpointer
+kanban_list_model_get_item (GListModel *model,
+                            guint       i)
+{
+  return (g_object_ref (KANBAN_LIST_STORE (model))->card_list)[i];
+}
+
+static void
+g_list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = kanban_list_model_get_type;
+  iface->get_n_items = kanban_list_model_get_n_items;
+  iface->get_item = kanban_list_model_get_item;
+}
 
 void
-kanban_tree_store_change_column (KanbanTreeStore *self,
+kanban_list_store_change_column (KanbanListStore *self,
                                  gint             column_id,
                                  gchar           *heading)
 {
@@ -62,7 +104,7 @@ kanban_tree_store_change_column (KanbanTreeStore *self,
 }
 
 void
-kanban_tree_store_change_content (KanbanTreeStore *self,
+kanban_list_store_change_content (KanbanListStore *self,
                                   gint             card_id,
                                   gchar           *heading,
                                   gchar           *content)
@@ -72,7 +114,7 @@ kanban_tree_store_change_content (KanbanTreeStore *self,
 }
 
 void
-kanban_tree_store_move_card (KanbanTreeStore *self,
+kanban_list_store_move_card (KanbanListStore *self,
                              gint             card_id,
                              gint             column_id,
                              gint             priority)
@@ -82,7 +124,7 @@ kanban_tree_store_move_card (KanbanTreeStore *self,
 }
 
 void
-kanban_tree_store_new_card (KanbanTreeStore  *self,
+kanban_list_store_new_card (KanbanListStore  *self,
                             const KanbanCard *card_data)
 {
   g_print ("New card: HEADING: %s; CONTENT: %s\n",
@@ -90,17 +132,18 @@ kanban_tree_store_new_card (KanbanTreeStore  *self,
 }
 
 static void
-kanban_tree_store_finalize (GObject *object)
+kanban_list_store_finalize (GObject *object)
 {
-  KanbanTreeStore *self = KANBAN_TREE_STORE (object);
+  KanbanListStore *self = KANBAN_LIST_STORE (object);
   deregister_kanban_viewmodel_observer (self);
-  g_print ("finalize KanbanTreeStore called\n");
-  G_OBJECT_CLASS (kanban_tree_store_parent_class)->finalize (object);
+  g_print ("finalize KanbanListStore called\n");
+  G_OBJECT_CLASS (kanban_list_store_parent_class)->finalize (object);
 }
 
 static void
-kanban_tree_store_init (KanbanTreeStore *self)
+kanban_list_store_init (KanbanListStore *self)
 {
+/*
   GtkTreeStore *tree = &self->parent_instance;
   GtkTreeIter iter;
   gint column_iter = 0;
@@ -129,25 +172,26 @@ kanban_tree_store_init (KanbanTreeStore *self)
                           VISIBLE_COLUMN, FALSE,
                           END_TREE_SET_INSERSION);
     }
+*/
   register_kanban_viewmodel_observer (self);
 }
 
 static void
-kanban_tree_store_class_init (KanbanTreeStoreClass *klass)
+kanban_list_store_class_init (KanbanListStoreClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = kanban_tree_store_finalize;
+  object_class->finalize = kanban_list_store_finalize;
 }
 
 
-KanbanTreeStore *
+KanbanListStore *
 initialize_viewmodel ()
 {
-  return g_object_new (KANBAN_TREE_STORE_TYPE, NULL);
+  return g_object_new (KANBAN_LIST_STORE_TYPE, NULL);
 }
 
 void
-destroy_viewmodel (KanbanTreeStore *viewmodel)
+destroy_viewmodel (KanbanListStore *viewmodel)
 {
   g_object_unref (viewmodel);
   viewmodel = NULL;

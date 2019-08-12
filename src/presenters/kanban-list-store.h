@@ -1,4 +1,4 @@
-/* src/presenters/kanban-tree-store.h
+/* src/presenters/kanban-list-store.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,39 +12,40 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_TREE_STORE_H
-#define KANBAN_TREE_STORE_H
+#ifndef KANBAN_LIST_STORE_H
+#define KANBAN_LIST_STORE_H
 
 #include "../models/kanban-cards.h"
 
+#include <gio/gio.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define KANBAN_TREE_STORE_TYPE (kanban_tree_store_get_type ())
+#define KANBAN_LIST_STORE_TYPE (kanban_list_store_get_type ())
 
-G_DECLARE_FINAL_TYPE (KanbanTreeStore, kanban_tree_store, KANBAN, TREE_STORE, GtkTreeStore)
+G_DECLARE_FINAL_TYPE (KanbanListStore, kanban_list_store, KANBAN, LIST_STORE, GObject)
 
-KanbanTreeStore  *initialize_viewmodel             ();
-void              destroy_viewmodel                (KanbanTreeStore   *viewmodel);
+KanbanListStore  *initialize_viewmodel             ();
+void              destroy_viewmodel                (KanbanListStore   *viewmodel);
 
-void              kanban_tree_store_change_column  (KanbanTreeStore   *self,
+void              kanban_list_store_change_column  (KanbanListStore   *self,
                                                     gint               column_id,
                                                     gchar             *heading);
-void              kanban_tree_store_change_content (KanbanTreeStore   *self,
+void              kanban_list_store_change_content (KanbanListStore   *self,
                                                     gint               card_id,
                                                     gchar             *heading,
                                                     gchar             *content);
-void              kanban_tree_store_move_card      (KanbanTreeStore   *self,
+void              kanban_list_store_move_card      (KanbanListStore   *self,
                                                     gint               card_id,
                                                     gint               column_id,
                                                     gint               priority);
-void              kanban_tree_store_new_card       (KanbanTreeStore   *self,
+void              kanban_list_store_new_card       (KanbanListStore   *self,
                                                     const KanbanCard  *card_data);
 
 
 
 G_END_DECLS
 
-#endif /* KANBAN_TREE_STORE_H */
+#endif /* KANBAN_LIST_STORE_H */
 
