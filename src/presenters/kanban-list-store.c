@@ -23,13 +23,13 @@
 
 struct _KanbanListStore
 {
-  GObject               parent_instance;
+  GObject     parent_instance;
 
-  guint                 num_cards;
-  gchar               **kanban_column_names;
+  guint       num_cards;
+  gchar     **kanban_column_names;
 
-  //KanbanCardViewModel  *card_list[10]; // TODO: use GHashTable /similar
-  GSequence            *card_list;
+  GHashTable *card_table; // TODO: will need to change much if use string card-id
+  GSequence  *card_list;
 };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
@@ -111,11 +111,13 @@ kanban_list_store_new_card (KanbanListStore  *self,
                                                     card_data->priority);
   iter = g_sequence_insert_before (iter, g_object_ref (new_card));
   self->num_cards++;
+  g_hash_table_insert (self->card_table,
+                       GINT_TO_POINTER (card_data->card_id), iter);
+  guint position = g_sequence_iter_get_position (iter);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 
   g_print ("New card: HEADING: %s; CONTENT: %s\n",
            card_data->heading, card_data->content);
-  // TODO: iter points to new card - could place in GHashTable for searching
-  // TODO: g_list_model_items_changed() signal
 }
 
 /* funcs for class */
@@ -124,15 +126,19 @@ static void
 kanban_list_store_finalize (GObject *object)
 {
   KanbanListStore *self = KANBAN_LIST_STORE (object);
+
   deregister_kanban_viewmodel_observer (self);
   g_clear_pointer (&self->card_list, g_sequence_free);
+  g_clear_pointer (&self->card_table, g_hash_table_destroy);
+
   G_OBJECT_CLASS (kanban_list_store_parent_class)->finalize (object);
 }
 
 static void
 kanban_list_store_init (KanbanListStore *self)
 {
-  self->card_list = g_sequence_new(g_object_unref);
+  self->card_list = g_sequence_new (g_object_unref);
+  self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
   register_kanban_viewmodel_observer (self);
 }
 
