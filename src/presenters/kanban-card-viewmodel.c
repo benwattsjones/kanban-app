@@ -145,7 +145,7 @@ kanban_card_viewmodel_class_init (KanbanCardViewModelClass *klass)
                      "Card ID",
                      "Unique, immutable, kanban card identifier",
                      0, G_MAXINT, 0,
-                     G_PARAM_CONSTRUCT_ONLY);
+                     G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
   obj_properties[PROP_COLUMN_ID] =
     g_param_spec_int("column-id",
                      "Column ID", 

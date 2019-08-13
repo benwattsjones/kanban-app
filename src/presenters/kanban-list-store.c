@@ -28,7 +28,7 @@ struct _KanbanListStore
   guint                 num_cards;
   gchar               **kanban_column_names;
 
-  KanbanCardViewModel  *card_list[10]; // TODO: replace stub with GHashTable /similer
+  KanbanCardViewModel  *card_list[10]; // TODO: use GHashTable /similar
 };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
@@ -101,6 +101,8 @@ void
 kanban_list_store_new_card (KanbanListStore  *self,
                             const KanbanCard *card_data)
 {
+  KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
+  self->card_list[card_data->priority] = new_card;
   g_print ("New card: HEADING: %s; CONTENT: %s\n",
            card_data->heading, card_data->content);
 }
@@ -110,9 +112,9 @@ kanban_list_store_new_card (KanbanListStore  *self,
 static void
 kanban_list_store_finalize (GObject *object)
 {
+  // TODO: free proper card list store implementation
   KanbanListStore *self = KANBAN_LIST_STORE (object);
   deregister_kanban_viewmodel_observer (self);
-  g_print ("finalize KanbanListStore called\n");
   G_OBJECT_CLASS (kanban_list_store_parent_class)->finalize (object);
 }
 
