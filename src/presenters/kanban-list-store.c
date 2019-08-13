@@ -86,6 +86,14 @@ void
 kanban_list_store_change_content (KanbanListStore  *self,
                                   const KanbanCard *card_data)
 {
+  GSequenceIter *iter = g_hash_table_lookup(self->card_table, 
+                                            GINT_TO_POINTER (card_data->card_id));
+  KanbanCardViewModel *card = g_sequence_get(iter);
+  if (card_data->heading)
+    g_object_set (G_OBJECT (card), "heading", card_data->heading, NULL);
+  if (card_data->content)
+    g_object_set (G_OBJECT (card), "content", card_data->content, NULL);
+
   g_print ("Changed card content: ID: %d; HEADING: %s; CONTENT: %s\n", 
            card_data->card_id, card_data->heading, card_data->content);
 }
