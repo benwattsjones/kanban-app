@@ -75,31 +75,27 @@ g_list_model_iface_init (GListModelInterface *iface)
 /* funcs for editing cards in column */
 
 void
-kanban_list_store_change_column (KanbanListStore *self,
-                                 gint             column_id,
-                                 gchar           *heading)
+kanban_list_store_change_column (KanbanListStore  *self,
+                                 const KanbanCard *card_data)
 {
-  g_print ("Changed column: ID: %d; HEADING: %s\n", column_id, heading);
+  g_print ("Changed column: ID: %d; HEADING: %s\n",
+           card_data->column_id, card_data->heading);
 }
 
 void
-kanban_list_store_change_content (KanbanListStore *self,
-                                  gint             card_id,
-                                  gchar           *heading,
-                                  gchar           *content)
+kanban_list_store_change_content (KanbanListStore  *self,
+                                  const KanbanCard *card_data)
 {
   g_print ("Changed card content: ID: %d; HEADING: %s; CONTENT: %s\n", 
-           card_id, heading, content);
+           card_data->card_id, card_data->heading, card_data->content);
 }
 
 void
-kanban_list_store_move_card (KanbanListStore *self,
-                             gint             card_id,
-                             gint             column_id,
-                             gint             priority)
+kanban_list_store_move_card (KanbanListStore  *self,
+                             const KanbanCard *card_data)
 {
   g_print ("Moved card: ID: %d, COLUMN: %d, PRIORITY: %d\n",
-           card_id, column_id, priority);
+           card_data->card_id, card_data->column_id, card_data->priority);
 }
 
 void

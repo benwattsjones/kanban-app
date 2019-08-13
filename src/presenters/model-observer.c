@@ -28,18 +28,13 @@ kanban_model_changed (void             *instance,
 {
   KanbanListStore *viewmodel = instance;
   assert (viewmodel != NULL);
-  int column_id = card_data->column_id;
-  int card_id = card_data->card_id;
-  char *heading = card_data->heading;
-  char *content = card_data->content;
-  int priority = card_data->priority;
   
-  if (card_id == 0)
-    kanban_list_store_change_column (viewmodel, column_id, heading);
+  if (card_data->card_id == 0)
+    kanban_list_store_change_column (viewmodel, card_data);
   else if (card_data->column_id == 0)
-    kanban_list_store_change_content (viewmodel, card_id, heading, content);
+    kanban_list_store_change_content (viewmodel, card_data);
   else if (card_data->heading == NULL)
-    kanban_list_store_move_card (viewmodel, card_id, column_id, priority);
+    kanban_list_store_move_card (viewmodel, card_data);
   else
     kanban_list_store_new_card (viewmodel, card_data);
 }

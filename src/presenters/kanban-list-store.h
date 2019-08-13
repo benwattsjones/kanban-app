@@ -29,16 +29,11 @@ KanbanListStore  *initialize_viewmodel             ();
 void              destroy_viewmodel                (KanbanListStore   *viewmodel);
 
 void              kanban_list_store_change_column  (KanbanListStore   *self,
-                                                    gint               column_id,
-                                                    gchar             *heading);
+                                                    const KanbanCard  *card_data);
 void              kanban_list_store_change_content (KanbanListStore   *self,
-                                                    gint               card_id,
-                                                    gchar             *heading,
-                                                    gchar             *content);
+                                                    const KanbanCard  *card_data);
 void              kanban_list_store_move_card      (KanbanListStore   *self,
-                                                    gint               card_id,
-                                                    gint               column_id,
-                                                    gint               priority);
+                                                    const KanbanCard  *card_data);
 void              kanban_list_store_new_card       (KanbanListStore   *self,
                                                     const KanbanCard  *card_data);
 
