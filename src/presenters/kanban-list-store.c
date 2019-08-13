@@ -28,7 +28,8 @@ struct _KanbanListStore
   guint                 num_cards;
   gchar               **kanban_column_names;
 
-  KanbanCardViewModel  *card_list[10]; // TODO: use GHashTable /similar
+  //KanbanCardViewModel  *card_list[10]; // TODO: use GHashTable /similar
+  GSequence            *card_list;
 };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
@@ -56,7 +57,11 @@ static gpointer
 kanban_list_model_get_item (GListModel *model,
                             guint       i)
 {
-  return (g_object_ref (KANBAN_LIST_STORE (model))->card_list)[i];
+  GSequenceIter *iter;
+  KanbanCardViewModel *card;
+  iter = g_sequence_get_iter_at_pos (KANBAN_LIST_STORE (model)->card_list, i);
+  card =  g_sequence_get(iter);
+  return g_object_ref (card);
 }
 
 static void
@@ -102,9 +107,15 @@ kanban_list_store_new_card (KanbanListStore  *self,
                             const KanbanCard *card_data)
 {
   KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
-  self->card_list[card_data->priority] = new_card;
+  GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,
+                                                    card_data->priority);
+  iter = g_sequence_insert_before (iter, g_object_ref (new_card));
+  self->num_cards++;
+
   g_print ("New card: HEADING: %s; CONTENT: %s\n",
            card_data->heading, card_data->content);
+  // TODO: iter points to new card - could place in GHashTable for searching
+  // TODO: g_list_model_items_changed() signal
 }
 
 /* funcs for class */
@@ -112,15 +123,16 @@ kanban_list_store_new_card (KanbanListStore  *self,
 static void
 kanban_list_store_finalize (GObject *object)
 {
-  // TODO: free proper card list store implementation
   KanbanListStore *self = KANBAN_LIST_STORE (object);
   deregister_kanban_viewmodel_observer (self);
+  g_clear_pointer (&self->card_list, g_sequence_free);
   G_OBJECT_CLASS (kanban_list_store_parent_class)->finalize (object);
 }
 
 static void
 kanban_list_store_init (KanbanListStore *self)
 {
+  self->card_list = g_sequence_new(g_object_unref);
   register_kanban_viewmodel_observer (self);
 }
 
