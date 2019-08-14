@@ -55,11 +55,18 @@ kanban_application_init (KanbanApplication *app)
 }
 
 static void
+kanban_application_startup (GApplication *app)
+{
+  KanbanApplication *self = KANBAN_APPLICATION (app);
+  self->viewmodel = initialize_viewmodel ();
+
+  G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
+}
+
+static void
 kanban_application_activate (GApplication *app)
 {
   initialize_kanban_view (KANBAN_APPLICATION (app));
-  KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = initialize_viewmodel ();
 }
 
 static void
@@ -99,6 +106,7 @@ static void
 kanban_application_class_init (KanbanApplicationClass *klass)
 {
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
+  application_class->startup = kanban_application_startup;
   application_class->activate = kanban_application_activate;
   application_class->open = kanban_application_open;
   application_class->handle_local_options = kanban_application_handle_local_options;
