@@ -15,6 +15,8 @@
 #ifndef KANBAN_LIST_BOX_H
 #define KANBAN_LIST_BOX_H
 
+#include "../presenters/kanban-list-store.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -23,7 +25,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkListBox)
 
-KanbanListBox *kanban_list_box_new ();
+KanbanListBox *kanban_list_box_new (KanbanListStore *card_data);
 
 G_END_DECLS
 
