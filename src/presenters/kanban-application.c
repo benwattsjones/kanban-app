@@ -14,7 +14,7 @@
 
 #include "kanban-application.h"
 
-#include "kanban-tree-store.h"
+#include "kanban-list-store.h"
 #include "presenter-view-interface.h"
 
 #include <gtk/gtk.h>
@@ -30,8 +30,8 @@ enum
 
 struct _KanbanApplication
 {
-  GtkApplication  parent_instance;
-  GtkTreeStore   *viewmodel;
+  GtkApplication    parent_instance;
+  KanbanListStore  *viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -52,14 +52,26 @@ kanban_application_init (KanbanApplication *app)
   g_application_set_option_context_parameter_string (G_APPLICATION (app), 
     "- description of program for help");
   g_application_add_main_option_entries (G_APPLICATION (app), entries);
+  app->viewmodel = NULL;
+}
+
+static void
+kanban_application_startup (GApplication *app)
+{
+  KanbanApplication *self = KANBAN_APPLICATION (app);
+  self->viewmodel = initialize_viewmodel ();
+
+  G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
+  g_print ("app viewmodel pointer: %p\n", (void *) self->viewmodel);
 }
 
 static void
 kanban_application_activate (GApplication *app)
 {
   initialize_kanban_view (KANBAN_APPLICATION (app));
-  KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = initialize_viewmodel ();
+
+  g_print("init app list len: %d\n",
+      g_list_model_get_n_items (G_LIST_MODEL (KANBAN_APPLICATION (app)->viewmodel)));
 }
 
 static void
@@ -99,10 +111,18 @@ static void
 kanban_application_class_init (KanbanApplicationClass *klass)
 {
   GApplicationClass *application_class = G_APPLICATION_CLASS (klass);
+  application_class->startup = kanban_application_startup;
   application_class->activate = kanban_application_activate;
   application_class->open = kanban_application_open;
   application_class->handle_local_options = kanban_application_handle_local_options;
   application_class->shutdown = kanban_application_shutdown;
+}
+
+KanbanListStore *
+kanban_application_get_viewmodel (KanbanApplication *self)
+{
+  g_print ("app viewmodel pointer ret: %p\n", (void *) self->viewmodel);
+  return self->viewmodel;
 }
 
 int

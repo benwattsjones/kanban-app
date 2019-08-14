@@ -34,6 +34,7 @@ test_observers()
   emit_kanban_card_change_signal (card);
   usleep (200000);
   card->content = "New Card Content!";
+  card->column_id = 0;
   emit_kanban_card_change_signal (card);
   
   free (card);

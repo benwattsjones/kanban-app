@@ -1,4 +1,4 @@
-/* src/presenters/kanban-tree-store.h
+/* src/views/kanban-list-box.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,20 +12,22 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_TREE_STORE_H
-#define KANBAN_TREE_STORE_H
+#ifndef KANBAN_LIST_BOX_H
+#define KANBAN_LIST_BOX_H
 
-#include "../models/kanban-cards.h"
+#include "../presenters/kanban-list-store.h"
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-GtkTreeStore  *initialize_viewmodel  ();
-void           viewmodel_change_card (const KanbanCard  *card_data);
-void           destroy_viewmodel     (GtkTreeStore      *viewmodel);
+#define KANBAN_LIST_BOX_TYPE (kanban_list_box_get_type ())
+
+G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkListBox)
+
+KanbanListBox *kanban_list_box_new (KanbanListStore *card_data);
 
 G_END_DECLS
 
-#endif /* KANBAN_TREE_STORE_H */
+#endif /* KANBAN_LIST_BOX_H */
 

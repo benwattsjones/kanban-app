@@ -15,12 +15,14 @@
 #ifndef MODEL_OBSERVER_H
 #define MODEL_OBSERVER_H
 
+#include "kanban-list-store.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-void register_kanban_viewmodel_observer   (GtkTreeStore *viewmodel);
-void deregister_kanban_viewmodel_observer (GtkTreeStore *viewmodel);
+void register_kanban_viewmodel_observer   (KanbanListStore *viewmodel);
+void deregister_kanban_viewmodel_observer (KanbanListStore *viewmodel);
 
 G_END_DECLS
 

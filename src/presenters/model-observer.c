@@ -14,33 +14,33 @@
 
 #include "model-observer.h"
 
-#include "kanban-tree-store.h"
+#include "kanban-list-store.h"
 #include "../models/model-presenter-interface.h"
-#include "../models/kanban-cards.h" /* for test_observers() only */
+#include "../models/kanban-cards.h"
 
-#include <gtk/gtk.h>
 #include <assert.h>
-#include <stdlib.h>
+#include <stddef.h>
 
 
 static void 
 kanban_model_changed (void             *instance, 
                       const KanbanCard *card_data)
 {
-  GtkTreeStore *viewmodel = instance;
+  KanbanListStore *viewmodel = instance;
   assert (viewmodel != NULL);
+  
   if (card_data->card_id == 0)
-    {
-      // change is to a column. TODO: implement change column funciton.
-    }
+    kanban_list_store_change_column (viewmodel, card_data);
+  else if (card_data->column_id == 0)
+    kanban_list_store_change_content (viewmodel, card_data);
+  else if (card_data->heading == NULL)
+    kanban_list_store_move_card (viewmodel, card_data);
   else
-    {
-      viewmodel_change_card (card_data);
-    }
+    kanban_list_store_new_card (viewmodel, card_data);
 }
 
 void 
-register_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
+register_kanban_viewmodel_observer (KanbanListStore *viewmodel)
 {
   assert (viewmodel != NULL);
   KanbanModelObserver observer = { .instance = viewmodel,
@@ -50,7 +50,7 @@ register_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
 }
 
 void
-deregister_kanban_viewmodel_observer (GtkTreeStore *viewmodel)
+deregister_kanban_viewmodel_observer (KanbanListStore *viewmodel)
 {
   KanbanModelObserver observer = { .instance = viewmodel,
                                    .notification = kanban_model_changed };

@@ -6,8 +6,10 @@ GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources 
 
 SRC = src/presenters/kanban-application.c \
 	  src/presenters/model-observer.c \
-	  src/presenters/kanban-tree-store.c \
+	  src/presenters/kanban-list-store.c \
+	  src/presenters/kanban-card-viewmodel.c \
 	  src/views/kanban-window.c \
+	  src/views/kanban-list-box.c \
 	  src/models/model-presenter-interface.c \
 	  src/models/kanban-cards.c \
 	  src/main.c
