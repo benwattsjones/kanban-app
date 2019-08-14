@@ -25,7 +25,12 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanCardViewModel, kanban_card_viewmodel, KANBAN, CARD_VIEWMODEL, GObject)
 
-KanbanCardViewModel *kanban_card_viewmodel_new (const KanbanCard *card_data);
+KanbanCardViewModel *kanban_card_viewmodel_new (const KanbanCard    *card_data);
+
+void                 kanban_card_viewmodel_update_contents 
+                                               (KanbanCardViewModel *self,
+                                                gchar               *heading,
+                                                gchar               *content);
 
 G_END_DECLS
 

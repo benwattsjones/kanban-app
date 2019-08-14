@@ -186,3 +186,22 @@ kanban_card_viewmodel_new (const KanbanCard *card_data)
                        NULL);
 }
 
+void
+kanban_card_viewmodel_update_contents (KanbanCardViewModel *self,
+                                       gchar               *heading,
+                                       gchar               *content)
+{
+  if (heading)
+    {
+      g_free (self->heading);
+      self->heading = g_strdup (heading);
+      g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_HEADING]);
+    }
+  if (content)
+    {
+      g_free (self->content);
+      self->heading = g_strdup (content);
+      g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_CONTENT]);
+    }
+}
+
