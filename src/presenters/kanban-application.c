@@ -105,6 +105,12 @@ kanban_application_class_init (KanbanApplicationClass *klass)
   application_class->shutdown = kanban_application_shutdown;
 }
 
+KanbanListStore *
+kanban_application_get_viewmodel (KanbanApplication *self)
+{
+  return self->viewmodel;
+}
+
 int
 initialize_kanban_presenter (int argc, char *argv[])
 {

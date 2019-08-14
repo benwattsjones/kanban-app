@@ -14,6 +14,7 @@
 
 #include "kanban-window.h"
 
+#include "kanban-list-box.h"
 #include "../presenters/presenter-view-interface.h"
 
 #include <gtk/gtk.h>
@@ -45,5 +46,7 @@ initialize_kanban_view (KanbanApplication *app)
                                     "application", app, 
                                     NULL);
   gtk_window_present (GTK_WINDOW (win));
+
+  kanban_list_box_new (kanban_application_get_viewmodel (app));
 }
 

@@ -15,6 +15,8 @@
 #ifndef KANBAN_APPLICATION_H
 #define KANBAN_APPLICATION_H
 
+#include "kanban-list-store.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -23,7 +25,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanApplication, kanban_application, KANBAN, APPLICATION, GtkApplication)
 
-int initialize_kanban_presenter (int argc, char *argv[]);
+
+KanbanListStore *kanban_application_get_viewmodel (KanbanApplication *self);
+
+int              initialize_kanban_presenter      (int                argc,
+                                                   char              *argv[]);
 
 G_END_DECLS
 
