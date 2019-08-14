@@ -16,6 +16,7 @@
 
 #include "kanban-list-box.h"
 #include "../presenters/presenter-view-interface.h"
+#include "../presenters/kanban-list-store.h" // TODO - remove after testing?
 
 #include <gtk/gtk.h>
 
@@ -42,11 +43,16 @@ kanban_window_class_init (KanbanWindowClass *klass)
 void
 initialize_kanban_view (KanbanApplication *app)
 {
-  KanbanWindow *win = g_object_new (KANBAN_WINDOW_TYPE, 
-                                    "application", app, 
-                                    NULL);
-  gtk_window_present (GTK_WINDOW (win));
+  KanbanWindow *window = g_object_new (KANBAN_WINDOW_TYPE,
+                                       "application", app,
+                                       NULL);
+  gtk_window_present (GTK_WINDOW (window));
 
-  kanban_list_box_new (kanban_application_get_viewmodel (app));
+  // TODO: implement properly via .ui files
+  KanbanListStore *viewmodel = kanban_application_get_viewmodel (app);
+  g_print ("window viewmodel pointer: %p\n", (void *) viewmodel);
+  KanbanListBox *card_list = kanban_list_box_new (viewmodel);
+  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (card_list));
+  gtk_widget_show_all (GTK_WIDGET (window));
 }
 

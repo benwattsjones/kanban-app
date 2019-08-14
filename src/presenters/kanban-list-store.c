@@ -107,6 +107,7 @@ void
 kanban_list_store_new_card (KanbanListStore  *self,
                             const KanbanCard *card_data)
 {
+  g_print("Seq length: %d\n", g_sequence_get_length (self->card_list));
   KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
   GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,
                                                     card_data->priority);
@@ -117,6 +118,7 @@ kanban_list_store_new_card (KanbanListStore  *self,
   guint position = g_sequence_iter_get_position (iter);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 
+  g_print("Seq length: %d\n", g_sequence_get_length (self->card_list));
   g_print ("New card: HEADING: %s; CONTENT: %s\n",
            card_data->heading, card_data->content);
 }
@@ -138,9 +140,11 @@ kanban_list_store_finalize (GObject *object)
 static void
 kanban_list_store_init (KanbanListStore *self)
 {
+  self->num_cards = 0;
   self->card_list = g_sequence_new (g_object_unref);
   self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
   register_kanban_viewmodel_observer (self);
+  g_print ("liststore viewmodel pointer: %p\n", (void *) self);
 }
 
 static void

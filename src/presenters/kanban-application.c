@@ -52,6 +52,7 @@ kanban_application_init (KanbanApplication *app)
   g_application_set_option_context_parameter_string (G_APPLICATION (app), 
     "- description of program for help");
   g_application_add_main_option_entries (G_APPLICATION (app), entries);
+  app->viewmodel = NULL;
 }
 
 static void
@@ -61,12 +62,16 @@ kanban_application_startup (GApplication *app)
   self->viewmodel = initialize_viewmodel ();
 
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
+  g_print ("app viewmodel pointer: %p\n", (void *) self->viewmodel);
 }
 
 static void
 kanban_application_activate (GApplication *app)
 {
   initialize_kanban_view (KANBAN_APPLICATION (app));
+
+  g_print("init app list len: %d\n",
+      g_list_model_get_n_items (G_LIST_MODEL (KANBAN_APPLICATION (app)->viewmodel)));
 }
 
 static void
@@ -116,6 +121,7 @@ kanban_application_class_init (KanbanApplicationClass *klass)
 KanbanListStore *
 kanban_application_get_viewmodel (KanbanApplication *self)
 {
+  g_print ("app viewmodel pointer ret: %p\n", (void *) self->viewmodel);
   return self->viewmodel;
 }
 

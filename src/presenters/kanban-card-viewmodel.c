@@ -200,7 +200,7 @@ kanban_card_viewmodel_update_contents (KanbanCardViewModel *self,
   if (content)
     {
       g_free (self->content);
-      self->heading = g_strdup (content);
+      self->content = g_strdup (content);
       g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_CONTENT]);
     }
 }
