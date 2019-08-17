@@ -1,6 +1,7 @@
 *.o
-src/resources.c
-kanban-app
+/src/resources.c
+/kanban-app
 *.swp
 /notes
+/builddir/*
 
