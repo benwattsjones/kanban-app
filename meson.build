@@ -29,17 +29,26 @@ kanban_app_sources += gnome.compile_resources(
 )
 
 kanban_app_c_args = ['-fexceptions',
-                     '-fpie',
-                     '-Wl,-pie',
                      '-fstack-clash-protection',
                      '-fstack-protector-strong',
+                     '-fasynchronous-unwind-tables',
+                     '-fpic',
+                     '-shared',
+                     '-fcf-protection',
+                     '-pipe',
                      '-g',
                      '-O3',
+                     '-march=native',
+                     '-D_FORTIFY_SOURCE=2',
                      '-Wall',
                      '-Wextra',
+                     '-Werror=format-security',
+                     '-Werror=implicit-function-declaration',
                      '-Wpedantic']
 
-kanban_app_ld_args = []
+kanban_app_ld_args = ['-Wl,-z,defs',
+                      '-Wl,-z,now',
+                      '-Wl,-z,relro']
 
 kanban_app_deps = [dependency('gtk+-3.0', version: '>=3.24.10')] 
 
@@ -48,6 +57,7 @@ executable(
                  sources: kanban_app_sources,
                   c_args: kanban_app_c_args,
                link_args: kanban_app_ld_args,
-            dependencies: kanban_app_deps
+            dependencies: kanban_app_deps,
+                     pie: true
 )
 
