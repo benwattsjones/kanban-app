@@ -16,6 +16,7 @@
 
 #include "kanban-list-store.h"
 #include "presenter-view-interface.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 
@@ -93,7 +94,7 @@ kanban_application_handle_local_options (GApplication *app,
   (void) app;
   if (g_variant_dict_contains (options, "version"))
     {
-      g_print("Kanban App version information\n");
+      g_print("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
       return SUCCESS_KANBAN_PROGRAM_CODE;
     }
   return CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE;
@@ -129,7 +130,7 @@ int
 initialize_kanban_presenter (int argc, char *argv[])
 {
   KanbanApplication *app = g_object_new (KANBAN_APPLICATION_TYPE,
-                                         "application-id", "com.benwattsjones.kanban",
+                                         "application-id", APPLICATION_ID,
                                          "flags", G_APPLICATION_HANDLES_OPEN,
                                          NULL);
   int status = g_application_run (G_APPLICATION (app), argc, argv);
