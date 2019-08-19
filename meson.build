@@ -1,7 +1,7 @@
 project(
        'kanban-app',
-                'c',
-    default_options: ['c_std=gnu11'],
+       ['c', 'cpp'],
+    default_options: ['c_std=gnu11', 'cpp_std=c++11'],
             license: 'GPL-3.0-or-later',
       meson_version: '>=0.50.0',
             version: '0.0.1'
@@ -38,7 +38,6 @@ kanban_app_sources = files(
     'src/views/kanban-list-box.c',
     'src/models/model-presenter-interface.c',
     'src/models/kanban-cards.c',
-    'src/main.c'
 )
 
 kanban_app_sources += gnome.compile_resources(
@@ -47,6 +46,8 @@ kanban_app_sources += gnome.compile_resources(
     source_dir: 'src/views',
     export: true
 )
+
+kanban_app_sources_main = kanban_app_sources + files('src/main.c')
 
 kanban_app_c_args = [
     '-fexceptions',
@@ -74,15 +75,41 @@ kanban_app_ld_args = [
     '-Wl,-z,relro'
 ]
 
-kanban_app_deps = [dependency('gtk+-3.0', version: '>=3.24.10')] 
+kanban_app_deps = [
+    dependency('gtk+-3.0', version: '>=3.24.10')
+] 
 
 executable(
     meson.project_name(),
-                 sources: kanban_app_sources,
+                 sources: kanban_app_sources_main,
                   c_args: kanban_app_c_args,
                link_args: kanban_app_ld_args,
             dependencies: kanban_app_deps,
                      pie: true,
      include_directories: config_h_inc
 )
+
+gtest_dep = dependency('gtest_main', main: true, required: false)
+
+if gtest_dep.found()
+    test_sources = kanban_app_sources
+    test_sources += files(
+        'tests/check-gtest-working-test.cpp'
+    )
+
+    e = executable(
+        '@0@-tests'.format(meson.project_name()),
+                    sources: test_sources,
+                     c_args: kanban_app_c_args,
+                  link_args: kanban_app_ld_args,
+               dependencies: [gtest_dep, kanban_app_deps],
+                        pie: true,
+        include_directories: config_h_inc
+    )
+
+    test('gtest tests', e)
+else
+    warning('gtest dependency not found. NOT building tests.')
+    message('Consider installing gtest: dnf install gtest-devel')
+endif
 
