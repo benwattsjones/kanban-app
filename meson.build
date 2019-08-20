@@ -89,27 +89,9 @@ executable(
      include_directories: config_h_inc
 )
 
-gtest_dep = dependency('gtest_main', main: true, required: false)
+test_deps = [
+    dependency('gtest_main', main: true, required: false)
+]
 
-if gtest_dep.found()
-    test_sources = kanban_app_sources
-    test_sources += files(
-        'tests/check-gtest-working-test.cpp'
-    )
-
-    e = executable(
-        '@0@-tests'.format(meson.project_name()),
-                    sources: test_sources,
-                     c_args: kanban_app_c_args,
-                  link_args: kanban_app_ld_args,
-               dependencies: [gtest_dep, kanban_app_deps],
-                        pie: true,
-        include_directories: config_h_inc
-    )
-
-    test('gtest tests', e)
-else
-    warning('gtest dependency not found. NOT building tests.')
-    message('Consider installing gtest: dnf install gtest-devel')
-endif
+subdir('tests', if_found: test_deps)
 
