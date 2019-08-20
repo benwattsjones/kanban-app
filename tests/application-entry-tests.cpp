@@ -12,17 +12,18 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-extern "C" {
-#include "../src/presenters/kanban-application.h"
-#include "../src/presenters/kanban-list-store.h"
-#include <config.h>
+extern "C"
+{
+  #include "../src/presenters/kanban-application.h"
+  #include "../src/presenters/kanban-list-store.h"
+  #include <config.h>
 
-#include <gtk/gtk.h>
+  #include <gtk/gtk.h>
 }
 
 #include "gtest/gtest.h"
 
-// stubs:
+// Stubs:
 extern "C"
 {
   void initialize_kanban_view (KanbanApplication *app) { (void) app; }
@@ -30,7 +31,7 @@ extern "C"
   void destroy_viewmodel (KanbanListStore *viewmodel) { (void) viewmodel; }
 }
 
-
+// Test Fixtures:
 class ApplicationEntryTests : public ::testing::Test
 {
 protected:
@@ -50,7 +51,7 @@ protected:
   }
 };
 
-
+// Tests:
 TEST_F(ApplicationEntryTests, checkExitCodeSuccess)
 {
   int status = g_application_run (G_APPLICATION (app), 0, NULL);
