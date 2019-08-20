@@ -36,9 +36,18 @@ class ApplicationEntryTests : public ::testing::Test
 {
 protected:
   gpointer app;
+  static gchar *printed_string;
+
+  static void redirect_gprint(const gchar *string)
+  {
+    g_free (printed_string);
+    printed_string = g_strdup (string);
+  }
 
   void SetUp() override
   {
+    printed_string = NULL;
+    g_set_print_handler (redirect_gprint);
     app = g_object_new (KANBAN_APPLICATION_TYPE,
                         "application-id", APPLICATION_ID,
                         "flags", G_APPLICATION_HANDLES_OPEN,
@@ -48,13 +57,28 @@ protected:
   void TearDown() override
   {
     g_object_unref (app);
+    g_free (printed_string);
   }
 };
+
+gchar *ApplicationEntryTests::printed_string = NULL;
 
 // Tests:
 TEST_F(ApplicationEntryTests, checkExitCodeSuccess)
 {
   int status = g_application_run (G_APPLICATION (app), 0, NULL);
   EXPECT_EQ(status, 0);
+}
+
+TEST_F(ApplicationEntryTests, checkVersionOptionPrints)
+{
+  char *prog_name = g_strdup("prog");
+  char *cmd_options = g_strdup("--version");
+  char *opt[] = {prog_name, cmd_options};
+  int status = g_application_run (G_APPLICATION (app), 2, opt);
+  EXPECT_EQ(status, 0);
+  EXPECT_STREQ(printed_string, PACKAGE_NAME " " PACKAGE_VERSION "\n");
+  g_free(prog_name);
+  g_free(cmd_options);
 }
 
