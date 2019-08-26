@@ -38,6 +38,7 @@ kanban_app_sources = files(
     'src/views/kanban-list-box.c',
     'src/models/model-presenter-interface.c',
     'src/models/kanban-cards.c',
+    'src/main.c'
 )
 
 kanban_app_sources += gnome.compile_resources(
@@ -46,8 +47,6 @@ kanban_app_sources += gnome.compile_resources(
     source_dir: 'src/views',
     export: true
 )
-
-kanban_app_sources_main = kanban_app_sources + files('src/main.c')
 
 kanban_app_c_args = [
     '-fexceptions',
@@ -81,7 +80,7 @@ kanban_app_deps = [
 
 executable(
     meson.project_name(),
-                 sources: kanban_app_sources_main,
+                 sources: kanban_app_sources,
                   c_args: kanban_app_c_args,
                link_args: kanban_app_ld_args,
             dependencies: kanban_app_deps,
