@@ -24,11 +24,36 @@ extern "C"
 #include "gtest/gtest.h"
 
 // Stubs:
+static struct _FunctionCallTracker
+{
+  int func_call_counter = 0;
+  int initialize_kanban_view_func_count = 0;
+  int initialize_viewmodel_func_count = 0;
+  int destroy_viewmodel_func_count = 0;
+} FunctionCallTracker, FunctionCallTrackerReset;
+
 extern "C"
 {
-  void initialize_kanban_view (KanbanApplication *app) { (void) app; }
-  KanbanListStore *initialize_viewmodel() { return NULL; }
-  void destroy_viewmodel (KanbanListStore *viewmodel) { (void) viewmodel; }
+  void initialize_kanban_view (KanbanApplication *app)
+  {
+    (void) app;
+    FunctionCallTracker.initialize_kanban_view_func_count =
+        ++FunctionCallTracker.func_call_counter;
+  }
+
+  KanbanListStore *initialize_viewmodel()
+  {
+    FunctionCallTracker.initialize_viewmodel_func_count =
+        ++FunctionCallTracker.func_call_counter;
+    return NULL;
+  }
+
+  void destroy_viewmodel (KanbanListStore *viewmodel)
+  {
+    (void) viewmodel;
+    FunctionCallTracker.destroy_viewmodel_func_count =
+        ++FunctionCallTracker.func_call_counter;
+  }
 }
 
 // Test Fixtures:
@@ -48,6 +73,7 @@ protected:
   {
     printed_string = NULL;
     g_set_print_handler (redirect_gprint);
+    FunctionCallTracker = FunctionCallTrackerReset;
     app = g_object_new (KANBAN_APPLICATION_TYPE,
                         "application-id", APPLICATION_ID,
                         "flags", G_APPLICATION_HANDLES_OPEN,
@@ -80,5 +106,14 @@ TEST_F(ApplicationEntryTests, checkVersionOptionPrints)
   EXPECT_STREQ(printed_string, PACKAGE_NAME " " PACKAGE_VERSION "\n");
   g_free(prog_name);
   g_free(cmd_options);
+}
+
+TEST_F(ApplicationEntryTests, checkInitializationCallOrder)
+{
+  int status = g_application_run (G_APPLICATION (app), 0, NULL);
+  EXPECT_EQ(status, 0);
+  EXPECT_EQ(FunctionCallTracker.initialize_viewmodel_func_count, 1);
+  EXPECT_EQ(FunctionCallTracker.initialize_kanban_view_func_count, 2);
+  EXPECT_EQ(FunctionCallTracker.destroy_viewmodel_func_count, 3);
 }
 
