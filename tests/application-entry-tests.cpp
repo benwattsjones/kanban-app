@@ -61,6 +61,8 @@ class ApplicationEntryTests : public ::testing::Test
 {
 protected:
   gpointer app;
+  int argc_stub = 0;
+  char **argv_stub = NULL;
   static gchar *printed_string;
 
   static void redirect_gprint(const gchar *string)
@@ -92,7 +94,7 @@ gchar *ApplicationEntryTests::printed_string = NULL;
 // Tests:
 TEST_F(ApplicationEntryTests, checkExitCodeSuccess)
 {
-  int status = g_application_run (G_APPLICATION (app), 0, NULL);
+  int status = g_application_run (G_APPLICATION (app), argc_stub, argv_stub);
   EXPECT_EQ(status, 0);
 }
 
@@ -110,10 +112,16 @@ TEST_F(ApplicationEntryTests, checkVersionOptionPrints)
 
 TEST_F(ApplicationEntryTests, checkInitializationCallOrder)
 {
-  int status = g_application_run (G_APPLICATION (app), 0, NULL);
+  int status = g_application_run (G_APPLICATION (app), argc_stub, argv_stub);
   EXPECT_EQ(status, 0);
   EXPECT_EQ(FunctionCallTracker.initialize_viewmodel_func_count, 1);
   EXPECT_EQ(FunctionCallTracker.initialize_kanban_view_func_count, 2);
   EXPECT_EQ(FunctionCallTracker.destroy_viewmodel_func_count, 3);
+}
+
+TEST_F(ApplicationEntryTests, checkInitializationFunctionReturnsSuccess)
+{
+  int status = initialize_kanban_presenter (argc_stub, argv_stub);
+  EXPECT_EQ(status, 0);
 }
 
