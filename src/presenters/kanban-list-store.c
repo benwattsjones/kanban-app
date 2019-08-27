@@ -111,7 +111,7 @@ kanban_list_store_new_card (KanbanListStore  *self,
   KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
   GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,
                                                     card_data->priority);
-  iter = g_sequence_insert_before (iter, g_object_ref (new_card));
+  iter = g_sequence_insert_before (iter, new_card);
   self->num_cards++;
   g_hash_table_insert (self->card_table,
                        GINT_TO_POINTER (card_data->card_id), iter);
