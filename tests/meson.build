@@ -32,4 +32,7 @@ test('card_viewmodel_tests',
     )
 )
 
+add_test_setup('valgrind',
+    exe_wrapper: ['valgrind', '--leak-check=full', '--suppressions=/usr/share/glib-2.0/valgrind/glib.supp', '--error-exitcode=1', '--show-leak-kinds=all', '--trace-children=yes', '--errors-for-leak-kinds=definite,indirect', '-s'],
+)
 
