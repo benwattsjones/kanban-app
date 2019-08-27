@@ -32,6 +32,16 @@ test('card_viewmodel_tests',
     )
 )
 
+test('list_store_tests',
+    executable('list_store_tests',
+        files('../src/presenters/kanban-list-store.c',
+              '../src/presenters/kanban-card-viewmodel.c',
+              'kanban-list-store-tests.cpp'),
+        kwargs: default_test_args,
+    )
+)
+
+
 add_test_setup('valgrind',
     exe_wrapper: ['valgrind', '--leak-check=full', '--suppressions=/usr/share/glib-2.0/valgrind/glib.supp', '--error-exitcode=1', '--show-leak-kinds=all', '--trace-children=yes', '--errors-for-leak-kinds=definite,indirect', '-s'],
 )
