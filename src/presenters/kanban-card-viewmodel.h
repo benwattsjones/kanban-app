@@ -29,8 +29,8 @@ KanbanCardViewModel *kanban_card_viewmodel_new (const KanbanCard    *card_data);
 
 void                 kanban_card_viewmodel_update_contents 
                                                (KanbanCardViewModel *self,
-                                                gchar               *heading,
-                                                gchar               *content);
+                                                const gchar         *heading,
+                                                const gchar         *content);
 
 G_END_DECLS
 

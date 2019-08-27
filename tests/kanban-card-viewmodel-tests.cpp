@@ -94,3 +94,50 @@ TEST_F(KanbanCardViewModelTests, checkCardContentPropertyStored)
   free (stored_property);
 }
 
+TEST_F(KanbanCardViewModelTests, checkCardContentChanged)
+{
+  char *stored_property;
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+
+  kanban_card_viewmodel_update_contents (viewmodel, NULL, "changed content");
+  g_object_get (viewmodel, "content", &stored_property, NULL);
+  EXPECT_STREQ(stored_property, "changed content");
+
+  g_object_unref (viewmodel);
+  free (stored_property);
+}
+
+TEST_F(KanbanCardViewModelTests, checkCardHeadingChanged)
+{
+  char *stored_property;
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+
+  kanban_card_viewmodel_update_contents (viewmodel, "changed heading", NULL);
+  g_object_get (viewmodel, "heading", &stored_property, NULL);
+  EXPECT_STREQ(stored_property, "changed heading");
+
+  g_object_unref (viewmodel);
+  free (stored_property);
+}
+
+TEST_F(KanbanCardViewModelTests, checkCardDetailsUpdatedTogether)
+{
+  char *stored_content, *stored_heading;
+  card_data.content = g_strdup("old content");
+  card_data.heading = g_strdup("old heading");
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+
+  kanban_card_viewmodel_update_contents (viewmodel, "new heading", "new content");
+  g_object_get (viewmodel, "content", &stored_content, NULL);
+  g_object_get (viewmodel, "heading", &stored_heading, NULL);
+  EXPECT_STREQ(stored_content, "new content");
+  EXPECT_STREQ(stored_heading, "new heading");
+
+  g_object_unref (viewmodel);
+  free (stored_content);
+  free (stored_heading);
+  free (card_data.content);
+  free (card_data.heading);
+}
+
+
