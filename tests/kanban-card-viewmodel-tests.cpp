@@ -31,10 +31,10 @@ protected:
   void SetUp() override
   {
     card_data.card_id = 1;
-    card_data.column_id = 1;
+    card_data.column_id = 2;
     card_data.heading = NULL;
     card_data.content = NULL;
-    card_data.priority = 1;
+    card_data.priority = 3;
   }
 
   void TearDown() override
@@ -50,5 +50,47 @@ TEST_F(KanbanCardViewModelTests, checkCardIdPropertyStored)
   g_object_get (viewmodel, "card-id", &stored_property, NULL);
   EXPECT_EQ(stored_property, card_data.card_id);
   g_object_unref (viewmodel);
+}
+
+TEST_F(KanbanCardViewModelTests, checkColumnIdPropertyStored)
+{
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+  int stored_property;
+  g_object_get (viewmodel, "column-id", &stored_property, NULL);
+  EXPECT_EQ(stored_property, card_data.column_id);
+  g_object_unref (viewmodel);
+}
+
+TEST_F(KanbanCardViewModelTests, checkPriorityPropertyStored)
+{
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+  int stored_property;
+  g_object_get (viewmodel, "priority", &stored_property, NULL);
+  EXPECT_EQ(stored_property, card_data.priority);
+  g_object_unref (viewmodel);
+}
+
+TEST_F(KanbanCardViewModelTests, checkCardHeadingPropertyStored)
+{
+  card_data.heading = g_strdup("card heading");
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+  char *stored_property;
+  g_object_get (viewmodel, "heading", &stored_property, NULL);
+  EXPECT_STREQ(stored_property, card_data.heading);
+  g_object_unref (viewmodel);
+  free (card_data.heading);
+  free (stored_property);
+}
+
+TEST_F(KanbanCardViewModelTests, checkCardContentPropertyStored)
+{
+  card_data.content = g_strdup("card content");
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+  char *stored_property;
+  g_object_get (viewmodel, "content", &stored_property, NULL);
+  EXPECT_STREQ(stored_property, card_data.content);
+  g_object_unref (viewmodel);
+  free (card_data.content);
+  free (stored_property);
 }
 
