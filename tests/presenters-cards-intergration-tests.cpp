@@ -67,9 +67,11 @@ protected:
 
 
 // Tests:
-TEST_F(PresentersCardsIntergrationTests, checkExitCodeSuccess)
+TEST_F(PresentersCardsIntergrationTests, checkViewModelNotNull)
 {
-  EXPECT_EQ(0, 0);
+  KanbanListStore *viewmodel;
+  viewmodel = kanban_application_get_viewmodel (KANBAN_APPLICATION (app));
+  ASSERT_NE(viewmodel, nullptr);
 }
 
 
