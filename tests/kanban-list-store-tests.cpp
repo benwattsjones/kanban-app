@@ -50,7 +50,7 @@ protected:
     card_data.column_id = 2;
     card_data.heading = g_strdup("card heading!");
     card_data.content = g_strdup("card content.");
-    card_data.priority = 3;
+    card_data.priority = 0;
 
     viewmodel = initialize_viewmodel ();
   }
@@ -87,6 +87,18 @@ TEST_F(KanbanListStoreTests, checkAddCardIncrementsCount)
   kanban_list_store_new_card (viewmodel, &card_data);
   int num_items_new = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   EXPECT_EQ (num_items_new, num_items_orig + 1);
+}
+
+TEST_F(KanbanListStoreTests, checkCardItemRetrieved)
+{
+  kanban_list_store_new_card (viewmodel, &card_data);
+  KanbanCardViewModel *card = KANBAN_CARD_VIEWMODEL
+      (g_list_model_get_item (G_LIST_MODEL (viewmodel), card_data.priority));
+  char *content_stored;
+  g_object_get (card, "content", &content_stored, NULL);
+  EXPECT_STREQ (card_data.content, content_stored);
+  free (content_stored);
+  g_object_unref (card);
 }
 
 
