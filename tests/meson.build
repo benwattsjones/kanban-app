@@ -21,7 +21,8 @@ test('kanban_application_tests',
               'application-entry-tests.cpp'),
         kwargs: default_test_args,
         include_directories: config_h_inc,
-    )
+    ),
+    is_parallel: false,
 )
 
 test('card_viewmodel_tests', 
@@ -39,6 +40,18 @@ test('list_store_tests',
               'kanban-list-store-tests.cpp'),
         kwargs: default_test_args,
     )
+)
+
+test('presenter_integration_tests',
+    executable('presenter_integration_tests',
+        files('../src/presenters/kanban-application.c',
+              '../src/presenters/kanban-card-viewmodel.c',
+              '../src/presenters/kanban-list-store.c',
+              'presenters-cards-intergration-tests.cpp'),
+        kwargs: default_test_args,
+        include_directories: config_h_inc,
+    ),
+    is_parallel: false,
 )
 
 
