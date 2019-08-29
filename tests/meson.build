@@ -12,7 +12,8 @@ test('gtest_tests',
     executable('gtest_tests',
         files('check-gtest-working-test.cpp'),
         kwargs: default_test_args,
-    )
+    ),
+    suite: 'unit',
 )
 
 test('kanban_application_tests',
@@ -23,6 +24,7 @@ test('kanban_application_tests',
         include_directories: config_h_inc,
     ),
     is_parallel: false,
+    suite: 'integration',
 )
 
 test('card_viewmodel_tests', 
@@ -30,7 +32,8 @@ test('card_viewmodel_tests',
         files('../src/presenters/kanban-card-viewmodel.c',
               'kanban-card-viewmodel-tests.cpp'),
         kwargs: default_test_args,
-    )
+    ),
+    suite: 'unit',
 )
 
 test('list_store_tests',
@@ -39,7 +42,8 @@ test('list_store_tests',
               '../src/presenters/kanban-card-viewmodel.c',
               'kanban-list-store-tests.cpp'),
         kwargs: default_test_args,
-    )
+    ),
+    suite: 'unit',
 )
 
 test('presenter_integration_tests',
@@ -52,6 +56,7 @@ test('presenter_integration_tests',
         include_directories: config_h_inc,
     ),
     is_parallel: false,
+    suite: 'integration',
 )
 
 
