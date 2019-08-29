@@ -72,57 +72,6 @@ g_list_model_iface_init (GListModelInterface *iface)
   iface->get_item = kanban_list_model_get_item;
 }
 
-/* funcs for editing cards in column */
-
-void
-kanban_list_store_change_column (KanbanListStore  *self,
-                                 const KanbanCard *card_data)
-{
-  g_print ("Changed column: ID: %d; HEADING: %s\n",
-           card_data->column_id, card_data->heading);
-}
-
-void
-kanban_list_store_change_content (KanbanListStore  *self,
-                                  const KanbanCard *card_data)
-{
-  GSequenceIter *iter = g_hash_table_lookup (self->card_table, 
-                                             GINT_TO_POINTER (card_data->card_id));
-  KanbanCardViewModel *card = g_sequence_get(iter);
-  kanban_card_viewmodel_update_contents(card, card_data->heading, card_data->content);
-
-  g_print ("Changed card content: ID: %d; HEADING: %s; CONTENT: %s\n", 
-           card_data->card_id, card_data->heading, card_data->content);
-}
-
-void
-kanban_list_store_move_card (KanbanListStore  *self,
-                             const KanbanCard *card_data)
-{
-  g_print ("Moved card: ID: %d, COLUMN: %d, PRIORITY: %d\n",
-           card_data->card_id, card_data->column_id, card_data->priority);
-}
-
-void
-kanban_list_store_new_card (KanbanListStore  *self,
-                            const KanbanCard *card_data)
-{
-  g_print("Seq length: %d\n", g_sequence_get_length (self->card_list));
-  KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
-  GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,
-                                                    card_data->priority);
-  iter = g_sequence_insert_before (iter, g_object_ref (new_card));
-  self->num_cards++;
-  g_hash_table_insert (self->card_table,
-                       GINT_TO_POINTER (card_data->card_id), iter);
-  guint position = g_sequence_iter_get_position (iter);
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
-
-  g_print("Seq length: %d\n", g_sequence_get_length (self->card_list));
-  g_print ("New card: HEADING: %s; CONTENT: %s\n",
-           card_data->heading, card_data->content);
-}
-
 /* funcs for class */
 
 static void
@@ -144,7 +93,6 @@ kanban_list_store_init (KanbanListStore *self)
   self->card_list = g_sequence_new (g_object_unref);
   self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
   register_kanban_viewmodel_observer (self);
-  g_print ("liststore viewmodel pointer: %p\n", (void *) self);
 }
 
 static void
@@ -167,4 +115,48 @@ destroy_viewmodel (KanbanListStore *viewmodel)
   g_object_unref (viewmodel);
   viewmodel = NULL;
 }
+
+/* funcs for editing cards in column */
+
+void
+kanban_list_store_change_column (KanbanListStore  *self,
+                                 const KanbanCard *card_data)
+{
+  g_print ("Changed column: ID: %d; HEADING: %s\n",
+           card_data->column_id, card_data->heading);
+}
+
+void
+kanban_list_store_change_content (KanbanListStore  *self,
+                                  const KanbanCard *card_data)
+{
+  GSequenceIter *iter = g_hash_table_lookup (self->card_table, 
+                                             GINT_TO_POINTER (card_data->card_id));
+  KanbanCardViewModel *card = g_sequence_get (iter);
+  kanban_card_viewmodel_update_contents (card, card_data->heading, card_data->content);
+}
+
+void
+kanban_list_store_move_card (KanbanListStore  *self,
+                             const KanbanCard *card_data)
+{
+  g_print ("Moved card: ID: %d, COLUMN: %d, PRIORITY: %d\n",
+           card_data->card_id, card_data->column_id, card_data->priority);
+}
+
+void
+kanban_list_store_new_card (KanbanListStore  *self,
+                            const KanbanCard *card_data)
+{
+  KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
+  GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,
+                                                    card_data->priority);
+  iter = g_sequence_insert_before (iter, new_card);
+  self->num_cards++;
+  g_hash_table_insert (self->card_table,
+                       GINT_TO_POINTER (card_data->card_id), iter);
+  guint position = g_sequence_iter_get_position (iter);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+}
+
 
