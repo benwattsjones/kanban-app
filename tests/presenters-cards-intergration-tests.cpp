@@ -16,6 +16,7 @@ extern "C"
 {
   #include "../src/presenters/kanban-application.h"
   #include "../src/presenters/kanban-list-store.h"
+  #include "../src/presenters/kanban-column-store.h"
   #include <config.h>
 
   #include <gtk/gtk.h>

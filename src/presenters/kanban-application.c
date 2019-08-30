@@ -14,7 +14,7 @@
 
 #include "kanban-application.h"
 
-#include "kanban-list-store.h"
+#include "kanban-column-store.h"
 #include "presenter-view-interface.h"
 #include <config.h>
 
@@ -31,8 +31,8 @@ enum
 
 struct _KanbanApplication
 {
-  GtkApplication    parent_instance;
-  KanbanListStore  *viewmodel;
+  GtkApplication      parent_instance;
+  KanbanColumnStore  *viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -51,7 +51,7 @@ static void
 kanban_application_startup (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = initialize_viewmodel (1); // TODO: temp col_id implement new object
+  self->viewmodel = kanban_column_store_new ();
 
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
 }
@@ -91,7 +91,7 @@ static void
 kanban_application_shutdown (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  destroy_viewmodel (self->viewmodel);
+  kanban_column_store_destroy (self->viewmodel);
   G_APPLICATION_CLASS (kanban_application_parent_class)->shutdown (app);
 }
 
@@ -118,7 +118,7 @@ kanban_application_class_init (KanbanApplicationClass *klass)
 KanbanListStore *
 kanban_application_get_viewmodel (KanbanApplication *self)
 {
-  return self->viewmodel;
+  return kanban_column_store_get_card_list (self->viewmodel);
 }
 
 int

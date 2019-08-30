@@ -33,6 +33,7 @@ kanban_app_sources = files(
     'src/presenters/kanban-application.c',
     'src/presenters/model-observer.c',
     'src/presenters/kanban-list-store.c',
+    'src/presenters/kanban-column-store.c',
     'src/presenters/kanban-card-viewmodel.c',
     'src/views/kanban-window.c',
     'src/views/kanban-list-box.c',

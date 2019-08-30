@@ -15,7 +15,7 @@
 extern "C"
 {
   #include "../src/presenters/kanban-application.h"
-  #include "../src/presenters/kanban-list-store.h"
+  #include "../src/presenters/kanban-column-store.h"
   #include <config.h>
 
   #include <gtk/gtk.h>
@@ -41,18 +41,24 @@ extern "C"
         ++FunctionCallTracker.func_call_counter;
   }
 
-  KanbanListStore *initialize_viewmodel (gint col_id)
+  KanbanColumnStore *kanban_column_store_new ()
   {
     FunctionCallTracker.initialize_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;
     return NULL;
   }
 
-  void destroy_viewmodel (KanbanListStore *viewmodel)
+  void kanban_column_store_destroy (KanbanColumnStore *self)
   {
-    (void) viewmodel;
+    (void) self;
     FunctionCallTracker.destroy_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;
+  }
+
+  KanbanListStore *kanban_column_store_get_card_list (KanbanColumnStore *self)
+  {
+    (void) self;
+    return NULL;
   }
 }
 
