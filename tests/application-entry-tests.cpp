@@ -41,7 +41,7 @@ extern "C"
         ++FunctionCallTracker.func_call_counter;
   }
 
-  KanbanListStore *initialize_viewmodel()
+  KanbanListStore *initialize_viewmodel (gint col_id)
   {
     FunctionCallTracker.initialize_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;

@@ -65,7 +65,7 @@ protected:
     card_data.content = g_strdup("card content.");
     card_data.priority = 0;
 
-    viewmodel = initialize_viewmodel ();
+    viewmodel = initialize_viewmodel (card_data.column_id);
   }
 
   void TearDown() override
@@ -80,6 +80,13 @@ protected:
 TEST_F(KanbanListStoreTests, checkKanbanListStoreCreated)
 {
   ASSERT_NE (viewmodel, nullptr);
+}
+
+TEST_F(KanbanListStoreTests, checkColumnIdPropertyStored)
+{
+  int result_column_id;
+  g_object_get (viewmodel, "column-id", &result_column_id, NULL);
+  EXPECT_EQ (result_column_id, card_data.column_id);
 }
 
 TEST_F(KanbanListStoreTests, checkInitialCountZero)

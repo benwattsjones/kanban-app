@@ -51,7 +51,7 @@ static void
 kanban_application_startup (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = initialize_viewmodel ();
+  self->viewmodel = initialize_viewmodel (1); // TODO: temp col_id implement new object
 
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
 }

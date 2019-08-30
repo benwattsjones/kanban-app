@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanListStore, kanban_list_store, KANBAN, LIST_STORE, GObject)
 
-KanbanListStore  *initialize_viewmodel             ();
+KanbanListStore  *initialize_viewmodel             (gint               col_id);
 void              destroy_viewmodel                (KanbanListStore   *viewmodel);
 
 void              kanban_list_store_change_column  (KanbanListStore   *self,

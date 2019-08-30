@@ -26,11 +26,19 @@ struct _KanbanListStore
   GObject     parent_instance;
 
   guint       num_cards;
-  gchar     **kanban_column_names;
+  gint        column_id;
 
   GHashTable *card_table; // TODO: will need to change much if use string card-id
   GSequence  *card_list;
 };
+
+enum
+{
+  PROP_COLUMN_ID = 1,
+  N_PROPERTIES
+};
+
+static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
 
@@ -75,6 +83,46 @@ g_list_model_iface_init (GListModelInterface *iface)
 /* funcs for class */
 
 static void
+kanban_list_store_set_property (GObject      *object,
+                                guint         property_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  KanbanListStore *self = KANBAN_LIST_STORE (object);
+
+  switch (property_id)
+    {
+    case PROP_COLUMN_ID:
+      self->column_id = g_value_get_int (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+kanban_list_store_get_property (GObject    *object,
+                                guint       property_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  KanbanListStore *self = KANBAN_LIST_STORE (object);
+
+  switch (property_id)
+    {
+    case PROP_COLUMN_ID:
+      g_value_set_int (value, self->column_id);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
 kanban_list_store_finalize (GObject *object)
 {
   KanbanListStore *self = KANBAN_LIST_STORE (object);
@@ -99,14 +147,27 @@ static void
 kanban_list_store_class_init (KanbanListStoreClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->set_property = kanban_list_store_set_property;
+  object_class->get_property = kanban_list_store_get_property;
   object_class->finalize = kanban_list_store_finalize;
+
+  obj_properties[PROP_COLUMN_ID] =
+    g_param_spec_int("column-id",
+                     "Column ID", 
+                     "Unique, immutable kanban column identifier",
+                     0, G_MAXINT, 0,
+                     G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+  g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
 
 KanbanListStore *
-initialize_viewmodel ()
+initialize_viewmodel (gint col_id)
 {
-  return g_object_new (KANBAN_LIST_STORE_TYPE, NULL);
+  return g_object_new (KANBAN_LIST_STORE_TYPE,
+                       "column-id", col_id,
+                       NULL);
 }
 
 void
