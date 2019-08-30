@@ -16,6 +16,7 @@
 #define KANBAN_COLUMN_STORE_H
 
 #include "kanban-list-store.h"
+#include "../models/kanban-cards.h"
 
 #include <gtk/gtk.h>
 
@@ -30,6 +31,16 @@ void                kanban_column_store_destroy       (KanbanColumnStore *self);
 
 KanbanListStore    *kanban_column_store_get_card_list (KanbanColumnStore *self);
 
+void                kanban_column_store_add_card      (KanbanColumnStore *self,
+                                                       const KanbanCard  *card_data);
+void                kanban_column_store_edit_card     (KanbanColumnStore *self,
+                                                       const KanbanCard  *card_data);
+void                kanban_column_store_move_card     (KanbanColumnStore *self,
+                                                       const KanbanCard  *card_data);
+void                kanban_column_store_edit_column   (KanbanColumnStore *self,
+                                                       const KanbanCard  *card_data);
+
 G_END_DECLS
 
 #endif /* KANBAN_COLUMN_STORE_H */
+

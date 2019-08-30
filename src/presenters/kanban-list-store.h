@@ -25,16 +25,16 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanListStore, kanban_list_store, KANBAN, LIST_STORE, GObject)
 
-KanbanListStore  *initialize_viewmodel             (gint               col_id);
-void              destroy_viewmodel                (KanbanListStore   *viewmodel);
+KanbanListStore  *kanban_list_store_new            (gint               col_id);
+void              kanban_list_store_destroy        (KanbanListStore   *viewmodel);
 
-void              kanban_list_store_change_column  (KanbanListStore   *self,
-                                                    const KanbanCard  *card_data);
-void              kanban_list_store_change_content (KanbanListStore   *self,
-                                                    const KanbanCard  *card_data);
-void              kanban_list_store_move_card      (KanbanListStore   *self,
-                                                    const KanbanCard  *card_data);
-void              kanban_list_store_new_card       (KanbanListStore   *self,
+//void              kanban_list_store_change_column  (KanbanListStore   *self,
+//                                                    const KanbanCard  *card_data);
+//void              kanban_list_store_change_content (KanbanListStore   *self,
+//                                                    const KanbanCard  *card_data);
+//void              kanban_list_store_move_card      (KanbanListStore   *self,
+//                                                    const KanbanCard  *card_data);
+GSequenceIter    *kanban_list_store_new_card       (KanbanListStore   *self,
                                                     const KanbanCard  *card_data);
 
 

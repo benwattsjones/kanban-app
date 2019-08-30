@@ -16,6 +16,7 @@ extern "C"
 {
   #include "../src/presenters/kanban-column-store.h"
   #include "../src/presenters/kanban-list-store.h"
+  #include "../src/presenters/kanban-card-viewmodel.h"
 
   #include <gtk/gtk.h>
 }
@@ -26,15 +27,42 @@ extern "C"
 // Stubs:
 extern "C"
 {
-  KanbanListStore *initialize_viewmodel (gint col_id)
+  KanbanListStore *kanban_list_store_new (gint col_id)
   {
     (void) col_id;
     return nullptr;
   }
 
-  void destroy_viewmodel (KanbanListStore *viewmodel)
+  void kanban_list_store_destroy (KanbanListStore *viewmodel)
   {
     (void) viewmodel;
+  }
+
+  void register_kanban_viewmodel_observer   (KanbanColumnStore *viewmodel)
+  {
+    (void) viewmodel;
+  }
+
+  void deregister_kanban_viewmodel_observer (KanbanColumnStore *viewmodel)
+  {
+    (void) viewmodel;
+  }
+
+  void kanban_card_viewmodel_update_contents (KanbanCardViewModel *card,
+                                              const gchar         *heading,
+                                              const gchar         *content)
+  {
+    (void) card;
+    (void) heading;
+    (void) content;
+  }
+
+  GSequenceIter *kanban_list_store_new_card (KanbanListStore  *self,
+                                             const KanbanCard *card_data)
+  {
+    (void) self;
+    (void) card_data;
+    return NULL;
   }
 }
 
