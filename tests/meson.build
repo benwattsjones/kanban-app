@@ -46,6 +46,15 @@ test('list_store_tests',
     suite: 'unit',
 )
 
+test('column_store_tests',
+    executable('column_store_tests',
+        files('../src/presenters/kanban-column-store.c',
+              'kanban-column-store-tests.cpp'),
+        kwargs: default_test_args,
+    ),
+    suite: 'unit',
+)
+
 test('presenter_integration_tests',
     executable('presenter_integration_tests',
         files('../src/presenters/kanban-application.c',
