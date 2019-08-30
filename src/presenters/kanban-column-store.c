@@ -95,7 +95,7 @@ kanban_column_store_edit_card (KanbanColumnStore *self,
                                const KanbanCard  *card_data)
 {
   GSequenceIter *card_iter = g_hash_table_lookup (self->card_table, 
-                                             GINT_TO_POINTER (card_data->card_id));
+                                          GINT_TO_POINTER (card_data->card_id));
   KanbanCardViewModel *card = g_sequence_get (card_iter);
   kanban_card_viewmodel_update_contents (card, card_data->heading, card_data->content);
 }

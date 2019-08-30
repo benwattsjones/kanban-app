@@ -27,7 +27,6 @@ struct _KanbanListStore
   guint       num_cards;
   gint        column_id;
 
-  GHashTable *card_table; // TODO: will need to change much if use string card-id
   GSequence  *card_list;
 };
 
@@ -156,6 +155,7 @@ kanban_list_store_class_init (KanbanListStoreClass *klass)
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
+// Funcs to act on object:
 
 KanbanListStore *
 kanban_list_store_new (gint col_id)
@@ -172,34 +172,6 @@ kanban_list_store_destroy (KanbanListStore *viewmodel)
   viewmodel = NULL;
 }
 
-/* funcs for editing cards in column */
-/*
-void
-kanban_list_store_change_column (KanbanListStore  *self,
-                                 const KanbanCard *card_data)
-{
-  g_print ("Changed column: ID: %d; HEADING: %s\n",
-           card_data->column_id, card_data->heading);
-}
-
-void
-kanban_list_store_change_content (KanbanListStore  *self,
-                                  const KanbanCard *card_data)
-{
-  GSequenceIter *iter = g_hash_table_lookup (self->card_table, 
-                                             GINT_TO_POINTER (card_data->card_id));
-  KanbanCardViewModel *card = g_sequence_get (iter);
-  kanban_card_viewmodel_update_contents (card, card_data->heading, card_data->content);
-}
-
-void
-kanban_list_store_move_card (KanbanListStore  *self,
-                             const KanbanCard *card_data)
-{
-  g_print ("Moved card: ID: %d, COLUMN: %d, PRIORITY: %d\n",
-           card_data->card_id, card_data->column_id, card_data->priority);
-}
-*/
 GSequenceIter *
 kanban_list_store_new_card (KanbanListStore  *self,
                             const KanbanCard *card_data)
@@ -209,11 +181,8 @@ kanban_list_store_new_card (KanbanListStore  *self,
                                                     card_data->priority);
   iter = g_sequence_insert_before (iter, new_card);
   self->num_cards++;
-//  g_hash_table_insert (self->card_table,
-//                       GINT_TO_POINTER (card_data->card_id), iter);
   guint position = g_sequence_iter_get_position (iter);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
   return iter;
 }
-
 
