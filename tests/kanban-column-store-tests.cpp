@@ -27,18 +27,6 @@ extern "C"
 // Stubs:
 extern "C"
 {
-/*
-  KanbanListStore *kanban_list_store_new (gint col_id)
-  {
-    (void) col_id;
-    return nullptr;
-  }
-
-  void kanban_list_store_destroy (KanbanListStore *viewmodel)
-  {
-    (void) viewmodel;
-  }
-*/
   void register_kanban_viewmodel_observer   (KanbanColumnStore *viewmodel)
   {
     (void) viewmodel;
@@ -48,24 +36,6 @@ extern "C"
   {
     (void) viewmodel;
   }
-/*
-  void kanban_card_viewmodel_update_contents (KanbanCardViewModel *card,
-                                              const gchar         *heading,
-                                              const gchar         *content)
-  {
-    (void) card;
-    (void) heading;
-    (void) content;
-  }
-
-  GSequenceIter *kanban_list_store_new_card (KanbanListStore  *self,
-                                             const KanbanCard *card_data)
-  {
-    (void) self;
-    (void) card_data;
-    return NULL;
-  }
-*/
 }
 
 // Test Fixtures:

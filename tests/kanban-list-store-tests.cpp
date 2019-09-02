@@ -39,15 +39,6 @@ extern "C"
 // Stubs:
 extern "C"
 {
-/*  void register_kanban_viewmodel_observer   (KanbanListStore *viewmodel)
-  {
-    (void) viewmodel;
-  }
-
-  void deregister_kanban_viewmodel_observer (KanbanListStore *viewmodel)
-  {
-    (void) viewmodel;
-  } */
 }
 
 // Test Fixtures:
