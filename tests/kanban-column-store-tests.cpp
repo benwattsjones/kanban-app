@@ -15,6 +15,7 @@
 extern "C"
 {
   #include "../src/presenters/kanban-column-store.h"
+  #include "../src/presenters/model-observer-interface.h"
   #include "../src/presenters/kanban-list-store.h"
   #include "../src/presenters/kanban-card-viewmodel.h"
 
@@ -27,14 +28,14 @@ extern "C"
 // Stubs:
 extern "C"
 {
-  void register_kanban_viewmodel_observer   (KanbanColumnStore *viewmodel)
+  void register_kanban_viewmodel_observer   (ModelObserverInterface *observer)
   {
-    (void) viewmodel;
+    (void) observer;
   }
 
-  void deregister_kanban_viewmodel_observer (KanbanColumnStore *viewmodel)
+  void deregister_kanban_viewmodel_observer (ModelObserverInterface *observer)
   {
-    (void) viewmodel;
+    (void) observer;
   }
 }
 
@@ -74,7 +75,7 @@ TEST_F(KanbanColumnStoreTests, checkAddCardStoresInTable)
 {
   int card_id_stored;
   char *heading_stored;
-  kanban_column_store_add_card (viewmodel, &card_data);
+  kanban_column_store_add_card ( (void *) viewmodel, &card_data);
   KanbanCardViewModel *card_added = kanban_column_store_get_card (viewmodel,
                                         card_data.card_id);
   g_object_get (card_added, "card-id", &card_id_stored, NULL);

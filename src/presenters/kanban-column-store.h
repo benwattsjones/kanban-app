@@ -31,13 +31,13 @@ void                 kanban_column_store_destroy       (KanbanColumnStore *self)
 
 KanbanListStore     *kanban_column_store_get_card_list (KanbanColumnStore *self);
 
-void                 kanban_column_store_add_card      (KanbanColumnStore *self,
+void                 kanban_column_store_add_card      (void              *vself,
                                                         const KanbanCard  *card_data);
-void                 kanban_column_store_edit_card     (KanbanColumnStore *self,
+void                 kanban_column_store_edit_card     (void              *vself,
                                                         const KanbanCard  *card_data);
-void                 kanban_column_store_move_card     (KanbanColumnStore *self,
+void                 kanban_column_store_move_card     (void              *vself,
                                                         const KanbanCard  *card_data);
-void                 kanban_column_store_edit_column   (KanbanColumnStore *self,
+void                 kanban_column_store_edit_column   (void              *vself,
                                                         const KanbanCard  *card_data);
 
 #ifdef TESTING_ONLY_ACCESS
