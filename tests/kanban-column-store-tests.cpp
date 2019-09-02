@@ -44,6 +44,7 @@ class KanbanColumnStoreTests : public ::testing::Test
 {
 protected:
   KanbanColumnStore *viewmodel;
+  ModelObserverInterface *observer;
   KanbanCard card_data;
 
   void SetUp() override
@@ -55,6 +56,7 @@ protected:
     card_data.priority = 0;
 
     viewmodel = kanban_column_store_new ();
+    observer = kanban_column_store_get_observer (viewmodel);
   }
 
   void TearDown() override
@@ -75,7 +77,7 @@ TEST_F(KanbanColumnStoreTests, checkAddCardStoresInTable)
 {
   int card_id_stored;
   char *heading_stored;
-  kanban_column_store_add_card ( (void *) viewmodel, &card_data);
+  observer->add_card ( observer->viewmodel, &card_data);
   KanbanCardViewModel *card_added = kanban_column_store_get_card (viewmodel,
                                         card_data.card_id);
   g_object_get (card_added, "card-id", &card_id_stored, NULL);
