@@ -172,21 +172,4 @@ TEST_F(KanbanListStoreTests, checkMultipleCardsCorrectCount)
   int num_items = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   EXPECT_EQ (3, num_items);
 }
-/*
-TEST_F(KanbanListStoreTests, checkChangeContentSuccess)
-{
-  kanban_list_store_new_card (viewmodel, &card_data);
-  KanbanCardViewModel *card = KANBAN_CARD_VIEWMODEL
-      (g_list_model_get_item (G_LIST_MODEL (viewmodel), card_data.priority));
-  free (card_data.heading);
-  card_data.heading = g_strdup ("new heading");
-  kanban_list_store_change_content (viewmodel, &card_data);
-  char *heading_stored;
-  g_object_get (card, "heading", &heading_stored, NULL);
-  EXPECT_STREQ (card_data.heading, heading_stored);
-  free (heading_stored);
-  g_object_unref (card);
-}
-*/
-
 

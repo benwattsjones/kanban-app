@@ -77,14 +77,33 @@ TEST_F(KanbanColumnStoreTests, checkAddCardStoresInTable)
 {
   int card_id_stored;
   char *heading_stored;
-  observer->add_card ( observer->viewmodel, &card_data);
-  KanbanCardViewModel *card_added = kanban_column_store_get_card (viewmodel,
-                                        card_data.card_id);
+  observer->add_card (observer->viewmodel, &card_data);
+  KanbanCardViewModel *card_added;
+  card_added = kanban_column_store_get_card (viewmodel, card_data.card_id);
+
   g_object_get (card_added, "card-id", &card_id_stored, NULL);
   g_object_get (card_added, "heading", &heading_stored, NULL);
   ASSERT_NE (card_added, nullptr);
   EXPECT_EQ (card_id_stored, card_data.card_id);
-  EXPECT_STREQ (heading_stored, card_data.heading);
+  EXPECT_STREQ (card_data.heading, heading_stored);
+
   g_free (heading_stored);
 }
+
+TEST_F(KanbanColumnStoreTests, checkEditCardSavesNewContents)
+{
+  KanbanCardViewModel *card;
+  char *heading_stored;
+  observer->add_card (observer->viewmodel, &card_data);
+  card = kanban_column_store_get_card (viewmodel, card_data.card_id);
+  free (card_data.heading);
+  card_data.heading = g_strdup ("new heading");
+  observer->edit_card (observer->viewmodel, &card_data);
+
+  g_object_get (card, "heading", &heading_stored, NULL);
+  EXPECT_STREQ (card_data.heading, heading_stored);
+
+  g_free (heading_stored);
+}
+
 
