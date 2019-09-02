@@ -1,7 +1,8 @@
 
 
 default_test_args = {
-                 'c_args': kanban_app_c_args,
+                 'c_args': [kanban_app_c_args, '-DTESTING_ONLY_ACCESS'],
+               'cpp_args': ['-DTESTING_ONLY_ACCESS'],
               'link_args': kanban_app_ld_args,
            'dependencies': [test_deps, kanban_app_deps],
                     'pie': true,
@@ -49,6 +50,8 @@ test('list_store_tests',
 test('column_store_tests',
     executable('column_store_tests',
         files('../src/presenters/kanban-column-store.c',
+              '../src/presenters/kanban-list-store.c',
+              '../src/presenters/kanban-card-viewmodel.c',
               'kanban-column-store-tests.cpp'),
         kwargs: default_test_args,
     ),

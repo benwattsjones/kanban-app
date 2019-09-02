@@ -116,3 +116,18 @@ kanban_column_store_edit_column (KanbanColumnStore *self,
            card_data->column_id, card_data->heading);
 }
 
+// Functions used only to provide testing API
+
+#ifdef TESTING_ONLY_ACCESS
+
+KanbanCardViewModel *
+kanban_column_store_get_card (KanbanColumnStore *self,
+                              gint               card_id)
+{
+  GSequenceIter *card_iter = g_hash_table_lookup (self->card_table,
+                                                  GINT_TO_POINTER (card_id));
+  return KANBAN_CARD_VIEWMODEL (g_sequence_get (card_iter));
+}
+
+#endif
+

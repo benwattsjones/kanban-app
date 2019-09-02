@@ -26,19 +26,25 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanColumnStore, kanban_column_store, KANBAN, COLUMN_STORE, GObject)
 
-KanbanColumnStore  *kanban_column_store_new           ();
-void                kanban_column_store_destroy       (KanbanColumnStore *self);
+KanbanColumnStore   *kanban_column_store_new           ();
+void                 kanban_column_store_destroy       (KanbanColumnStore *self);
 
-KanbanListStore    *kanban_column_store_get_card_list (KanbanColumnStore *self);
+KanbanListStore     *kanban_column_store_get_card_list (KanbanColumnStore *self);
 
-void                kanban_column_store_add_card      (KanbanColumnStore *self,
-                                                       const KanbanCard  *card_data);
-void                kanban_column_store_edit_card     (KanbanColumnStore *self,
-                                                       const KanbanCard  *card_data);
-void                kanban_column_store_move_card     (KanbanColumnStore *self,
-                                                       const KanbanCard  *card_data);
-void                kanban_column_store_edit_column   (KanbanColumnStore *self,
-                                                       const KanbanCard  *card_data);
+void                 kanban_column_store_add_card      (KanbanColumnStore *self,
+                                                        const KanbanCard  *card_data);
+void                 kanban_column_store_edit_card     (KanbanColumnStore *self,
+                                                        const KanbanCard  *card_data);
+void                 kanban_column_store_move_card     (KanbanColumnStore *self,
+                                                        const KanbanCard  *card_data);
+void                 kanban_column_store_edit_column   (KanbanColumnStore *self,
+                                                        const KanbanCard  *card_data);
+
+#ifdef TESTING_ONLY_ACCESS
+#include "kanban-card-viewmodel.h"
+KanbanCardViewModel *kanban_column_store_get_card      (KanbanColumnStore *self,
+                                                        gint               card_id);
+#endif
 
 G_END_DECLS
 
