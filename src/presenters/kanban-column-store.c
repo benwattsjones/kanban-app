@@ -69,11 +69,29 @@ kanban_column_store_move_card (void              *vself,
 }
 
 static void
+kanban_column_store_add_column (void              *vself,
+                                const KanbanData  *card_data)
+{
+  KanbanColumnStore *self = vself;
+  g_print ("Changed column: ID: %d; HEADING: %s\n",
+           card_data->column_id, card_data->heading);
+}
+
+static void
 kanban_column_store_edit_column (void              *vself,
                                  const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
-  g_print ("Changed column: ID: %d; HEADING: %s\n",
+  g_print ("Edited column: ID: %d; HEADING: %s\n",
+           card_data->column_id, card_data->heading);
+}
+
+static void
+kanban_column_store_move_column (void              *vself,
+                                 const KanbanData  *card_data)
+{
+  KanbanColumnStore *self = vself;
+  g_print ("Moved column: ID: %d; HEADING: %s\n",
            card_data->column_id, card_data->heading);
 }
 
@@ -101,10 +119,12 @@ kanban_column_store_init (KanbanColumnStore *self)
   self->observer_object = (ModelObserverInterface *) 
                               g_malloc (sizeof (ModelObserverInterface));
   self->observer_object->viewmodel = self;
-  self->observer_object->add_card = kanban_column_store_add_card;
-  self->observer_object->edit_card = kanban_column_store_edit_card;
-  self->observer_object->move_card = kanban_column_store_move_card;
-  self->observer_object->edit_column = kanban_column_store_edit_column;
+  self->observer_object->task_func[TASK_ADD_CARD] = kanban_column_store_add_card;
+  self->observer_object->task_func[TASK_EDIT_CARD] = kanban_column_store_edit_card;
+  self->observer_object->task_func[TASK_MOVE_CARD] = kanban_column_store_move_card;
+  self->observer_object->task_func[TASK_ADD_COLUMN] = kanban_column_store_add_column;
+  self->observer_object->task_func[TASK_EDIT_COLUMN] = kanban_column_store_edit_column;
+  self->observer_object->task_func[TASK_MOVE_COLUMN] = kanban_column_store_move_column;
   register_kanban_viewmodel_observer (self->observer_object);
 }
 

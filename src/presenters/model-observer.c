@@ -29,20 +29,15 @@ kanban_model_changed (void             *instance,
   ModelObserverInterface *observer = instance;
   assert (observer != NULL);
   
-  if (card_data->card_id == 0)
-    observer->edit_column (observer->viewmodel, card_data);
-  else if (card_data->column_id == 0)
-    observer->edit_card (observer->viewmodel, card_data);
-  else if (card_data->heading == NULL)
-    observer->move_card (observer->viewmodel, card_data);
-  else
-    observer->add_card (observer->viewmodel, card_data);
+  observer->task_func[card_data->task] (observer->viewmodel, card_data);
 }
 
 void 
 register_kanban_viewmodel_observer (ModelObserverInterface *observer)
 {
-  assert (observer != NULL);
+  int i;
+  for (i = 0; i < NUM_TASKS; ++i)
+    assert (observer->task_func[i] != NULL);
   KanbanModelObserver observer_wrap = { .instance = observer,
                                         .notification = kanban_model_changed };
   attach_observer (&observer_wrap);

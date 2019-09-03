@@ -25,11 +25,7 @@ G_BEGIN_DECLS
 typedef struct _ModelObserverInterface
 {
   void *viewmodel;
-
-  void (*add_card)    (void *self, const KanbanData *card_data);
-  void (*edit_card)   (void *self, const KanbanData *card_data);
-  void (*move_card)   (void *self, const KanbanData *card_data);
-  void (*edit_column) (void *self, const KanbanData *card_data);
+  void (*task_func[NUM_TASKS]) (void *self, const KanbanData *data);
 } ModelObserverInterface;
 
 
