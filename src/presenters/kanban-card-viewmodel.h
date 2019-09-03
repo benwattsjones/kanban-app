@@ -15,7 +15,7 @@
 #ifndef KANBAN_CARD_VIEWMODEL_H
 #define KANBAN_CARD_VIEWMODEL_H
 
-#include "../models/kanban-cards.h"
+#include "../models/kanban-data.h"
 
 #include <gtk/gtk.h>
 
@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanCardViewModel, kanban_card_viewmodel, KANBAN, CARD_VIEWMODEL, GObject)
 
-KanbanCardViewModel *kanban_card_viewmodel_new (const KanbanCard    *card_data);
+KanbanCardViewModel *kanban_card_viewmodel_new (const KanbanData    *card_data);
 
 void                 kanban_card_viewmodel_update_contents 
                                                (KanbanCardViewModel *self,

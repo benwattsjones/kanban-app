@@ -15,10 +15,10 @@
 #ifndef MODEL_PRESENTER_INTERFACE_H
 #define MODEL_PRESENTER_INTERFACE_H
 
-#include "kanban-cards.h"
+#include "kanban-data.h"
 
 typedef void (*KanbanChangeNotification) (void             *instance,
-                                          const KanbanCard *card_data);
+                                          const KanbanData *card_data);
 
 typedef struct
 {
@@ -31,7 +31,7 @@ void attach_observer                (const KanbanModelObserver *observer);
 void detach_observer                (const KanbanModelObserver *observer);
 
 /* PRIVATE: FOR INTERNAL MODEL USE ONLY */
-void emit_kanban_card_change_signal (const KanbanCard          *card_data);
+void emit_kanban_card_change_signal (const KanbanData          *card_data);
 
 #endif /* MODEL_PRESENTER_INTERFACE_H */
 

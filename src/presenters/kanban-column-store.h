@@ -16,7 +16,6 @@
 #define KANBAN_COLUMN_STORE_H
 
 #include "kanban-list-store.h"
-#include "../models/kanban-cards.h"
 
 #include <gtk/gtk.h>
 

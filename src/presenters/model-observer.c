@@ -16,7 +16,7 @@
 
 #include "model-observer-interface.h"
 #include "../models/model-presenter-interface.h"
-#include "../models/kanban-cards.h"
+#include "../models/kanban-data.h"
 
 #include <assert.h>
 #include <stddef.h>
@@ -24,7 +24,7 @@
 
 static void 
 kanban_model_changed (void             *instance, 
-                      const KanbanCard *card_data)
+                      const KanbanData *card_data)
 {
   ModelObserverInterface *observer = instance;
   assert (observer != NULL);

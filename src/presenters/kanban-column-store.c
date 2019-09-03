@@ -18,6 +18,7 @@
 #include "kanban-card-viewmodel.h"
 #include "model-observer.h"
 #include "model-observer-interface.h"
+#include "../models/kanban-data.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -38,7 +39,7 @@ G_DEFINE_TYPE (KanbanColumnStore, kanban_column_store, G_TYPE_OBJECT)
 
 static void
 kanban_column_store_add_card (void              *vself,
-                              const KanbanCard  *card_data)
+                              const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
   GSequenceIter *card_iter;
@@ -49,7 +50,7 @@ kanban_column_store_add_card (void              *vself,
 
 static void
 kanban_column_store_edit_card (void              *vself,
-                               const KanbanCard  *card_data)
+                               const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
   GSequenceIter *card_iter = g_hash_table_lookup (self->card_table, 
@@ -60,7 +61,7 @@ kanban_column_store_edit_card (void              *vself,
 
 static void
 kanban_column_store_move_card (void              *vself,
-                               const KanbanCard  *card_data)
+                               const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
   g_print ("Moved card: ID: %d, COLUMN: %d, PRIORITY: %d\n",
@@ -69,7 +70,7 @@ kanban_column_store_move_card (void              *vself,
 
 static void
 kanban_column_store_edit_column (void              *vself,
-                                 const KanbanCard  *card_data)
+                                 const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
   g_print ("Changed column: ID: %d; HEADING: %s\n",

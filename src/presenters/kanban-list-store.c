@@ -15,7 +15,7 @@
 #include "kanban-list-store.h"
 
 #include "kanban-card-viewmodel.h"
-#include "../models/kanban-cards.h"
+#include "../models/kanban-data.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -174,7 +174,7 @@ kanban_list_store_destroy (KanbanListStore *viewmodel)
 
 GSequenceIter *
 kanban_list_store_new_card (KanbanListStore  *self,
-                            const KanbanCard *card_data)
+                            const KanbanData *card_data)
 {
   KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
   GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,

@@ -15,7 +15,7 @@
 #ifndef KANBAN_LIST_STORE_H
 #define KANBAN_LIST_STORE_H
 
-#include "../models/kanban-cards.h"
+#include "../models/kanban-data.h"
 
 #include <gtk/gtk.h>
 
@@ -29,7 +29,7 @@ KanbanListStore  *kanban_list_store_new            (gint               col_id);
 void              kanban_list_store_destroy        (KanbanListStore   *viewmodel);
 
 GSequenceIter    *kanban_list_store_new_card       (KanbanListStore   *self,
-                                                    const KanbanCard  *card_data);
+                                                    const KanbanData  *card_data);
 
 G_END_DECLS
 

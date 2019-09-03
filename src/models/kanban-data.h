@@ -1,4 +1,4 @@
-/* src/models/kanban-cards.h
+/* src/models/kanban-data.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,8 +12,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_CARDS_H
-#define KANBAN_CARDS_H
+#ifndef KANBAN_DATA_H
+#define KANBAN_DATA_H
 
 typedef struct
 {
@@ -22,9 +22,9 @@ typedef struct
   char *heading;
   char *content;
   int   priority;
-} KanbanCard;
+} KanbanData;
 
 void test_observers ();
 
-#endif /* KANBAN_CARDS_H */
+#endif /* KANBAN_DATA_H */
 

@@ -1,4 +1,4 @@
-/* src/models/kanban-cards.c
+/* src/models/kanban-data.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,7 +12,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "kanban-cards.h"
+#include "kanban-data.h"
 
 #include "model-presenter-interface.h"
 
@@ -22,7 +22,7 @@
 void
 test_observers()
 {
-  KanbanCard *card = (KanbanCard *) malloc (sizeof (KanbanCard));
+  KanbanData *card = (KanbanData *) malloc (sizeof (KanbanData));
 
   card->card_id = 1;
   card->column_id = 1;

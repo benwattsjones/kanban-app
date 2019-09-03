@@ -15,7 +15,7 @@
 extern "C"
 {
   #include "../src/presenters/kanban-card-viewmodel.h"
-  #include "../src/models/kanban-cards.h"
+  #include "../src/models/kanban-data.h"
 
   #include <gtk/gtk.h>
 }
@@ -26,7 +26,7 @@ extern "C"
 class KanbanCardViewModelTests : public ::testing::Test
 {
 protected:
-  KanbanCard card_data;
+  KanbanData card_data;
 
   void SetUp() override
   {

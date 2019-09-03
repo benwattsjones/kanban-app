@@ -14,7 +14,7 @@
 
 #include "model-presenter-interface.h"
 
-#include "kanban-cards.h"
+#include "kanban-data.h"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -89,7 +89,7 @@ detach_observer (const KanbanModelObserver *observer)
 }
 
 void 
-emit_kanban_card_change_signal (const KanbanCard *card_data)
+emit_kanban_card_change_signal (const KanbanData *card_data)
 {
   ObserversListNode *observers_iter = observers_linked_list.next;
   KanbanModelObserver *active_observer;

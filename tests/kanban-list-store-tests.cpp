@@ -16,7 +16,7 @@ extern "C"
 {
   #include "../src/presenters/kanban-list-store.h"
   #include "../src/presenters/kanban-card-viewmodel.h"
-  #include "../src/models/kanban-cards.h"
+  #include "../src/models/kanban-data.h"
 
   #include <gtk/gtk.h>
 }
@@ -24,8 +24,8 @@ extern "C"
 #include "gtest/gtest.h"
 
 /* WARNING: these functions have no checks for the following:
- *  - Passing KanbanCard data with non-existant ID to _change_content() func
- *  - passing KanbanCard data to _add_card() func with priority values in
+ *  - Passing KanbanData data with non-existant ID to _change_content() func
+ *  - passing KanbanData data to _add_card() func with priority values in
  *    wrong order (must be 0, 1, 2 etc.). This is because if priority > length,
  *    the card will be added to the end regardless of any other priority values
  *    in the list.
@@ -33,7 +33,7 @@ extern "C"
  * This is because such checks are expected to be done by the model.
  * (Exepting not passing NULL, which should be prevented with constant
  *  KanbanListStore* by kanban-application, and ONLY model-observer creating
- *  the KanbanCard* arguements, with proper rigor).
+ *  the KanbanData* arguements, with proper rigor).
  */
 
 // Stubs:
@@ -45,7 +45,7 @@ extern "C"
 class KanbanListStoreTests : public ::testing::Test
 {
 protected:
-  KanbanCard card_data;
+  KanbanData card_data;
   KanbanListStore *viewmodel;
 
   void SetUp() override

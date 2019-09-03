@@ -18,6 +18,7 @@ extern "C"
   #include "../src/presenters/model-observer-interface.h"
   #include "../src/presenters/kanban-list-store.h"
   #include "../src/presenters/kanban-card-viewmodel.h"
+  #include "../src/models/kanban-data.h"
 
   #include <gtk/gtk.h>
 }
@@ -45,7 +46,7 @@ class KanbanColumnStoreTests : public ::testing::Test
 protected:
   KanbanColumnStore *viewmodel;
   ModelObserverInterface *observer;
-  KanbanCard card_data;
+  KanbanData card_data;
 
   void SetUp() override
   {

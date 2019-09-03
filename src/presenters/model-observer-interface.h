@@ -15,7 +15,7 @@
 #ifndef MODEL_OBSERVER_INTERFACE_H
 #define MODEL_OBSERVER_INTERFACE_H
 
-#include "../models/kanban-cards.h"
+#include "../models/kanban-data.h"
 
 #include <gtk/gtk.h>
 
@@ -26,10 +26,10 @@ typedef struct _ModelObserverInterface
 {
   void *viewmodel;
 
-  void (*add_card)    (void *self, const KanbanCard *card_data);
-  void (*edit_card)   (void *self, const KanbanCard *card_data);
-  void (*move_card)   (void *self, const KanbanCard *card_data);
-  void (*edit_column) (void *self, const KanbanCard *card_data);
+  void (*add_card)    (void *self, const KanbanData *card_data);
+  void (*edit_card)   (void *self, const KanbanData *card_data);
+  void (*move_card)   (void *self, const KanbanData *card_data);
+  void (*edit_column) (void *self, const KanbanData *card_data);
 } ModelObserverInterface;
 
 
