@@ -24,17 +24,25 @@ test_observers()
 {
   KanbanData *card = (KanbanData *) malloc (sizeof (KanbanData));
 
-  card->card_id = 1;
+  card->card_id = 0;
   card->column_id = 1;
-  card->heading = "Card Heading";
-  card->content = "Card content\nMultiline!";
-  card->priority = 1;
+  card->heading = "Column Heading";
+  card->content = NULL;
+  card->priority = 0;
+  card->task = TASK_ADD_COLUMN;
+  emit_kanban_card_change_signal (card);
 
   usleep (500000); 
+  card->card_id = 1;
+  card->heading = "Card Heading";
+  card->content = "Card content\nMultiline!";
+  card->task = TASK_ADD_CARD;
   emit_kanban_card_change_signal (card);
+
   usleep (200000);
   card->content = "New Card Content!";
   card->column_id = 0;
+  card->task = TASK_EDIT_CARD;
   emit_kanban_card_change_signal (card);
   
   free (card);

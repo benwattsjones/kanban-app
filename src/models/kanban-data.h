@@ -15,13 +15,26 @@
 #ifndef KANBAN_DATA_H
 #define KANBAN_DATA_H
 
+typedef enum
+{
+  TASK_ADD_CARD,
+  TASK_EDIT_CARD,
+  TASK_MOVE_CARD,
+  TASK_ADD_COLUMN,
+  TASK_EDIT_COLUMN,
+  TASK_MOVE_COLUMN,
+  NUM_TASKS
+} RequiredTask;
+
+
 typedef struct
 {
-  int   card_id;
-  int   column_id;
-  char *heading;
-  char *content;
-  int   priority;
+  int           card_id;
+  int           column_id;
+  char         *heading;
+  char         *content;
+  int           priority;
+  RequiredTask  task;
 } KanbanData;
 
 void test_observers ();
