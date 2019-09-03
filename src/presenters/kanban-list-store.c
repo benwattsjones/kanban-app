@@ -166,10 +166,11 @@ kanban_list_store_new (gint col_id)
 }
 
 void
-kanban_list_store_destroy (KanbanListStore *viewmodel)
+kanban_list_store_destroy (gpointer vself)
 {
-  g_object_unref (viewmodel);
-  viewmodel = NULL;
+  KanbanListStore *self = KANBAN_LIST_STORE (vself);
+  g_object_unref (self);
+  self = NULL;
 }
 
 GSequenceIter *

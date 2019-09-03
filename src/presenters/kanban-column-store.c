@@ -28,8 +28,8 @@ struct _KanbanColumnStore
   GObject          parent_instance;
 
   GHashTable      *card_table; // TODO: will need to change much if use string card-id
+  GHashTable      *column_table;
 
-  KanbanListStore *card_list;
   ModelObserverInterface *observer_object;
 };
 
@@ -43,7 +43,11 @@ kanban_column_store_add_card (void              *vself,
 {
   KanbanColumnStore *self = vself;
   GSequenceIter *card_iter;
-  card_iter = kanban_list_store_new_card (self->card_list, card_data); 
+  KanbanListStore *column;
+  column = g_hash_table_lookup (self->column_table,
+                                GINT_TO_POINTER (card_data->column_id));
+  g_assert (column != NULL);
+  card_iter = kanban_list_store_new_card (column, card_data); 
   g_hash_table_insert (self->card_table,
                        GINT_TO_POINTER (card_data->card_id), card_iter);
 }
@@ -70,29 +74,30 @@ kanban_column_store_move_card (void              *vself,
 
 static void
 kanban_column_store_add_column (void              *vself,
-                                const KanbanData  *card_data)
+                                const KanbanData  *column_data)
 {
   KanbanColumnStore *self = vself;
-  g_print ("Changed column: ID: %d; HEADING: %s\n",
-           card_data->column_id, card_data->heading);
+  KanbanListStore *new_column = kanban_list_store_new (column_data->column_id);
+  g_hash_table_insert (self->column_table,
+                       GINT_TO_POINTER (column_data->column_id), new_column);
 }
 
 static void
 kanban_column_store_edit_column (void              *vself,
-                                 const KanbanData  *card_data)
+                                 const KanbanData  *column_data)
 {
   KanbanColumnStore *self = vself;
   g_print ("Edited column: ID: %d; HEADING: %s\n",
-           card_data->column_id, card_data->heading);
+           column_data->column_id, column_data->heading);
 }
 
 static void
 kanban_column_store_move_column (void              *vself,
-                                 const KanbanData  *card_data)
+                                 const KanbanData  *column_data)
 {
   KanbanColumnStore *self = vself;
   g_print ("Moved column: ID: %d; HEADING: %s\n",
-           card_data->column_id, card_data->heading);
+           column_data->column_id, column_data->heading);
 }
 
 static ModelObserverInterface *
@@ -118,7 +123,7 @@ kanban_column_store_finalize (GObject *object)
 
   deregister_kanban_viewmodel_observer (self->observer_object);
   g_free (self->observer_object);
-  kanban_list_store_destroy (self->card_list);
+  g_clear_pointer (&self->column_table, g_hash_table_destroy);
   g_clear_pointer (&self->card_table, g_hash_table_destroy);
 
   G_OBJECT_CLASS (kanban_column_store_parent_class)->finalize (object);
@@ -128,7 +133,8 @@ static void
 kanban_column_store_init (KanbanColumnStore *self)
 {
   self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
-  self->card_list = kanban_list_store_new (1); // TODO: temp column id and var.
+  self->column_table = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                              NULL, kanban_list_store_destroy);
   self->observer_object = model_observer_iface_init (self);
   register_kanban_viewmodel_observer (self->observer_object);
 }
@@ -153,10 +159,15 @@ kanban_column_store_destroy (KanbanColumnStore *self)
   self = NULL;
 }
 
-KanbanListStore *
+KanbanListStore * // TODO: temp func before GUI implemented
 kanban_column_store_get_card_list (KanbanColumnStore *self)
 {
-  return self->card_list;
+  GList *columns_list = g_hash_table_get_values(self->column_table);
+  if (!columns_list)
+    return NULL;
+  KanbanListStore *column = columns_list->data;
+  g_list_free (columns_list);
+  return column;
 }
 
 // Functions used only to provide testing API
@@ -170,6 +181,15 @@ kanban_column_store_get_card (KanbanColumnStore *self,
   GSequenceIter *card_iter = g_hash_table_lookup (self->card_table,
                                                   GINT_TO_POINTER (card_id));
   return KANBAN_CARD_VIEWMODEL (g_sequence_get (card_iter));
+}
+
+KanbanListStore *
+kanban_column_store_get_column (KanbanColumnStore *self,
+                                gint               column_id)
+{
+  KanbanListStore *column = g_hash_table_lookup (self->column_table,
+                                                  GINT_TO_POINTER (column_id));
+  return column;
 }
 
 ModelObserverInterface *

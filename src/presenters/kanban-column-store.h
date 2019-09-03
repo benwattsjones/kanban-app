@@ -35,6 +35,8 @@ KanbanListStore        *kanban_column_store_get_card_list (KanbanColumnStore *se
 #include "kanban-card-viewmodel.h"
 KanbanCardViewModel    *kanban_column_store_get_card      (KanbanColumnStore *self,
                                                            gint               card_id);
+KanbanListStore        *kanban_column_store_get_column    (KanbanColumnStore *self,
+                                                           gint               column_id);
 #include "model-observer-interface.h"
 ModelObserverInterface *kanban_column_store_get_observer  (KanbanColumnStore *self);
 #endif /* TESTING_ONLY_ACCESS */

@@ -61,7 +61,7 @@ protected:
 
   void TearDown() override
   {
-    kanban_list_store_destroy (viewmodel);
+    kanban_list_store_destroy ((void *) viewmodel);
     g_free (card_data.heading);
     g_free (card_data.content);
   }
