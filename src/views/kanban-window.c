@@ -15,7 +15,6 @@
 #include "kanban-window.h"
 
 #include "kanban-list-box.h"
-#include "../presenters/presenter-view-interface.h"
 #include "../presenters/kanban-list-store.h" // TODO - remove after testing?
 
 #include <gtk/gtk.h>

@@ -30,7 +30,6 @@ config_h_inc = include_directories('.')
 gnome = import('gnome')
 
 kanban_app_sources = files(
-    'src/presenters/kanban-application.c',
     'src/presenters/model-observer.c',
     'src/presenters/kanban-list-store.c',
     'src/presenters/kanban-column-store.c',
@@ -39,6 +38,7 @@ kanban_app_sources = files(
     'src/views/kanban-list-box.c',
     'src/models/model-presenter-interface.c',
     'src/models/kanban-data.c',
+    'src/kanban-application.c',
     'src/main.c'
 )
 

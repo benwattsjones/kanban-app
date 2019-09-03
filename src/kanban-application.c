@@ -1,4 +1,4 @@
-/* src/presenters/kanban-application.c
+/* src/kanban-application.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,8 +14,8 @@
 
 #include "kanban-application.h"
 
-#include "kanban-column-store.h"
-#include "presenter-view-interface.h"
+#include "presenters/kanban-column-store.h"
+#include "views/kanban-window.h"
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -122,7 +122,7 @@ kanban_application_get_viewmodel (KanbanApplication *self)
 }
 
 int
-initialize_kanban_presenter (int argc, char *argv[])
+initialize_kanban_application (int argc, char *argv[])
 {
   KanbanApplication *app = g_object_new (KANBAN_APPLICATION_TYPE,
                                          "application-id", APPLICATION_ID,

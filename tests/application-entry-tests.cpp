@@ -14,7 +14,7 @@
 
 extern "C"
 {
-  #include "../src/presenters/kanban-application.h"
+  #include "../src/kanban-application.h"
   #include "../src/presenters/kanban-column-store.h"
   #include <config.h>
 
@@ -127,7 +127,7 @@ TEST_F(ApplicationEntryTests, checkInitializationCallOrder)
 
 TEST_F(ApplicationEntryTests, checkInitializationFunctionReturnsSuccess)
 {
-  int status = initialize_kanban_presenter (argc_stub, argv_stub);
+  int status = initialize_kanban_application (argc_stub, argv_stub);
   EXPECT_EQ(status, 0);
 }
 
