@@ -95,6 +95,20 @@ kanban_column_store_move_column (void              *vself,
            card_data->column_id, card_data->heading);
 }
 
+static ModelObserverInterface *
+model_observer_iface_init (KanbanColumnStore *self)
+{
+  ModelObserverInterface *observer = g_malloc (sizeof *observer);
+  observer->viewmodel = self;
+  observer->task_func[TASK_ADD_CARD] = kanban_column_store_add_card;
+  observer->task_func[TASK_EDIT_CARD] = kanban_column_store_edit_card;
+  observer->task_func[TASK_MOVE_CARD] = kanban_column_store_move_card;
+  observer->task_func[TASK_ADD_COLUMN] = kanban_column_store_add_column;
+  observer->task_func[TASK_EDIT_COLUMN] = kanban_column_store_edit_column;
+  observer->task_func[TASK_MOVE_COLUMN] = kanban_column_store_move_column;
+  return observer;
+}
+
 // Functions for KanbanColumnStore GObject
 
 static void
@@ -115,16 +129,7 @@ kanban_column_store_init (KanbanColumnStore *self)
 {
   self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->card_list = kanban_list_store_new (1); // TODO: temp column id and var.
-
-  self->observer_object = (ModelObserverInterface *) 
-                              g_malloc (sizeof (ModelObserverInterface));
-  self->observer_object->viewmodel = self;
-  self->observer_object->task_func[TASK_ADD_CARD] = kanban_column_store_add_card;
-  self->observer_object->task_func[TASK_EDIT_CARD] = kanban_column_store_edit_card;
-  self->observer_object->task_func[TASK_MOVE_CARD] = kanban_column_store_move_card;
-  self->observer_object->task_func[TASK_ADD_COLUMN] = kanban_column_store_add_column;
-  self->observer_object->task_func[TASK_EDIT_COLUMN] = kanban_column_store_edit_column;
-  self->observer_object->task_func[TASK_MOVE_COLUMN] = kanban_column_store_move_column;
+  self->observer_object = model_observer_iface_init (self);
   register_kanban_viewmodel_observer (self->observer_object);
 }
 
