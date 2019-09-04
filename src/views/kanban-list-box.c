@@ -50,7 +50,6 @@ kanban_list_box_set_property (GObject      *object,
     {
     case PROP_COLUMN_DATA:
       self->column_data = g_value_get_pointer (value);
-      g_print("Setting card data\n");
       break;
 
     default:
@@ -85,9 +84,6 @@ kanban_list_box_constructed (GObject *object)
   KanbanListBox *self = KANBAN_LIST_BOX (object);
   gtk_list_box_bind_model (GTK_LIST_BOX (self), self->column_data,
                            create_card_widget_func, NULL, g_free);
-  g_print("init list box\n");
-  g_print("list box model addr: %p\n", (void *) self->column_data);
-  g_print("init gui list len: %d\n", g_list_model_get_n_items (G_LIST_MODEL (self->column_data)));
 }
 
 static void
@@ -136,7 +132,6 @@ create_card_widget_func (gpointer item,
                 "heading", &card_heading,
                 "content", &card_content,
                 NULL);
-  g_print("GUI INFO: H: %s, C: %s\n", card_heading, card_content);
 
   // TODO: bind notify signal of card to update widgets
   GtkWidget *grid = gtk_grid_new();
