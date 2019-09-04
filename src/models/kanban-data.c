@@ -17,7 +17,6 @@
 #include "model-presenter-interface.h"
 
 #include <stdlib.h>
-#include <unistd.h> /* only for usleep test stub - TODO: remove */
 
 void
 test_observers()
@@ -32,17 +31,54 @@ test_observers()
   card->task = TASK_ADD_COLUMN;
   emit_kanban_card_change_signal (card);
 
-  usleep (500000); 
   card->card_id = 1;
   card->heading = "Card Heading";
   card->content = "Card content\nMultiline!";
   card->task = TASK_ADD_CARD;
   emit_kanban_card_change_signal (card);
 
-  usleep (200000);
   card->content = "New Card Content!";
-  card->column_id = 0;
   card->task = TASK_EDIT_CARD;
+  emit_kanban_card_change_signal (card);
+
+  card->card_id = 2;
+  card->column_id = 1;
+  card->heading = "Second Card";
+  card->content = "content no2";
+  card->priority = 1;
+  card->task = TASK_ADD_CARD;
+  emit_kanban_card_change_signal (card);
+
+  card->card_id = 3;
+  card->column_id = 1;
+  card->heading = "A Third Card";
+  card->content = "Third card content";
+  card->priority = 2;
+  card->task = TASK_ADD_CARD;
+  emit_kanban_card_change_signal (card);
+
+  card->card_id = 0;
+  card->column_id = 2;
+  card->heading = "COLUMN 2";
+  card->content = NULL;
+  card->priority = 1;
+  card->task = TASK_ADD_COLUMN;
+  emit_kanban_card_change_signal (card);
+
+  card->card_id = 4;
+  card->column_id = 2;
+  card->heading = "Col2Card";
+  card->content = "This is the first card in column two.";
+  card->priority = 0;
+  card->task = TASK_ADD_CARD;
+  emit_kanban_card_change_signal (card);
+
+  card->card_id = 5;
+  card->column_id = 2;
+  card->heading = "heading col2card2. Blank content.";
+  card->content = "";
+  card->priority = 1;
+  card->task = TASK_ADD_CARD;
   emit_kanban_card_change_signal (card);
   
   free (card);
