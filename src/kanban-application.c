@@ -15,8 +15,10 @@
 #include "kanban-application.h"
 
 #include "presenters/kanban-column-store.h"
+#include "presenters/kanban-column-viewer-interface.h"
 #include "views/kanban-window.h"
 #include "views/kanban-list-box.h" // TODO - replace with kanban-grid
+#include "views/kanban-grid.h"
 #include "models/kanban-data.h" // TODO - remove after testing
 #include <config.h>
 
@@ -37,6 +39,7 @@ struct _KanbanApplication
   GtkApplication      parent_instance;
 
   KanbanWindow       *window;
+  KanbanGrid         *board_view;
   KanbanColumnStore  *viewmodel;
 };
 
@@ -56,8 +59,6 @@ static void
 kanban_application_startup (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = kanban_column_store_new (NULL);
-  test_observers();
 
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
 }
@@ -66,6 +67,10 @@ static void
 kanban_application_activate (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
+
+  self->board_view = kanban_grid_new();
+  self->viewmodel = kanban_column_store_new (KANBAN_COLUMN_VIEWER (self->board_view));
+  test_observers();
 
   self->window = kanban_window_new (KANBAN_APPLICATION (app));
 

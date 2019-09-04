@@ -18,6 +18,7 @@ extern "C"
   #include "../src/presenters/kanban-column-store.h"
   #include "../src/presenters/model-observer-interface.h"
   #include "../src/views/kanban-window.h"
+  #include "../src/views/kanban-grid.h"
   #include "../src/views/kanban-list-box.h"  // TODO delete
   #include <config.h>
 
@@ -54,6 +55,10 @@ extern "C"
   void deregister_kanban_viewmodel_observer (ModelObserverInterface *observer)
   {
     (void) observer;
+  }
+  KanbanGrid *kanban_grid_new()
+  {
+    return NULL;
   }
 }
 
