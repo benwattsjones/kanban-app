@@ -56,7 +56,7 @@ protected:
     card_data.content = g_strdup("content.");
     card_data.priority = 0;
 
-    viewmodel = kanban_column_store_new ();
+    viewmodel = kanban_column_store_new (NULL);
     observer = kanban_column_store_get_observer (viewmodel);
   }
 

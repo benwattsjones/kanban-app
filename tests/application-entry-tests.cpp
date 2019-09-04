@@ -16,6 +16,7 @@ extern "C"
 {
   #include "../src/kanban-application.h"
   #include "../src/presenters/kanban-column-store.h"
+  #include "../src/presenters/kanban-column-viewer-interface.h"
   #include "../src/views/kanban-window.h"
   #include "../src/views/kanban-list-box.h" // TODO delete
   #include <config.h>
@@ -49,8 +50,9 @@ extern "C"
   {
   }
 
-  KanbanColumnStore *kanban_column_store_new ()
+  KanbanColumnStore *kanban_column_store_new (KanbanColumnViewer *view_observer)
   {
+    (void) view_observer;
     FunctionCallTracker.initialize_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;
     return NULL;

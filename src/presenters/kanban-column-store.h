@@ -15,6 +15,8 @@
 #ifndef KANBAN_COLUMN_STORE_H
 #define KANBAN_COLUMN_STORE_H
 
+#include "kanban-column-viewer-interface.h"
+
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -23,21 +25,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanColumnStore, kanban_column_store, KANBAN, COLUMN_STORE, GObject)
 
-KanbanColumnStore      *kanban_column_store_new           ();
-void                    kanban_column_store_destroy       (KanbanColumnStore *self);
+KanbanColumnStore      *kanban_column_store_new           (KanbanColumnViewer *view_observer);
+void                    kanban_column_store_destroy       (KanbanColumnStore  *self);
 
-GListModel             *kanban_column_store_get_card_list (KanbanColumnStore *self);
+GListModel             *kanban_column_store_get_card_list (KanbanColumnStore  *self);
 
 
 #ifdef TESTING_ONLY_ACCESS
 #include "kanban-card-viewmodel.h"
-KanbanCardViewModel    *kanban_column_store_get_card      (KanbanColumnStore *self,
-                                                           gint               card_id);
+KanbanCardViewModel    *kanban_column_store_get_card      (KanbanColumnStore  *self,
+                                                           gint                card_id);
 #include "kanban-list-store.h"
-KanbanListStore        *kanban_column_store_get_column    (KanbanColumnStore *self,
-                                                           gint               column_id);
+KanbanListStore        *kanban_column_store_get_column    (KanbanColumnStore  *self,
+                                                           gint                column_id);
 #include "model-observer-interface.h"
-ModelObserverInterface *kanban_column_store_get_observer  (KanbanColumnStore *self);
+ModelObserverInterface *kanban_column_store_get_observer  (KanbanColumnStore  *self);
 #endif /* TESTING_ONLY_ACCESS */
 
 G_END_DECLS

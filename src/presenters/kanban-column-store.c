@@ -14,6 +14,7 @@
 
 #include "kanban-column-store.h"
 
+#include "kanban-column-viewer-interface.h"
 #include "kanban-list-store.h"
 #include "kanban-card-viewmodel.h"
 #include "model-observer.h"
@@ -25,13 +26,22 @@
 
 struct _KanbanColumnStore
 {
-  GObject          parent_instance;
+  GObject                 parent_instance;
 
-  GHashTable      *card_table; // TODO: will need to change much if use string card-id
-  GHashTable      *column_table;
+  GHashTable             *card_table; // TODO: will change much if use string card-id
+  GHashTable             *column_table;
 
   ModelObserverInterface *observer_object;
+  KanbanColumnViewer     *view_observer;
 };
+
+enum
+{
+  PROP_VIEW_OBSERVER = 1,
+  N_PROPERTIES
+};
+
+static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 G_DEFINE_TYPE (KanbanColumnStore, kanban_column_store, G_TYPE_OBJECT)
 
@@ -117,6 +127,46 @@ model_observer_iface_init (KanbanColumnStore *self)
 // Functions for KanbanColumnStore GObject
 
 static void
+kanban_column_store_set_property (GObject      *object,
+                                  guint         property_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+{
+  KanbanColumnStore *self = KANBAN_COLUMN_STORE (object);
+
+  switch (property_id)
+    {
+    case PROP_VIEW_OBSERVER:
+      self->view_observer = g_value_get_pointer (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+kanban_column_store_get_property (GObject    *object,
+                                  guint       property_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  KanbanColumnStore *self = KANBAN_COLUMN_STORE (object);
+
+  switch (property_id)
+    {
+    case PROP_VIEW_OBSERVER:
+      g_value_set_pointer (value, self->view_observer);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
 kanban_column_store_finalize (GObject *object)
 {
   KanbanColumnStore *self = KANBAN_COLUMN_STORE (object);
@@ -144,12 +194,25 @@ kanban_column_store_class_init (KanbanColumnStoreClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   object_class->finalize = kanban_column_store_finalize;
+  object_class->set_property = kanban_column_store_set_property;
+  object_class->get_property = kanban_column_store_get_property;
+
+
+  obj_properties[PROP_VIEW_OBSERVER] =
+    g_param_spec_pointer("view-observer",
+                         "View Observer",
+                         "GUI observer bound via KanbanColumnViewer iface",
+                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
 KanbanColumnStore *
-kanban_column_store_new ()
+kanban_column_store_new (KanbanColumnViewer *view_observer)
 {
-  return g_object_new (KANBAN_COLUMN_STORE_TYPE, NULL);
+  return g_object_new (KANBAN_COLUMN_STORE_TYPE,
+                       "view-observer", view_observer,
+                       NULL);
 }
 
 void

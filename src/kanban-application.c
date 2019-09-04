@@ -56,7 +56,7 @@ static void
 kanban_application_startup (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = kanban_column_store_new ();
+  self->viewmodel = kanban_column_store_new (NULL);
   test_observers();
 
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
