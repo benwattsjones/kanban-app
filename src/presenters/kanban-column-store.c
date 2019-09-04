@@ -90,6 +90,8 @@ kanban_column_store_add_column (void              *vself,
   KanbanListStore *new_column = kanban_list_store_new (column_data->column_id);
   g_hash_table_insert (self->column_table,
                        GINT_TO_POINTER (column_data->column_id), new_column);
+  if (self->view_observer)
+    kanban_column_viewer_add_column (self->view_observer, G_LIST_MODEL (new_column));
 }
 
 static void

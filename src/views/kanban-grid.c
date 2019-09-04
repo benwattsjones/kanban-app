@@ -40,6 +40,7 @@ kanban_grid_add_column (KanbanColumnViewer *self,
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
   gtk_grid_insert_column (GTK_GRID (self), 0); // always prepends new columns TODO
   gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), 0, 0, 1, 1);
+  gtk_widget_show_all (GTK_WIDGET (new_column_widget));
 }
 
 static void
