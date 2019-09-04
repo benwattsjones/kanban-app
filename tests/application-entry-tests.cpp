@@ -19,10 +19,8 @@ extern "C"
   #include "../src/presenters/kanban-column-viewer-interface.h"
   #include "../src/views/kanban-window.h"
   #include "../src/views/kanban-grid.h"
-  #include "../src/views/kanban-list-box.h" // TODO delete
   #include <config.h>
 
-  #include <gio/gio.h> // TODO delete
   #include <gtk/gtk.h>
 }
 
@@ -46,9 +44,11 @@ extern "C"
         ++FunctionCallTracker.func_call_counter;
     return NULL;
   }
+
   void test_observers()
   {
   }
+
   KanbanColumnStore *kanban_column_store_new (KanbanColumnViewer *view_observer)
   {
     (void) view_observer;
@@ -56,22 +56,14 @@ extern "C"
         ++FunctionCallTracker.func_call_counter;
     return NULL;
   }
+
   void kanban_column_store_destroy (KanbanColumnStore *self)
   {
     (void) self;
     FunctionCallTracker.destroy_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;
   }
-  GListModel *kanban_column_store_get_card_list (KanbanColumnStore *self)
-  {
-    (void) self;
-    return NULL;
-  }
-  KanbanListBox *kanban_list_box_new (GListModel *data)
-  {
-    (void) data;
-    return NULL;
-  }
+
   KanbanGrid *kanban_grid_new()
   {
     return NULL;

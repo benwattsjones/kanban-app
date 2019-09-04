@@ -28,8 +28,6 @@ G_DECLARE_FINAL_TYPE (KanbanColumnStore, kanban_column_store, KANBAN, COLUMN_STO
 KanbanColumnStore      *kanban_column_store_new           (KanbanColumnViewer *view_observer);
 void                    kanban_column_store_destroy       (KanbanColumnStore  *self);
 
-GListModel             *kanban_column_store_get_card_list (KanbanColumnStore  *self);
-
 
 #ifdef TESTING_ONLY_ACCESS
 #include "kanban-card-viewmodel.h"

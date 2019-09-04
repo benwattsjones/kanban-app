@@ -224,17 +224,6 @@ kanban_column_store_destroy (KanbanColumnStore *self)
   self = NULL;
 }
 
-GListModel * // TODO: temp func before GUI implemented
-kanban_column_store_get_card_list (KanbanColumnStore *self)
-{
-  GList *columns_list = g_hash_table_get_values(self->column_table);
-  if (!columns_list)
-    return NULL;
-  KanbanListStore *column = columns_list->data;
-  g_list_free (columns_list);
-  return G_LIST_MODEL (column);
-}
-
 // Functions used only to provide testing API
 
 #ifdef TESTING_ONLY_ACCESS
