@@ -15,11 +15,12 @@
 extern "C"
 {
   #include "../src/kanban-application.h"
-  #include "../src/presenters/kanban-column-store.h" // TODO delete
+  #include "../src/presenters/kanban-column-store.h"
   #include "../src/views/kanban-window.h"
   #include "../src/views/kanban-list-box.h" // TODO delete
   #include <config.h>
 
+  #include <gio/gio.h> // TODO delete
   #include <gtk/gtk.h>
 }
 
@@ -62,13 +63,13 @@ extern "C"
         ++FunctionCallTracker.func_call_counter;
   }
 
-  KanbanListStore *kanban_column_store_get_card_list (KanbanColumnStore *self)
+  GListModel *kanban_column_store_get_card_list (KanbanColumnStore *self)
   {
     (void) self;
     return NULL;
   }
 
-  KanbanListBox *kanban_list_box_new (KanbanListStore *data)
+  KanbanListBox *kanban_list_box_new (GListModel *data)
   {
     (void) data;
     return NULL;

@@ -15,12 +15,13 @@
 extern "C"
 {
   #include "../src/kanban-application.h"
-  #include "../src/presenters/kanban-list-store.h" // TODO delete
   #include "../src/presenters/kanban-column-store.h"
+  #include "../src/presenters/model-observer-interface.h"
   #include "../src/views/kanban-window.h"
   #include "../src/views/kanban-list-box.h"  // TODO delete
   #include <config.h>
 
+  #include <gio/gio.h> // TODO delete
   #include <gtk/gtk.h>
 }
 
@@ -34,23 +35,26 @@ extern "C"
     (void) app;
     return NULL;
   }
-  void register_kanban_viewmodel_observer (KanbanListStore *viewmodel)
-  {
-    (void) viewmodel;
-  }
-  void deregister_kanban_viewmodel_observer (KanbanListStore *viewmodel)
-  {
-    (void) viewmodel;
-  }
   void test_observers()
   {
   }
-  KanbanListBox *kanban_list_box_new (KanbanListStore *data)
+  KanbanListBox *kanban_list_box_new (GListModel *data)
   {
     (void) data;
     return NULL;
   }
-
+  void kanban_column_store_finalize (KanbanColumnStore *self)
+  {
+    (void) self;
+  }
+  void register_kanban_viewmodel_observer (ModelObserverInterface *observer)
+  {
+    (void) observer;
+  }
+  void deregister_kanban_viewmodel_observer (ModelObserverInterface *observer)
+  {
+    (void) observer;
+  }
 }
 
 

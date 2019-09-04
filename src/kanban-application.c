@@ -15,13 +15,13 @@
 #include "kanban-application.h"
 
 #include "presenters/kanban-column-store.h"
-#include "presenters/kanban-list-store.h" // TODO - remove
 #include "views/kanban-window.h"
-#include "views/kanban-list-box.h" // TODO - remove
+#include "views/kanban-list-box.h" // TODO - replace with kanban-grid
 #include "models/kanban-data.h" // TODO - remove after testing
 #include <config.h>
 
 #include <gtk/gtk.h>
+#include <gio/gio.h>  // TODO - remove once kanban-grid active
 
 #define NULL_ARGUEMENT_PLACEHOLDER NULL
 #define NULL_ARG_DATA NULL
@@ -69,7 +69,7 @@ kanban_application_activate (GApplication *app)
 
   self->window = kanban_window_new (KANBAN_APPLICATION (app));
 
-  KanbanListStore *col = kanban_column_store_get_card_list (self->viewmodel);
+  GListModel *col = kanban_column_store_get_card_list (self->viewmodel);
   KanbanListBox *card_list = kanban_list_box_new (col);
 
   gtk_container_add (GTK_CONTAINER (self->window), GTK_WIDGET (card_list));

@@ -14,7 +14,6 @@
 
 #include "kanban-list-box.h"
 
-#include "../presenters/kanban-list-store.h"
 #include "../presenters/kanban-card-viewmodel.h"
 
 #include <gtk/gtk.h>
@@ -22,14 +21,14 @@
 
 struct _KanbanListBox
 {
-  GtkListBox       parent_instance;
+  GtkListBox   parent_instance;
 
-  KanbanListStore *card_data;
+  GListModel  *column_data;
 };
 
 enum
 {
-  PROP_CARD_DATA = 1,
+  PROP_COLUMN_DATA = 1,
   N_PROPERTIES
 };
 
@@ -49,8 +48,8 @@ kanban_list_box_set_property (GObject      *object,
 
   switch (property_id)
     {
-    case PROP_CARD_DATA:
-      self->card_data = g_value_get_pointer (value);
+    case PROP_COLUMN_DATA:
+      self->column_data = g_value_get_pointer (value);
       g_print("Setting card data\n");
       break;
 
@@ -70,8 +69,8 @@ kanban_list_box_get_property (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_CARD_DATA:
-      g_value_set_object (value, self->card_data);
+    case PROP_COLUMN_DATA:
+      g_value_set_pointer (value, self->column_data);
       break;
 
     default:
@@ -84,13 +83,11 @@ static void
 kanban_list_box_constructed (GObject *object)
 {
   KanbanListBox *self = KANBAN_LIST_BOX (object);
-  gtk_list_box_bind_model (GTK_LIST_BOX (self), //&self->parent_instance,
-                           G_LIST_MODEL (self->card_data),
-                           create_card_widget_func,
-                           NULL, g_free);
+  gtk_list_box_bind_model (GTK_LIST_BOX (self), self->column_data,
+                           create_card_widget_func, NULL, g_free);
   g_print("init list box\n");
-  g_print("list box model addr: %p\n", (void *) self->card_data);
-  g_print("init gui list len: %d\n", g_list_model_get_n_items (G_LIST_MODEL (self->card_data)));
+  g_print("list box model addr: %p\n", (void *) self->column_data);
+  g_print("init gui list len: %d\n", g_list_model_get_n_items (G_LIST_MODEL (self->column_data)));
 }
 
 static void
@@ -108,21 +105,20 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
   object_class->get_property = kanban_list_box_get_property;
   object_class->constructed = kanban_list_box_constructed;
 
-  obj_properties[PROP_CARD_DATA] =
-    g_param_spec_pointer("card-data",
-                        "Card Data",
-                        "KanbanListStore Card data to bind to via GListModel iface",
-                       // KANBAN_LIST_STORE_TYPE,
-                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+  obj_properties[PROP_COLUMN_DATA] =
+    g_param_spec_pointer("column-data",
+                         "Column Data",
+                         "Card data of single column to bind to via GListModel iface",
+                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
 KanbanListBox *
-kanban_list_box_new (KanbanListStore *card_data)
+kanban_list_box_new (GListModel *column_data)
 {
   return g_object_new (KANBAN_LIST_BOX_TYPE,
-                       "card-data", card_data,
+                       "column-data", column_data,
                        NULL);
 }
 

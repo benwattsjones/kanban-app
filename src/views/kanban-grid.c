@@ -36,9 +36,10 @@ static void
 kanban_grid_add_column (KanbanColumnViewer *self,
                         GListModel         *new_column)
 {
+  // TODO free KanbanListBox object if column deleted
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
   gtk_grid_insert_column (GTK_GRID (self), 0); // always prepends new columns TODO
-  gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column), 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), 0, 0, 1, 1);
 }
 
 static void
@@ -63,7 +64,7 @@ kanban_grid_class_init (KanbanGridClass *klass)
 }
 
 KanbanGrid *
-kanban_grid_new (KanbanListStore *card_data)
+kanban_grid_new ()
 {
   return g_object_new (KANBAN_GRID_TYPE, NULL);
 }

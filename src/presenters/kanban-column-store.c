@@ -20,7 +20,7 @@
 #include "model-observer-interface.h"
 #include "../models/kanban-data.h"
 
-#include <gio/gio.h>
+#include <gio/gio.h> // TODO - delete once using kanban-column-viewer-interface
 #include <gtk/gtk.h>
 
 struct _KanbanColumnStore
@@ -159,7 +159,7 @@ kanban_column_store_destroy (KanbanColumnStore *self)
   self = NULL;
 }
 
-KanbanListStore * // TODO: temp func before GUI implemented
+GListModel * // TODO: temp func before GUI implemented
 kanban_column_store_get_card_list (KanbanColumnStore *self)
 {
   GList *columns_list = g_hash_table_get_values(self->column_table);
@@ -167,7 +167,7 @@ kanban_column_store_get_card_list (KanbanColumnStore *self)
     return NULL;
   KanbanListStore *column = columns_list->data;
   g_list_free (columns_list);
-  return column;
+  return G_LIST_MODEL (column);
 }
 
 // Functions used only to provide testing API
