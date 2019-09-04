@@ -24,7 +24,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanWindow, kanban_window, KANBAN, WINDOW, GtkApplicationWindow)
 
-void initialize_kanban_view (KanbanApplication *app);
+KanbanWindow *kanban_window_new (KanbanApplication *app);
 
 G_END_DECLS
 

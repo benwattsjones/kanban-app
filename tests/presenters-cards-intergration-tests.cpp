@@ -15,8 +15,10 @@
 extern "C"
 {
   #include "../src/kanban-application.h"
-  #include "../src/presenters/kanban-list-store.h"
+  #include "../src/presenters/kanban-list-store.h" // TODO delete
   #include "../src/presenters/kanban-column-store.h"
+  #include "../src/views/kanban-window.h"
+  #include "../src/views/kanban-list-box.h"  // TODO delete
   #include <config.h>
 
   #include <gtk/gtk.h>
@@ -27,9 +29,10 @@ extern "C"
 // Stubs:
 extern "C"
 {
-  void initialize_kanban_view (KanbanApplication *app)
+  KanbanWindow *kanban_window_new (KanbanApplication *app)
   {
     (void) app;
+    return NULL;
   }
   void register_kanban_viewmodel_observer (KanbanListStore *viewmodel)
   {
@@ -39,6 +42,15 @@ extern "C"
   {
     (void) viewmodel;
   }
+  void test_observers()
+  {
+  }
+  KanbanListBox *kanban_list_box_new (KanbanListStore *data)
+  {
+    (void) data;
+    return NULL;
+  }
+
 }
 
 
@@ -70,8 +82,8 @@ protected:
 // Tests:
 TEST_F(PresentersCardsIntergrationTests, checkViewModelNotNull)
 {
-  KanbanListStore *viewmodel;
-  viewmodel = kanban_application_get_viewmodel (KANBAN_APPLICATION (app));
+  //KanbanListStore *viewmodel;
+  //viewmodel = kanban_application_get_viewmodel (KANBAN_APPLICATION (app));
   //ASSERT_NE(viewmodel, nullptr);
   ASSERT_NE (app, nullptr);
 }

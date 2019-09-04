@@ -41,7 +41,6 @@ register_kanban_viewmodel_observer (ModelObserverInterface *observer)
   KanbanModelObserver observer_wrap = { .instance = observer,
                                         .notification = kanban_model_changed };
   attach_observer (&observer_wrap);
-  test_observers ();
 }
 
 void

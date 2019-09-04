@@ -15,7 +15,10 @@
 #include "kanban-application.h"
 
 #include "presenters/kanban-column-store.h"
+#include "presenters/kanban-list-store.h" // TODO - remove
 #include "views/kanban-window.h"
+#include "views/kanban-list-box.h" // TODO - remove
+#include "models/kanban-data.h" // TODO - remove after testing
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -32,6 +35,8 @@ enum
 struct _KanbanApplication
 {
   GtkApplication      parent_instance;
+
+  KanbanWindow       *window;
   KanbanColumnStore  *viewmodel;
 };
 
@@ -52,6 +57,7 @@ kanban_application_startup (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
   self->viewmodel = kanban_column_store_new ();
+  test_observers();
 
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
 }
@@ -59,7 +65,16 @@ kanban_application_startup (GApplication *app)
 static void
 kanban_application_activate (GApplication *app)
 {
-  initialize_kanban_view (KANBAN_APPLICATION (app));
+  KanbanApplication *self = KANBAN_APPLICATION (app);
+
+  self->window = kanban_window_new (KANBAN_APPLICATION (app));
+
+  KanbanListStore *col = kanban_column_store_get_card_list (self->viewmodel);
+  KanbanListBox *card_list = kanban_list_box_new (col);
+
+  gtk_container_add (GTK_CONTAINER (self->window), GTK_WIDGET (card_list));
+  gtk_window_present (GTK_WINDOW (self->window));
+  gtk_widget_show_all (GTK_WIDGET (self->window));
 }
 
 static void
@@ -113,12 +128,6 @@ kanban_application_class_init (KanbanApplicationClass *klass)
   application_class->open = kanban_application_open;
   application_class->handle_local_options = kanban_application_handle_local_options;
   application_class->shutdown = kanban_application_shutdown;
-}
-
-KanbanListStore *
-kanban_application_get_viewmodel (KanbanApplication *self)
-{
-  return kanban_column_store_get_card_list (self->viewmodel);
 }
 
 int

@@ -25,11 +25,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanApplication, kanban_application, KANBAN, APPLICATION, GtkApplication)
 
-
-KanbanListStore *kanban_application_get_viewmodel (KanbanApplication *self);
-
-int              initialize_kanban_application    (int                argc,
-                                                   char              *argv[]);
+int  initialize_kanban_application  (int   argc,
+                                     char *argv[]);
 
 G_END_DECLS
 

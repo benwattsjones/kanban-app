@@ -15,7 +15,9 @@
 extern "C"
 {
   #include "../src/kanban-application.h"
-  #include "../src/presenters/kanban-column-store.h"
+  #include "../src/presenters/kanban-column-store.h" // TODO delete
+  #include "../src/views/kanban-window.h"
+  #include "../src/views/kanban-list-box.h" // TODO delete
   #include <config.h>
 
   #include <gtk/gtk.h>
@@ -34,11 +36,16 @@ static struct _FunctionCallTracker
 
 extern "C"
 {
-  void initialize_kanban_view (KanbanApplication *app)
+  KanbanWindow *kanban_window_new (KanbanApplication *app)
   {
     (void) app;
     FunctionCallTracker.initialize_kanban_view_func_count =
         ++FunctionCallTracker.func_call_counter;
+    return NULL;
+  }
+
+  void test_observers()
+  {
   }
 
   KanbanColumnStore *kanban_column_store_new ()
@@ -58,6 +65,12 @@ extern "C"
   KanbanListStore *kanban_column_store_get_card_list (KanbanColumnStore *self)
   {
     (void) self;
+    return NULL;
+  }
+
+  KanbanListBox *kanban_list_box_new (KanbanListStore *data)
+  {
+    (void) data;
     return NULL;
   }
 }
