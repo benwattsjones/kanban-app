@@ -59,6 +59,15 @@ test('column_store_tests',
     suite: 'unit',
 )
 
+test('column_viewer_interface_tests',
+    executable('column_viewer_interface_tests',
+        files('../src/presenters/kanban-column-viewer-interface.c',
+              'kanban-column-viewer-interface-tests.cpp'),
+        kwargs: default_test_args,
+    ),
+    suite: 'unit',
+)
+
 test('presenter_integration_tests',
     executable('presenter_integration_tests',
         files('../src/kanban-application.c',
