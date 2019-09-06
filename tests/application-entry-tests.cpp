@@ -14,8 +14,11 @@
 
 extern "C"
 {
-  #include "../src/presenters/kanban-application.h"
-  #include "../src/presenters/kanban-list-store.h"
+  #include "../src/kanban-application.h"
+  #include "../src/presenters/kanban-column-store.h"
+  #include "../src/presenters/kanban-column-viewer-interface.h"
+  #include "../src/views/kanban-window.h"
+  #include "../src/views/kanban-grid.h"
   #include <config.h>
 
   #include <gtk/gtk.h>
@@ -34,25 +37,36 @@ static struct _FunctionCallTracker
 
 extern "C"
 {
-  void initialize_kanban_view (KanbanApplication *app)
+  KanbanWindow *kanban_window_new (KanbanApplication *app)
   {
     (void) app;
     FunctionCallTracker.initialize_kanban_view_func_count =
         ++FunctionCallTracker.func_call_counter;
+    return NULL;
   }
 
-  KanbanListStore *initialize_viewmodel()
+  void test_observers()
   {
+  }
+
+  KanbanColumnStore *kanban_column_store_new (KanbanColumnViewer *view_observer)
+  {
+    (void) view_observer;
     FunctionCallTracker.initialize_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;
     return NULL;
   }
 
-  void destroy_viewmodel (KanbanListStore *viewmodel)
+  void kanban_column_store_destroy (KanbanColumnStore *self)
   {
-    (void) viewmodel;
+    (void) self;
     FunctionCallTracker.destroy_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;
+  }
+
+  KanbanGrid *kanban_grid_new()
+  {
+    return NULL;
   }
 }
 
@@ -121,7 +135,7 @@ TEST_F(ApplicationEntryTests, checkInitializationCallOrder)
 
 TEST_F(ApplicationEntryTests, checkInitializationFunctionReturnsSuccess)
 {
-  int status = initialize_kanban_presenter (argc_stub, argv_stub);
+  int status = initialize_kanban_application (argc_stub, argv_stub);
   EXPECT_EQ(status, 0);
 }
 

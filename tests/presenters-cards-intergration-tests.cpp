@@ -14,8 +14,11 @@
 
 extern "C"
 {
-  #include "../src/presenters/kanban-application.h"
-  #include "../src/presenters/kanban-list-store.h"
+  #include "../src/kanban-application.h"
+  #include "../src/presenters/kanban-column-store.h"
+  #include "../src/presenters/model-observer-interface.h"
+  #include "../src/views/kanban-window.h"
+  #include "../src/views/kanban-grid.h"
   #include <config.h>
 
   #include <gtk/gtk.h>
@@ -26,17 +29,34 @@ extern "C"
 // Stubs:
 extern "C"
 {
-  void initialize_kanban_view (KanbanApplication *app)
+  KanbanWindow *kanban_window_new (KanbanApplication *app)
   {
     (void) app;
+    return NULL;
   }
-  void register_kanban_viewmodel_observer (KanbanListStore *viewmodel)
+
+  void test_observers()
   {
-    (void) viewmodel;
   }
-  void deregister_kanban_viewmodel_observer (KanbanListStore *viewmodel)
+
+  void kanban_column_store_finalize (KanbanColumnStore *self)
   {
-    (void) viewmodel;
+    (void) self;
+  }
+
+  void register_kanban_viewmodel_observer (ModelObserverInterface *observer)
+  {
+    (void) observer;
+  }
+
+  void deregister_kanban_viewmodel_observer (ModelObserverInterface *observer)
+  {
+    (void) observer;
+  }
+
+  KanbanGrid *kanban_grid_new()
+  {
+    return NULL;
   }
 }
 
@@ -67,11 +87,9 @@ protected:
 
 
 // Tests:
-TEST_F(PresentersCardsIntergrationTests, checkViewModelNotNull)
+TEST_F(PresentersCardsIntergrationTests, checkApplicationNotNull)
 {
-  KanbanListStore *viewmodel;
-  viewmodel = kanban_application_get_viewmodel (KANBAN_APPLICATION (app));
-  ASSERT_NE(viewmodel, nullptr);
+  ASSERT_NE (app, nullptr);
 }
 
 

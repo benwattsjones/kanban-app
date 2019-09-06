@@ -1,4 +1,4 @@
-/* src/models/kanban-cards.h
+/* src/presenters/model-observer-interface.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,19 +12,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_CARDS_H
-#define KANBAN_CARDS_H
+#ifndef MODEL_OBSERVER_INTERFACE_H
+#define MODEL_OBSERVER_INTERFACE_H
 
-typedef struct
+#include "../models/kanban-data.h"
+
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
+
+typedef struct _ModelObserverInterface
 {
-  int   card_id;
-  int   column_id;
-  char *heading;
-  char *content;
-  int   priority;
-} KanbanCard;
+  void *viewmodel;
+  void (*task_func[NUM_TASKS]) (void *self, const KanbanData *data);
+} ModelObserverInterface;
 
-void test_observers ();
 
-#endif /* KANBAN_CARDS_H */
+G_END_DECLS
+
+#endif /* MODEL_OBSERVER_INTERFACE_H */
 

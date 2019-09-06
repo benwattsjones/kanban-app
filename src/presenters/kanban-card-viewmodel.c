@@ -14,7 +14,7 @@
 
 #include "kanban-card-viewmodel.h"
 
-#include "../models/kanban-cards.h"
+#include "../models/kanban-data.h"
 
 #include <gtk/gtk.h>
 
@@ -175,7 +175,7 @@ kanban_card_viewmodel_class_init (KanbanCardViewModelClass *klass)
 }
 
 KanbanCardViewModel *
-kanban_card_viewmodel_new (const KanbanCard *card_data)
+kanban_card_viewmodel_new (const KanbanData *card_data)
 {
   return g_object_new (KANBAN_CARD_VIEWMODEL_TYPE,
                        "card-id", card_data->card_id,

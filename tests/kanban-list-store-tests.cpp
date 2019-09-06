@@ -16,7 +16,7 @@ extern "C"
 {
   #include "../src/presenters/kanban-list-store.h"
   #include "../src/presenters/kanban-card-viewmodel.h"
-  #include "../src/models/kanban-cards.h"
+  #include "../src/models/kanban-data.h"
 
   #include <gtk/gtk.h>
 }
@@ -24,8 +24,8 @@ extern "C"
 #include "gtest/gtest.h"
 
 /* WARNING: these functions have no checks for the following:
- *  - Passing KanbanCard data with non-existant ID to _change_content() func
- *  - passing KanbanCard data to _add_card() func with priority values in
+ *  - Passing KanbanData data with non-existant ID to _change_content() func
+ *  - passing KanbanData data to _add_card() func with priority values in
  *    wrong order (must be 0, 1, 2 etc.). This is because if priority > length,
  *    the card will be added to the end regardless of any other priority values
  *    in the list.
@@ -33,28 +33,19 @@ extern "C"
  * This is because such checks are expected to be done by the model.
  * (Exepting not passing NULL, which should be prevented with constant
  *  KanbanListStore* by kanban-application, and ONLY model-observer creating
- *  the KanbanCard* arguements, with proper rigor).
+ *  the KanbanData* arguements, with proper rigor).
  */
 
 // Stubs:
 extern "C"
 {
-  void register_kanban_viewmodel_observer   (KanbanListStore *viewmodel)
-  {
-    (void) viewmodel;
-  }
-
-  void deregister_kanban_viewmodel_observer (KanbanListStore *viewmodel)
-  {
-    (void) viewmodel;
-  }
 }
 
 // Test Fixtures:
 class KanbanListStoreTests : public ::testing::Test
 {
 protected:
-  KanbanCard card_data;
+  KanbanData card_data;
   KanbanListStore *viewmodel;
 
   void SetUp() override
@@ -65,12 +56,12 @@ protected:
     card_data.content = g_strdup("card content.");
     card_data.priority = 0;
 
-    viewmodel = initialize_viewmodel ();
+    viewmodel = kanban_list_store_new (card_data.column_id);
   }
 
   void TearDown() override
   {
-    destroy_viewmodel (viewmodel);
+    kanban_list_store_destroy ((void *) viewmodel);
     g_free (card_data.heading);
     g_free (card_data.content);
   }
@@ -80,6 +71,13 @@ protected:
 TEST_F(KanbanListStoreTests, checkKanbanListStoreCreated)
 {
   ASSERT_NE (viewmodel, nullptr);
+}
+
+TEST_F(KanbanListStoreTests, checkColumnIdPropertyStored)
+{
+  int result_column_id;
+  g_object_get (viewmodel, "column-id", &result_column_id, NULL);
+  EXPECT_EQ (result_column_id, card_data.column_id);
 }
 
 TEST_F(KanbanListStoreTests, checkInitialCountZero)
@@ -174,21 +172,4 @@ TEST_F(KanbanListStoreTests, checkMultipleCardsCorrectCount)
   int num_items = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   EXPECT_EQ (3, num_items);
 }
-
-TEST_F(KanbanListStoreTests, checkChangeContentSuccess)
-{
-  kanban_list_store_new_card (viewmodel, &card_data);
-  KanbanCardViewModel *card = KANBAN_CARD_VIEWMODEL
-      (g_list_model_get_item (G_LIST_MODEL (viewmodel), card_data.priority));
-  free (card_data.heading);
-  card_data.heading = g_strdup ("new heading");
-  kanban_list_store_change_content (viewmodel, &card_data);
-  char *heading_stored;
-  g_object_get (card, "heading", &heading_stored, NULL);
-  EXPECT_STREQ (card_data.heading, heading_stored);
-  free (heading_stored);
-  g_object_unref (card);
-}
-
-
 

@@ -1,4 +1,4 @@
-/* src/presenters/kanban-application.h
+/* src/kanban-application.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -15,7 +15,7 @@
 #ifndef KANBAN_APPLICATION_H
 #define KANBAN_APPLICATION_H
 
-#include "kanban-list-store.h"
+#include "presenters/kanban-list-store.h"
 
 #include <gtk/gtk.h>
 
@@ -25,11 +25,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanApplication, kanban_application, KANBAN, APPLICATION, GtkApplication)
 
-
-KanbanListStore *kanban_application_get_viewmodel (KanbanApplication *self);
-
-int              initialize_kanban_presenter      (int                argc,
-                                                   char              *argv[]);
+int  initialize_kanban_application  (int   argc,
+                                     char *argv[]);
 
 G_END_DECLS
 

@@ -1,7 +1,8 @@
 
 
 default_test_args = {
-                 'c_args': kanban_app_c_args,
+                 'c_args': [kanban_app_c_args, '-DTESTING_ONLY_ACCESS'],
+               'cpp_args': ['-DTESTING_ONLY_ACCESS'],
               'link_args': kanban_app_ld_args,
            'dependencies': [test_deps, kanban_app_deps],
                     'pie': true,
@@ -18,7 +19,8 @@ test('gtest_tests',
 
 test('kanban_application_tests',
     executable('kanban_application_tests',
-        files('../src/presenters/kanban-application.c',
+        files('../src/kanban-application.c',
+              '../src/presenters/kanban-column-viewer-interface.c',
               'application-entry-tests.cpp'),
         kwargs: default_test_args,
         include_directories: config_h_inc,
@@ -46,11 +48,33 @@ test('list_store_tests',
     suite: 'unit',
 )
 
+test('column_store_tests',
+    executable('column_store_tests',
+        files('../src/presenters/kanban-column-store.c',
+              '../src/presenters/kanban-list-store.c',
+              '../src/presenters/kanban-card-viewmodel.c',
+              'kanban-column-store-tests.cpp'),
+        kwargs: default_test_args,
+    ),
+    suite: 'unit',
+)
+
+test('column_viewer_interface_tests',
+    executable('column_viewer_interface_tests',
+        files('../src/presenters/kanban-column-viewer-interface.c',
+              'kanban-column-viewer-interface-tests.cpp'),
+        kwargs: default_test_args,
+    ),
+    suite: 'unit',
+)
+
 test('presenter_integration_tests',
     executable('presenter_integration_tests',
-        files('../src/presenters/kanban-application.c',
+        files('../src/kanban-application.c',
               '../src/presenters/kanban-card-viewmodel.c',
               '../src/presenters/kanban-list-store.c',
+              '../src/presenters/kanban-column-store.c',
+              '../src/presenters/kanban-column-viewer-interface.c',
               'presenters-cards-intergration-tests.cpp'),
         kwargs: default_test_args,
         include_directories: config_h_inc,

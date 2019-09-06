@@ -1,4 +1,4 @@
-/* src/kanban-presenters/presenter-view-interface.h
+/* src/views/kanban-grid.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,19 +12,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef PRESENTER_VIEW_INTERFACE_H
-#define PRESENTER_VIEW_INTERFACE_H
-
-#include "kanban-application.h"
+#ifndef KANBAN_GRID_H
+#define KANBAN_GRID_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-/* Function must be implemented by the view as the entry point. */
-void initialize_kanban_view (KanbanApplication *app);
+#define KANBAN_GRID_TYPE (kanban_grid_get_type ())
+
+G_DECLARE_FINAL_TYPE (KanbanGrid, kanban_grid, KANBAN, GRID, GtkGrid)
+
+KanbanGrid *kanban_grid_new ();
 
 G_END_DECLS
 
-#endif /* PRESENTER_VIEW_INTERFACE_H */
+#endif /* KANBAN_GRID_H */
 

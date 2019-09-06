@@ -15,8 +15,7 @@
 #include "kanban-list-store.h"
 
 #include "kanban-card-viewmodel.h"
-#include "model-observer.h"
-#include "../models/kanban-cards.h"
+#include "../models/kanban-data.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
@@ -26,11 +25,18 @@ struct _KanbanListStore
   GObject     parent_instance;
 
   guint       num_cards;
-  gchar     **kanban_column_names;
+  gint        column_id;
 
-  GHashTable *card_table; // TODO: will need to change much if use string card-id
   GSequence  *card_list;
 };
+
+enum
+{
+  PROP_COLUMN_ID = 1,
+  N_PROPERTIES
+};
+
+static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
 
@@ -75,13 +81,51 @@ g_list_model_iface_init (GListModelInterface *iface)
 /* funcs for class */
 
 static void
+kanban_list_store_set_property (GObject      *object,
+                                guint         property_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  KanbanListStore *self = KANBAN_LIST_STORE (object);
+
+  switch (property_id)
+    {
+    case PROP_COLUMN_ID:
+      self->column_id = g_value_get_int (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+kanban_list_store_get_property (GObject    *object,
+                                guint       property_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  KanbanListStore *self = KANBAN_LIST_STORE (object);
+
+  switch (property_id)
+    {
+    case PROP_COLUMN_ID:
+      g_value_set_int (value, self->column_id);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
 kanban_list_store_finalize (GObject *object)
 {
   KanbanListStore *self = KANBAN_LIST_STORE (object);
 
-  deregister_kanban_viewmodel_observer (self);
   g_clear_pointer (&self->card_list, g_sequence_free);
-  g_clear_pointer (&self->card_table, g_hash_table_destroy);
 
   G_OBJECT_CLASS (kanban_list_store_parent_class)->finalize (object);
 }
@@ -91,72 +135,55 @@ kanban_list_store_init (KanbanListStore *self)
 {
   self->num_cards = 0;
   self->card_list = g_sequence_new (g_object_unref);
-  self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
-  register_kanban_viewmodel_observer (self);
 }
 
 static void
 kanban_list_store_class_init (KanbanListStoreClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->set_property = kanban_list_store_set_property;
+  object_class->get_property = kanban_list_store_get_property;
   object_class->finalize = kanban_list_store_finalize;
+
+  obj_properties[PROP_COLUMN_ID] =
+    g_param_spec_int("column-id",
+                     "Column ID", 
+                     "Unique, immutable kanban column identifier",
+                     0, G_MAXINT, 0,
+                     G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+  g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
+// Funcs to act on object:
 
 KanbanListStore *
-initialize_viewmodel ()
+kanban_list_store_new (gint col_id)
 {
-  return g_object_new (KANBAN_LIST_STORE_TYPE, NULL);
+  return g_object_new (KANBAN_LIST_STORE_TYPE,
+                       "column-id", col_id,
+                       NULL);
 }
 
 void
-destroy_viewmodel (KanbanListStore *viewmodel)
+kanban_list_store_destroy (gpointer vself)
 {
-  g_object_unref (viewmodel);
-  viewmodel = NULL;
+  KanbanListStore *self = KANBAN_LIST_STORE (vself);
+  g_object_unref (self);
+  self = NULL;
 }
 
-/* funcs for editing cards in column */
-
-void
-kanban_list_store_change_column (KanbanListStore  *self,
-                                 const KanbanCard *card_data)
-{
-  g_print ("Changed column: ID: %d; HEADING: %s\n",
-           card_data->column_id, card_data->heading);
-}
-
-void
-kanban_list_store_change_content (KanbanListStore  *self,
-                                  const KanbanCard *card_data)
-{
-  GSequenceIter *iter = g_hash_table_lookup (self->card_table, 
-                                             GINT_TO_POINTER (card_data->card_id));
-  KanbanCardViewModel *card = g_sequence_get (iter);
-  kanban_card_viewmodel_update_contents (card, card_data->heading, card_data->content);
-}
-
-void
-kanban_list_store_move_card (KanbanListStore  *self,
-                             const KanbanCard *card_data)
-{
-  g_print ("Moved card: ID: %d, COLUMN: %d, PRIORITY: %d\n",
-           card_data->card_id, card_data->column_id, card_data->priority);
-}
-
-void
+GSequenceIter *
 kanban_list_store_new_card (KanbanListStore  *self,
-                            const KanbanCard *card_data)
+                            const KanbanData *card_data)
 {
   KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
   GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,
                                                     card_data->priority);
   iter = g_sequence_insert_before (iter, new_card);
   self->num_cards++;
-  g_hash_table_insert (self->card_table,
-                       GINT_TO_POINTER (card_data->card_id), iter);
   guint position = g_sequence_iter_get_position (iter);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+  return iter;
 }
-
 

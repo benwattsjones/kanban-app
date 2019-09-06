@@ -1,4 +1,4 @@
-/* src/presenters/kanban-application.c
+/* src/kanban-application.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,8 +14,11 @@
 
 #include "kanban-application.h"
 
-#include "kanban-list-store.h"
-#include "presenter-view-interface.h"
+#include "presenters/kanban-column-store.h"
+#include "presenters/kanban-column-viewer-interface.h"
+#include "views/kanban-window.h"
+#include "views/kanban-grid.h"
+#include "models/kanban-data.h" // TODO - remove after testing
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -31,8 +34,11 @@ enum
 
 struct _KanbanApplication
 {
-  GtkApplication    parent_instance;
-  KanbanListStore  *viewmodel;
+  GtkApplication      parent_instance;
+
+  KanbanWindow       *window;
+  KanbanGrid         *board_view;
+  KanbanColumnStore  *viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -51,7 +57,6 @@ static void
 kanban_application_startup (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  self->viewmodel = initialize_viewmodel ();
 
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
 }
@@ -59,7 +64,17 @@ kanban_application_startup (GApplication *app)
 static void
 kanban_application_activate (GApplication *app)
 {
-  initialize_kanban_view (KANBAN_APPLICATION (app));
+  KanbanApplication *self = KANBAN_APPLICATION (app);
+
+  self->board_view = kanban_grid_new();
+  self->viewmodel = kanban_column_store_new (KANBAN_COLUMN_VIEWER (self->board_view));
+  self->window = kanban_window_new (self);
+
+  gtk_container_add (GTK_CONTAINER (self->window), GTK_WIDGET (self->board_view));
+  gtk_window_present (GTK_WINDOW (self->window));
+  gtk_widget_show_all (GTK_WIDGET (self->window));
+
+  test_observers();
 }
 
 static void
@@ -91,7 +106,7 @@ static void
 kanban_application_shutdown (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  destroy_viewmodel (self->viewmodel);
+  kanban_column_store_destroy (self->viewmodel);
   G_APPLICATION_CLASS (kanban_application_parent_class)->shutdown (app);
 }
 
@@ -115,14 +130,8 @@ kanban_application_class_init (KanbanApplicationClass *klass)
   application_class->shutdown = kanban_application_shutdown;
 }
 
-KanbanListStore *
-kanban_application_get_viewmodel (KanbanApplication *self)
-{
-  return self->viewmodel;
-}
-
 int
-initialize_kanban_presenter (int argc, char *argv[])
+initialize_kanban_application (int argc, char *argv[])
 {
   KanbanApplication *app = g_object_new (KANBAN_APPLICATION_TYPE,
                                          "application-id", APPLICATION_ID,
