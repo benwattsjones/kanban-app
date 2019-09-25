@@ -31,10 +31,8 @@ protected:
   void SetUp() override
   {
     card_data.card_id = 1;
-    card_data.column_id = 2;
     card_data.heading = NULL;
     card_data.content = NULL;
-    card_data.priority = 3;
   }
 
   void TearDown() override
@@ -50,26 +48,6 @@ TEST_F (KanbanCardViewModelTests,
   int stored_property;
   g_object_get (viewmodel, "card-id", &stored_property, NULL);
   EXPECT_EQ (stored_property, card_data.card_id);
-  g_object_unref (viewmodel);
-}
-
-TEST_F (KanbanCardViewModelTests,
-        New_ValidColumnIdPassed_ColumnIdStoredAsProperty)
-{
-  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
-  int stored_property;
-  g_object_get (viewmodel, "column-id", &stored_property, NULL);
-  EXPECT_EQ (stored_property, card_data.column_id);
-  g_object_unref (viewmodel);
-}
-
-TEST_F (KanbanCardViewModelTests,
-        New_ValidPriorityPassed_PriorityStoredAsProperty)
-{
-  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
-  int stored_property;
-  g_object_get (viewmodel, "priority", &stored_property, NULL);
-  EXPECT_EQ (stored_property, card_data.priority);
   g_object_unref (viewmodel);
 }
 

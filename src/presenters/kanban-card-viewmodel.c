@@ -21,20 +21,17 @@
 struct _KanbanCardViewModel
 {
   GObject  parent_instance;
+
   gint     card_id;
-  gint     column_id; /* may wish to replace with a column object */
   gchar   *heading;
   gchar   *content;
-  gint     priority;
 };
 
 enum
 {
   PROP_CARD_ID = 1,
-  PROP_COLUMN_ID,
   PROP_HEADING,
   PROP_CONTENT,
-  PROP_PRIORITY,
   N_PROPERTIES
 };
 
@@ -56,10 +53,6 @@ kanban_card_viewmodel_set_property (GObject      *object,
       self->card_id = g_value_get_int (value);
       break;
 
-    case PROP_COLUMN_ID:
-      self->column_id = g_value_get_int (value);
-      break;
-
     case PROP_HEADING:
       g_free (self->heading);
       self->heading = g_value_dup_string (value);
@@ -68,10 +61,6 @@ kanban_card_viewmodel_set_property (GObject      *object,
     case PROP_CONTENT:
       g_free (self->content);
       self->content = g_value_dup_string (value);
-      break;
-
-    case PROP_PRIORITY:
-      self->priority = g_value_get_int (value);
       break;
 
     default:
@@ -94,20 +83,12 @@ kanban_card_viewmodel_get_property (GObject    *object,
       g_value_set_int (value, self->card_id);
       break;
 
-    case PROP_COLUMN_ID:
-      g_value_set_int (value, self->column_id);
-      break;
-
     case PROP_HEADING:
       g_value_set_string (value, self->heading);
       break;
 
     case PROP_CONTENT:
       g_value_set_string (value, self->content);
-      break;
-
-    case PROP_PRIORITY:
-      g_value_set_int (value, self->priority);
       break;
 
     default:
@@ -146,12 +127,6 @@ kanban_card_viewmodel_class_init (KanbanCardViewModelClass *klass)
                      "Unique, immutable, kanban card identifier",
                      0, G_MAXINT, 0,
                      G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
-  obj_properties[PROP_COLUMN_ID] =
-    g_param_spec_int("column-id",
-                     "Column ID", 
-                     "Unique, immutable kanban column identifier",
-                     0, G_MAXINT, 0,
-                     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
   obj_properties[PROP_HEADING] =
     g_param_spec_string("heading",
                         "Heading",
@@ -164,14 +139,7 @@ kanban_card_viewmodel_class_init (KanbanCardViewModelClass *klass)
                         "Details of task on a kanban card",
                         NULL,
                         G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
-  obj_properties[PROP_PRIORITY] =
-    g_param_spec_int("priority",
-                     "Priority",
-                     "Priority (i.e. position) of kanban card in its column",
-                     0, G_MAXINT, 0,
-                     G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
-
 }
 
 KanbanCardViewModel *
@@ -179,10 +147,8 @@ kanban_card_viewmodel_new (const KanbanData *card_data)
 {
   return g_object_new (KANBAN_CARD_VIEWMODEL_TYPE,
                        "card-id", card_data->card_id,
-                       "column-id", card_data->column_id,
                        "heading", card_data->heading,
                        "content", card_data->content,
-                       "priority", card_data->priority,
                        NULL);
 }
 
