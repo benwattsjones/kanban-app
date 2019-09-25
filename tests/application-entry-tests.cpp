@@ -45,7 +45,7 @@ extern "C"
     return NULL;
   }
 
-  void test_observers()
+  void test_observers ()
   {
   }
 
@@ -64,7 +64,7 @@ extern "C"
         ++FunctionCallTracker.func_call_counter;
   }
 
-  KanbanGrid *kanban_grid_new()
+  KanbanGrid *kanban_grid_new ()
   {
     return NULL;
   }
@@ -79,7 +79,7 @@ protected:
   char **argv_stub = NULL;
   static gchar *printed_string;
 
-  static void redirect_gprint(const gchar *string)
+  static void redirect_gprint (const gchar *string)
   {
     g_free (printed_string);
     printed_string = g_strdup (string);
@@ -106,34 +106,34 @@ protected:
 gchar *ApplicationEntryTests::printed_string = NULL;
 
 // Tests:
-TEST_F(ApplicationEntryTests, checkExitCodeSuccess)
+TEST_F (ApplicationEntryTests, checkExitCodeSuccess)
 {
   int status = g_application_run (G_APPLICATION (app), argc_stub, argv_stub);
-  EXPECT_EQ(status, 0);
+  EXPECT_EQ (status, 0);
 }
 
-TEST_F(ApplicationEntryTests, checkVersionOptionPrints)
+TEST_F (ApplicationEntryTests, checkVersionOptionPrints)
 {
   char *prog_name = g_strdup("prog");
   char *cmd_options = g_strdup("--version");
   char *opt[] = {prog_name, cmd_options};
   int status = g_application_run (G_APPLICATION (app), 2, opt);
-  EXPECT_EQ(status, 0);
-  EXPECT_STREQ(printed_string, PACKAGE_NAME " " PACKAGE_VERSION "\n");
-  g_free(prog_name);
-  g_free(cmd_options);
+  EXPECT_EQ (status, 0);
+  EXPECT_STREQ (printed_string, PACKAGE_NAME " " PACKAGE_VERSION "\n");
+  g_free (prog_name);
+  g_free (cmd_options);
 }
 
-TEST_F(ApplicationEntryTests, checkInitializationCallOrder)
+TEST_F (ApplicationEntryTests, checkInitializationCallOrder)
 {
   int status = g_application_run (G_APPLICATION (app), argc_stub, argv_stub);
-  EXPECT_EQ(status, 0);
-  EXPECT_EQ(FunctionCallTracker.initialize_viewmodel_func_count, 1);
-  EXPECT_EQ(FunctionCallTracker.initialize_kanban_view_func_count, 2);
-  EXPECT_EQ(FunctionCallTracker.destroy_viewmodel_func_count, 3);
+  EXPECT_EQ (status, 0);
+  EXPECT_EQ (FunctionCallTracker.initialize_viewmodel_func_count, 1);
+  EXPECT_EQ (FunctionCallTracker.initialize_kanban_view_func_count, 2);
+  EXPECT_EQ (FunctionCallTracker.destroy_viewmodel_func_count, 3);
 }
 
-TEST_F(ApplicationEntryTests, checkInitializationFunctionReturnsSuccess)
+TEST_F (ApplicationEntryTests, checkInitializationFunctionReturnsSuccess)
 {
   int status = initialize_kanban_application (argc_stub, argv_stub);
   EXPECT_EQ(status, 0);

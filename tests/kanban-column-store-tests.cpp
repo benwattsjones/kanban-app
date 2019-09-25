@@ -31,7 +31,7 @@ extern "C"
 // Stubs:
 extern "C"
 {
-  void register_kanban_viewmodel_observer   (ModelObserverInterface *observer)
+  void register_kanban_viewmodel_observer (ModelObserverInterface *observer)
   {
     (void) observer;
   }
@@ -61,8 +61,8 @@ protected:
   {
     card_data.card_id = 1;
     card_data.column_id = 2;
-    card_data.heading = g_strdup("heading!");
-    card_data.content = g_strdup("content.");
+    card_data.heading = g_strdup ("heading!");
+    card_data.content = g_strdup ("content.");
     card_data.priority = 0;
 
     viewmodel = kanban_column_store_new (NULL);
@@ -78,12 +78,14 @@ protected:
 };
 
 // Tests:
-TEST_F(KanbanColumnStoreTests, checkKanbanColumnStoreCreated)
+TEST_F (KanbanColumnStoreTests,
+        New_NullPassed_NewObjectReturned)
 {
   ASSERT_NE (viewmodel, nullptr);
 }
 
-TEST_F(KanbanColumnStoreTests, checkAddColumnStoresInTable)
+TEST_F (KanbanColumnStoreTests,
+        AddColumn_ValidDataPassed_NewColumnAddedToObjectAndRetrievable)
 {
   int column_id_stored;
   KanbanListStore *column_added;
@@ -95,7 +97,8 @@ TEST_F(KanbanColumnStoreTests, checkAddColumnStoresInTable)
   EXPECT_EQ (column_id_stored, card_data.column_id);
 }
 
-TEST_F(KanbanColumnStoreTests, checkAddCardStoresInTable)
+TEST_F (KanbanColumnStoreTests,
+        AddCard_ValidDataPassed_NewCardCreatedAndRetrievable)
 {
   int card_id_stored;
   char *heading_stored;
@@ -113,7 +116,8 @@ TEST_F(KanbanColumnStoreTests, checkAddCardStoresInTable)
   g_free (heading_stored);
 }
 
-TEST_F(KanbanColumnStoreTests, checkEditCardSavesNewContents)
+TEST_F (KanbanColumnStoreTests,
+        EditCard_NewHeadingDataPassed_CardHeadingChanged)
 {
   KanbanCardViewModel *card;
   char *heading_stored;

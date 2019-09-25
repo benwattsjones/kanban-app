@@ -126,9 +126,6 @@ TEST_F (ModelObserverTests,
 {
   EXPECT_NE (observer_data.notification, nullptr);
   EXPECT_NE (observer_data.instance, nullptr);
-//  card_data->task = TASK_ADD_CARD;
-//  observer_data.notification (observer_data.instance, card_data);
-//  EXPECT_EQ (func_call_count.add_card, 1);
 }
 
 TEST_F (ModelObserverTests,

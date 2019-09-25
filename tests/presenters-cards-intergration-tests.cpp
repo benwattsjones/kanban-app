@@ -54,7 +54,7 @@ extern "C"
     (void) observer;
   }
 
-  KanbanGrid *kanban_grid_new()
+  KanbanGrid *kanban_grid_new ()
   {
     return NULL;
   }

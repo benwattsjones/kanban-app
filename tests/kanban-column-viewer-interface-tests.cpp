@@ -84,15 +84,15 @@ protected:
 };
 
 // Tests:
-TEST_F(KanbanColumnViewerInterfaceTests,
-       AddColumn_InterfaceArguementIsNull_ImmediateReturnNoErrorsNoSideEffects)
+TEST_F (KanbanColumnViewerInterfaceTests,
+        AddColumn_InterfaceArguementIsNull_ImmediateReturnNoErrorsNoSideEffects)
 {
   kanban_column_viewer_add_column (NULL, NULL);
-  SUCCEED();
+  SUCCEED ();
 }
 
-TEST_F(KanbanColumnViewerInterfaceTests,
-       AddColumn_InterfaceArguementIsValid_ArguementsAddColumnFunctionisCalled)
+TEST_F (KanbanColumnViewerInterfaceTests,
+        AddColumn_InterfaceArguementIsValid_ArguementsAddColumnFunctionisCalled)
 {
   kanban_column_viewer_add_column (KANBAN_COLUMN_VIEWER (mock_column_viewer), NULL);
   EXPECT_EQ (add_column_called, 1);
