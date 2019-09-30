@@ -51,8 +51,8 @@ test_observers()
 
   card->card_id = 3;
   card->column_id = 1;
-  card->heading = "A Third Card";
-  card->content = "Third card content";
+  card->heading = "Card to be Moved";
+  card->content = "from col 1 priority 2 to col 2 priority 1";
   card->priority = 2;
   card->task = TASK_ADD_CARD;
   emit_kanban_card_change_signal (card);
@@ -80,7 +80,13 @@ test_observers()
   card->priority = 1;
   card->task = TASK_ADD_CARD;
   emit_kanban_card_change_signal (card);
-  
+
+  card->card_id = 3;
+  card->column_id = 2;
+  card->priority = 1;
+  card->task = TASK_MOVE_CARD;
+  emit_kanban_card_change_signal (card);
+
   free (card);
   card = NULL;
 }

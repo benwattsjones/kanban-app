@@ -187,3 +187,41 @@ kanban_list_store_new_card (KanbanListStore  *self,
   return iter;
 }
 
+GSequence *
+kanban_list_store_get_sequence (KanbanListStore *self)
+{
+  return self->card_list;
+}
+
+GSequenceIter *
+kanban_list_store_get_iter_at_pos (KanbanListStore *self,
+                                   gint             position)
+{
+  return g_sequence_get_iter_at_pos (self->card_list, position);
+}
+
+void
+kanban_list_store_alert_removed (KanbanListStore *self,
+                                 gint             position)
+{
+  self->num_cards--;
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+}
+
+void
+kanban_list_store_alert_added (KanbanListStore *self,
+                               gint             position)
+{
+  self->num_cards++;
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+}
+
+void
+kanban_list_store_alert_moved (KanbanListStore *self,
+                               gint             old_position,
+                               gint             new_position)
+{
+  g_list_model_items_changed (G_LIST_MODEL (self), old_position, 1, 0);
+  g_list_model_items_changed (G_LIST_MODEL (self), new_position, 0, 1);
+}
+
