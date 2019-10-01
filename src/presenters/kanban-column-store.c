@@ -46,6 +46,38 @@ static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 G_DEFINE_TYPE (KanbanColumnStore, kanban_column_store, G_TYPE_OBJECT)
 
+// helper funcs for readability
+
+inline GSequenceIter *
+get_card_iter_from_id (KanbanColumnStore *self,
+                       gint               card_id)
+{
+  GSequenceIter *card_iter;
+  card_iter = g_hash_table_lookup (self->card_table, GINT_TO_POINTER (card_id));
+  g_assert (card_iter != NULL);
+  return card_iter;
+}
+
+KanbanListStore *
+get_column_from_card_iter (KanbanColumnStore *self,
+                           GSequenceIter     *card_iter)
+{
+  GSequence *seq = g_sequence_iter_get_sequence (card_iter);
+  KanbanListStore *column = g_hash_table_lookup (self->sequence_table, seq);
+  g_assert (column != NULL);
+  return column;
+}
+
+KanbanListStore *
+get_column_from_id (KanbanColumnStore *self,
+                    gint               column_id)
+{
+  KanbanListStore *column;
+  column = g_hash_table_lookup (self->column_table, GINT_TO_POINTER (column_id));
+  g_assert (column != NULL);
+  return column;
+}
+
 // implementation vfuncs for ModelObserverInterface
 
 static void
@@ -53,12 +85,8 @@ kanban_column_store_add_card (void              *vself,
                               const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
-  GSequenceIter *card_iter;
-  KanbanListStore *column;
-  column = g_hash_table_lookup (self->column_table,
-                                GINT_TO_POINTER (card_data->column_id));
-  g_assert (column != NULL);
-  card_iter = kanban_list_store_new_card (column, card_data); 
+  KanbanListStore *column = get_column_from_id (self, card_data->column_id);
+  GSequenceIter *card_iter = kanban_list_store_new_card (column, card_data); 
   g_hash_table_insert (self->card_table,
                        GINT_TO_POINTER (card_data->card_id), card_iter);
 }
@@ -68,8 +96,7 @@ kanban_column_store_edit_card (void              *vself,
                                const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
-  GSequenceIter *card_iter = g_hash_table_lookup (self->card_table, 
-                                          GINT_TO_POINTER (card_data->card_id));
+  GSequenceIter *card_iter = get_card_iter_from_id (self, card_data->card_id);
   KanbanCardViewModel *card = g_sequence_get (card_iter);
   kanban_card_viewmodel_update_contents (card, card_data->heading, card_data->content);
 }
@@ -79,18 +106,14 @@ kanban_column_store_move_card (void              *vself,
                                const KanbanData  *card_data)
 {
   KanbanColumnStore *self = vself;
-  GSequenceIter *card_iter = g_hash_table_lookup (self->card_table,
-                                          GINT_TO_POINTER (card_data->card_id));
-  GSequence *seq = g_sequence_iter_get_sequence (card_iter);
-  KanbanListStore *old_col = g_hash_table_lookup (self->sequence_table, seq);
-  g_assert (old_col != NULL);
-  KanbanListStore *new_col = g_hash_table_lookup (self->column_table,
-                                        GINT_TO_POINTER (card_data->column_id));
-  g_assert (new_col != NULL);
-  gint old_position = g_sequence_iter_get_position (card_iter);
+  GSequenceIter *old_iter = get_card_iter_from_id (self, card_data->card_id);
+  KanbanListStore *old_col = get_column_from_card_iter (self, old_iter);
+  KanbanListStore *new_col = get_column_from_id (self, card_data->column_id);
+  gint old_position = g_sequence_iter_get_position (old_iter);
   gint new_position = card_data->priority;
-  g_sequence_move (card_iter,
-                   kanban_list_store_get_iter_at_pos (new_col, new_position));
+  GSequenceIter *new_iter = kanban_list_store_get_iter_at_pos (new_col, new_position);
+
+  g_sequence_move (old_iter, new_iter);
   if (new_col != old_col)
     {
       kanban_list_store_alert_removed (old_col, old_position);
