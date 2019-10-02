@@ -24,6 +24,31 @@ extern "C"
 
 #include "gtest/gtest.h"
 
+/* WARNING:
+ * The model is currently expected to conform to the following API rules,
+ * and as such checks for them breaking is not performed currently by
+ * presenter code.
+
+ *  - A column must be created (TASK_ADD_COLUMN) with corresponding column-id,
+ *    before a card may be added to that column (TASK_ADD_CARD).
+ *  - Within a column, a cards priority cannot be greater than the number
+ *    of cards in the column. Thus the first card added must have priority
+ *    value zero; the second card added may have priority zero (making it
+ *    the higher priority card) or priority one (making it the lower priority
+ *    card).
+ *  - Card and column ID values must exist for each column and card, and are
+ *    unique and immutable.
+ *  - Operations to move or edit cards and columns (TASK_EDIT_*, TASK_MOVE_*),
+ *    may only be performed on cards / columns that have already been created
+ *    (with TASK_ADD_*).
+ *
+ * Currently, breaking these API rules invokes undefined behaviour.
+ * However this project is currently under active development, and APIs
+ * between model, presenter and view code will be formalized in the future,
+ * along with documentation.
+ */
+
+
 KanbanModelObserver observer_model;
 
 // Stubs:

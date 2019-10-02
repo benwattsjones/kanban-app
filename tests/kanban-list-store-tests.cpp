@@ -23,18 +23,6 @@ extern "C"
 
 #include "gtest/gtest.h"
 
-/* WARNING: these functions have no checks for the following:
- *  - Passing KanbanData data with non-existant ID to _change_content() func
- *  - passing KanbanData data to _add_card() func with priority values in
- *    wrong order (must be 0, 1, 2 etc.). This is because if priority > length,
- *    the card will be added to the end regardless of any other priority values
- *    in the list.
- *  - Passing NULL as any pointer variable
- * This is because such checks are expected to be done by the model.
- * (Exepting not passing NULL, which should be prevented with constant
- *  KanbanListStore* by kanban-application, and ONLY model-observer creating
- *  the KanbanData* arguements, with proper rigor).
- */
 
 // Stubs:
 extern "C"
