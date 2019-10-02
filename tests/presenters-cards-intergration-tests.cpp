@@ -17,46 +17,27 @@ extern "C"
   #include "../src/kanban-application.h"
   #include "../src/presenters/kanban-column-store.h"
   #include "../src/presenters/model-observer-interface.h"
-  #include "../src/views/kanban-window.h"
-  #include "../src/views/kanban-grid.h"
-  #include <config.h>
+  #include "../src/models/model-presenter-interface.h"
 
   #include <gtk/gtk.h>
 }
 
 #include "gtest/gtest.h"
 
+KanbanModelObserver observer_model;
+
 // Stubs:
 extern "C"
 {
-  KanbanWindow *kanban_window_new (KanbanApplication *app)
+  void attach_observer (const KanbanModelObserver *observer)
   {
-    (void) app;
-    return NULL;
+    observer_model.instance = observer->instance;
+    observer_model.notification = observer->notification;
   }
 
-  void test_observers()
-  {
-  }
-
-  void kanban_column_store_finalize (KanbanColumnStore *self)
-  {
-    (void) self;
-  }
-
-  void register_kanban_viewmodel_observer (ModelObserverInterface *observer)
+  void detach_observer (const KanbanModelObserver *observer)
   {
     (void) observer;
-  }
-
-  void deregister_kanban_viewmodel_observer (ModelObserverInterface *observer)
-  {
-    (void) observer;
-  }
-
-  KanbanGrid *kanban_grid_new ()
-  {
-    return NULL;
   }
 }
 
@@ -65,31 +46,41 @@ extern "C"
 class PresentersCardsIntergrationTests : public ::testing::Test
 {
 protected:
-  gpointer app;
+  KanbanColumnStore *presenter;
+  KanbanData model_data;
 
   void SetUp() override
   {
-    app = g_object_new (KANBAN_APPLICATION_TYPE,
-                        "application-id", APPLICATION_ID,
-                        "flags", G_APPLICATION_HANDLES_OPEN,
-                        NULL);
-    gboolean registered = g_application_register (G_APPLICATION (app), NULL, NULL);
-    ASSERT_EQ (true, registered);
-    g_application_activate (G_APPLICATION (app));
+    presenter = kanban_column_store_new (NULL);
+
+    model_data.card_id = 1;
+    model_data.column_id = 1;
+    model_data.heading = NULL;
+    model_data.content = NULL;
+    model_data.priority = 0;
   }
 
   void TearDown() override
   {
-    g_application_quit (G_APPLICATION (app));
-    g_object_unref (app);
+    kanban_column_store_destroy (presenter);
   }
 };
 
 
 // Tests:
-TEST_F(PresentersCardsIntergrationTests, checkApplicationNotNull)
+TEST_F (PresentersCardsIntergrationTests, checkPresenterNotNull)
 {
-  ASSERT_NE (app, nullptr);
+  EXPECT_NE (presenter, nullptr);
+  EXPECT_NE (observer_model.notification, nullptr);
+  EXPECT_NE (observer_model.instance, nullptr);
 }
 
+TEST_F (PresentersCardsIntergrationTests, checkCreateColumnSuccessful)
+{
+  model_data.task = TASK_ADD_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  gpointer new_column = kanban_column_store_get_column (presenter,
+                                                        model_data.column_id);
+  EXPECT_NE (new_column, nullptr);
+}
 
