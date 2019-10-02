@@ -3,5 +3,5 @@
 /kanban-app
 *.swp
 /notes
-/builddir/*
+/builddir*/*
 

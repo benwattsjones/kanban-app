@@ -31,7 +31,7 @@ extern "C"
 // Stubs:
 extern "C"
 {
-  void register_kanban_viewmodel_observer   (ModelObserverInterface *observer)
+  void register_kanban_viewmodel_observer (ModelObserverInterface *observer)
   {
     (void) observer;
   }
@@ -61,8 +61,8 @@ protected:
   {
     card_data.card_id = 1;
     card_data.column_id = 2;
-    card_data.heading = g_strdup("heading!");
-    card_data.content = g_strdup("content.");
+    card_data.heading = g_strdup ("heading!");
+    card_data.content = g_strdup ("content.");
     card_data.priority = 0;
 
     viewmodel = kanban_column_store_new (NULL);
@@ -78,12 +78,14 @@ protected:
 };
 
 // Tests:
-TEST_F(KanbanColumnStoreTests, checkKanbanColumnStoreCreated)
+TEST_F (KanbanColumnStoreTests,
+        New_NullPassed_NewObjectReturned)
 {
   ASSERT_NE (viewmodel, nullptr);
 }
 
-TEST_F(KanbanColumnStoreTests, checkAddColumnStoresInTable)
+TEST_F (KanbanColumnStoreTests,
+        AddColumn_ValidDataPassed_NewColumnAddedToObjectAndRetrievable)
 {
   int column_id_stored;
   KanbanListStore *column_added;
@@ -95,7 +97,8 @@ TEST_F(KanbanColumnStoreTests, checkAddColumnStoresInTable)
   EXPECT_EQ (column_id_stored, card_data.column_id);
 }
 
-TEST_F(KanbanColumnStoreTests, checkAddCardStoresInTable)
+TEST_F (KanbanColumnStoreTests,
+        AddCard_ValidDataPassed_NewCardCreatedAndRetrievable)
 {
   int card_id_stored;
   char *heading_stored;
@@ -113,7 +116,8 @@ TEST_F(KanbanColumnStoreTests, checkAddCardStoresInTable)
   g_free (heading_stored);
 }
 
-TEST_F(KanbanColumnStoreTests, checkEditCardSavesNewContents)
+TEST_F (KanbanColumnStoreTests,
+        EditCard_NewHeadingDataPassed_CardHeadingChanged)
 {
   KanbanCardViewModel *card;
   char *heading_stored;
@@ -130,4 +134,95 @@ TEST_F(KanbanColumnStoreTests, checkEditCardSavesNewContents)
   g_free (heading_stored);
 }
 
+TEST_F (KanbanColumnStoreTests,
+        MoveCard_CurrantColumnAndPriorityPassed_BoardUnchanged)
+{
+  KanbanListStore *column;
+  gpointer card1, card2, top_card_before, bottom_card_before,
+           top_card_after, bottom_card_after;
+  observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
+  observer->task_func[TASK_ADD_CARD] (observer->viewmodel, &card_data);
+  card1 = kanban_column_store_get_card (viewmodel, card_data.card_id);
+  card_data.card_id = 2;
+  card_data.priority = 1;
+  observer->task_func[TASK_ADD_CARD] (observer->viewmodel, &card_data);
+  card2 = kanban_column_store_get_card (viewmodel, card_data.card_id);
+
+  column = kanban_column_store_get_column (viewmodel, card_data.column_id);
+  top_card_before = g_list_model_get_item (G_LIST_MODEL (column), 0);
+  bottom_card_before = g_list_model_get_item (G_LIST_MODEL (column), 1);
+  observer->task_func[TASK_MOVE_CARD] (observer->viewmodel, &card_data);
+  top_card_after = g_list_model_get_item (G_LIST_MODEL (column), 0);
+  bottom_card_after = g_list_model_get_item (G_LIST_MODEL (column), 1);
+
+  EXPECT_EQ (card1, top_card_before);
+  EXPECT_EQ (card2, bottom_card_before);
+  EXPECT_EQ (card1, top_card_after);
+  EXPECT_EQ (card2, bottom_card_after);
+
+  g_object_unref (top_card_before);
+  g_object_unref (top_card_after);
+  g_object_unref (bottom_card_before);
+  g_object_unref (bottom_card_after);
+}
+
+TEST_F (KanbanColumnStoreTests,
+        MoveCard_NewPriorityPassed_CardMovesToPriorityPosition)
+{
+  KanbanListStore *column;
+  gpointer card1, card2, top_card_before, bottom_card_before,
+           top_card_after, bottom_card_after;
+  observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
+  observer->task_func[TASK_ADD_CARD] (observer->viewmodel, &card_data);
+  card1 = kanban_column_store_get_card (viewmodel, card_data.card_id);
+  card_data.card_id = 2;
+  card_data.priority = 1;
+  observer->task_func[TASK_ADD_CARD] (observer->viewmodel, &card_data);
+  card2 = kanban_column_store_get_card (viewmodel, card_data.card_id);
+
+  column = kanban_column_store_get_column (viewmodel, card_data.column_id);
+  top_card_before = g_list_model_get_item (G_LIST_MODEL (column), 0);
+  bottom_card_before = g_list_model_get_item (G_LIST_MODEL (column), 1);
+  card_data.priority = 0;
+  observer->task_func[TASK_MOVE_CARD] (observer->viewmodel, &card_data);
+  top_card_after = g_list_model_get_item (G_LIST_MODEL (column), 0);
+  bottom_card_after = g_list_model_get_item (G_LIST_MODEL (column), 1);
+
+  EXPECT_EQ (card1, top_card_before);
+  EXPECT_EQ (card2, bottom_card_before);
+  EXPECT_EQ (card2, top_card_after);
+  EXPECT_EQ (card1, bottom_card_after);
+
+  g_object_unref (top_card_before);
+  g_object_unref (top_card_after);
+  g_object_unref (bottom_card_before);
+  g_object_unref (bottom_card_after);
+}
+
+TEST_F (KanbanColumnStoreTests,
+        MoveCard_NewColumnPassed_CardMovesToNewColumn)
+{
+  KanbanListStore *column1, *column2;
+  gint col1_count_before, col2_count_before, col1_count_after, col2_count_after;
+  observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
+  observer->task_func[TASK_ADD_CARD] (observer->viewmodel, &card_data);
+  column1 = kanban_column_store_get_column (viewmodel, card_data.column_id);
+  card_data.column_id++;
+  observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
+  column2 = kanban_column_store_get_column (viewmodel, card_data.column_id);
+
+  col1_count_before = g_list_model_get_n_items (G_LIST_MODEL (column1));
+  col2_count_before = g_list_model_get_n_items (G_LIST_MODEL (column2));
+  observer->task_func[TASK_MOVE_CARD] (observer->viewmodel, &card_data);
+  col1_count_after = g_list_model_get_n_items (G_LIST_MODEL (column1));
+  col2_count_after = g_list_model_get_n_items (G_LIST_MODEL (column2));
+
+  EXPECT_NE (column1, nullptr);
+  EXPECT_NE (column2, nullptr);
+  EXPECT_NE (column1, column2);
+  EXPECT_EQ (col1_count_before, 1);
+  EXPECT_EQ (col2_count_before, 0);
+  EXPECT_EQ (col1_count_after, 0);
+  EXPECT_EQ (col2_count_after, 1);
+}
 

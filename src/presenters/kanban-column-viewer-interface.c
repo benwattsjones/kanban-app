@@ -29,6 +29,8 @@ void
 kanban_column_viewer_add_column (KanbanColumnViewer *self,
                                  GListModel         *new_column)
 {
+  if (!self)
+    return;
   KanbanColumnViewerInterface *iface;
   g_return_if_fail (KANBAN_IS_COLUMN_VIEWER (self));
   iface = KANBAN_COLUMN_VIEWER_GET_IFACE (self);

@@ -1,7 +1,7 @@
 project(
        'kanban-app',
        ['c', 'cpp'],
-    default_options: ['c_std=gnu11', 'cpp_std=c++11'],
+    default_options: ['c_std=gnu11', 'cpp_std=c++11', 'b_ndebug=if-release'],
             license: 'GPL-3.0-or-later',
       meson_version: '>=0.50.0',
             version: '0.0.1'
@@ -52,19 +52,18 @@ kanban_app_sources += gnome.compile_resources(
 )
 
 kanban_app_c_args = [
-    '-fexceptions',
+    '-fexceptions',                             # hardening options...
     '-fstack-clash-protection',
     '-fstack-protector-strong',
-    '-fasynchronous-unwind-tables',
     '-fpic',
     '-shared',
     '-fcf-protection',
-    '-pipe',
-    '-g',
+    '-fasynchronous-unwind-tables',             # debuging options...
+    '-pipe',                                    # performance options...
     '-O3',
     '-march=native',
     '-D_FORTIFY_SOURCE=2',
-    '-Wall',
+    '-Wall',                                    # warning options...
     '-Wextra',
     '-Werror=format-security',
     '-Werror=implicit-function-declaration',
@@ -76,6 +75,13 @@ kanban_app_ld_args = [
     '-Wl,-z,now',
     '-Wl,-z,relro'
 ]
+
+if get_option('buildtype').startswith('release')
+    kanban_app_c_args += ['-DG_DISABLE_ASSERT', '-DG_DISABLE_CHECKS']
+    kanban_app_ld_args += ['-s']
+elif get_option('buildtype').startswith('debug') # default
+    kanban_app_c_args += ['-g']
+endif
 
 kanban_app_deps = [
     dependency('gtk+-3.0', version: '>=3.24.10')

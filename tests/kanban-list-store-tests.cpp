@@ -23,18 +23,6 @@ extern "C"
 
 #include "gtest/gtest.h"
 
-/* WARNING: these functions have no checks for the following:
- *  - Passing KanbanData data with non-existant ID to _change_content() func
- *  - passing KanbanData data to _add_card() func with priority values in
- *    wrong order (must be 0, 1, 2 etc.). This is because if priority > length,
- *    the card will be added to the end regardless of any other priority values
- *    in the list.
- *  - Passing NULL as any pointer variable
- * This is because such checks are expected to be done by the model.
- * (Exepting not passing NULL, which should be prevented with constant
- *  KanbanListStore* by kanban-application, and ONLY model-observer creating
- *  the KanbanData* arguements, with proper rigor).
- */
 
 // Stubs:
 extern "C"
@@ -52,8 +40,8 @@ protected:
   {
     card_data.card_id = 1;
     card_data.column_id = 2;
-    card_data.heading = g_strdup("card heading!");
-    card_data.content = g_strdup("card content.");
+    card_data.heading = g_strdup ("card heading!");
+    card_data.content = g_strdup ("card content.");
     card_data.priority = 0;
 
     viewmodel = kanban_list_store_new (card_data.column_id);
@@ -68,31 +56,36 @@ protected:
 };
 
 // Tests:
-TEST_F(KanbanListStoreTests, checkKanbanListStoreCreated)
+TEST_F (KanbanListStoreTests,
+        New_ValidColumnIdPassed_NewObjectReturned)
 {
   ASSERT_NE (viewmodel, nullptr);
 }
 
-TEST_F(KanbanListStoreTests, checkColumnIdPropertyStored)
+TEST_F (KanbanListStoreTests,
+        New_ValidColumnIdPassed_ColumnIdStoredAsRetrievableProperty)
 {
   int result_column_id;
   g_object_get (viewmodel, "column-id", &result_column_id, NULL);
   EXPECT_EQ (result_column_id, card_data.column_id);
 }
 
-TEST_F(KanbanListStoreTests, checkInitialCountZero)
+TEST_F (KanbanListStoreTests,
+        GListModelGetNItems_NewOjectCreated_ItemCountInitiallyZero)
 {
   int num_items = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   EXPECT_EQ (num_items, 0);
 }
 
-TEST_F(KanbanListStoreTests, checkEmptyListItemReturnsNull)
+TEST_F (KanbanListStoreTests,
+        GListModelGetItem_NewObjectCreated_EmptyListReturnsNull)
 {
   gpointer item = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
   EXPECT_EQ (item, nullptr);
 }
 
-TEST_F(KanbanListStoreTests, checkAddCardIncrementsCount)
+TEST_F (KanbanListStoreTests,
+        GListModelGetNItems_NewCardCalled_CardCountIncrements)
 {
   int num_items_orig = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   kanban_list_store_new_card (viewmodel, &card_data);
@@ -100,7 +93,8 @@ TEST_F(KanbanListStoreTests, checkAddCardIncrementsCount)
   EXPECT_EQ (num_items_new, num_items_orig + 1);
 }
 
-TEST_F(KanbanListStoreTests, checkCardItemRetrieved)
+TEST_F (KanbanListStoreTests,
+        GListModelGetItem_NewCardCalled_NewCardIsReturned)
 {
   kanban_list_store_new_card (viewmodel, &card_data);
   KanbanCardViewModel *card = KANBAN_CARD_VIEWMODEL
@@ -112,7 +106,8 @@ TEST_F(KanbanListStoreTests, checkCardItemRetrieved)
   g_object_unref (card);
 }
 
-TEST_F(KanbanListStoreTests, checkGetCardItemDoesntRemoveIt)
+TEST_F (KanbanListStoreTests,
+        GListModelGetItem_CardRetrievedAndFreed_CardIsNotRemovedFromList)
 {
   kanban_list_store_new_card (viewmodel, &card_data);
   KanbanCardViewModel *card1 = KANBAN_CARD_VIEWMODEL
@@ -127,7 +122,8 @@ TEST_F(KanbanListStoreTests, checkGetCardItemDoesntRemoveIt)
   g_object_unref (card2);
 }
 
-TEST_F(KanbanListStoreTests, checkMultipleCardsCorrectOrder)
+TEST_F (KanbanListStoreTests,
+        NewCard_MultipleCardsAddedPriorityOrder_CardsStoredInPriorityOrder)
 {
   int card0_id=42, card1_id=769, card2_id=33;
   card_data.priority = 0;
@@ -157,7 +153,8 @@ TEST_F(KanbanListStoreTests, checkMultipleCardsCorrectOrder)
   EXPECT_EQ (card2_id, card2_id_result);
 }
 
-TEST_F(KanbanListStoreTests, checkMultipleCardsCorrectCount)
+TEST_F (KanbanListStoreTests,
+        NewCard_MultipleCardsAdded_CountCorrect)
 {
   card_data.priority = 0;
   card_data.card_id = 734;
