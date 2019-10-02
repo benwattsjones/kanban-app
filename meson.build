@@ -53,10 +53,8 @@ kanban_app_sources += gnome.compile_resources(
 
 kanban_app_c_args = [
     '-fexceptions',                             # hardening options...
-    '-fstack-clash-protection',
     '-fstack-protector-strong',
     '-fpic',
-    '-shared',
     '-fcf-protection',
     '-fasynchronous-unwind-tables',             # debuging options...
     '-pipe',                                    # performance options...
@@ -69,6 +67,13 @@ kanban_app_c_args = [
     '-Werror=implicit-function-declaration',
     '-Wpedantic'
 ]
+
+if meson.get_compiler('c').get_id() == 'gcc'
+    kanban_app_c_args += [
+      '-fstack-clash-protection',
+      '-shared',
+    ]
+endif
 
 kanban_app_ld_args = [
     '-Wl,-z,defs',
