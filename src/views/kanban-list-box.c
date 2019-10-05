@@ -133,15 +133,15 @@ create_card_widget_func (gpointer item,
                 "content", &card_content,
                 NULL);
 
+  GtkBuilder *builder = gtk_builder_new_from_resource ("/com/benwattsjones/kanban/card.ui");
+  GObject *heading_lbl = gtk_builder_get_object (builder, "heading-lbl");
+  GObject *content_lbl = gtk_builder_get_object (builder, "content-lbl");
+  GObject *card_grid = gtk_builder_get_object (builder, "card-grid");
+
   // TODO: bind notify signal of card to update widgets
-  GtkWidget *grid = gtk_grid_new();
-  GtkWidget *heading_label = gtk_label_new (card_heading);
-  GtkWidget *content_label = gtk_label_new (card_content);
+  gtk_label_set_text (GTK_LABEL (heading_lbl), card_heading);
+  gtk_label_set_text (GTK_LABEL (content_lbl), card_content);
 
-  gtk_grid_attach (GTK_GRID (grid), heading_label, 0, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), content_label, 0, 1, 1, 1);
-  gtk_widget_show_all (grid);
-
-  return grid;
+  return GTK_WIDGET (card_grid);
 }
 
