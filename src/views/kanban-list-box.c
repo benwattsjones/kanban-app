@@ -15,6 +15,7 @@
 #include "kanban-list-box.h"
 
 #include "../presenters/kanban-card-viewmodel.h"
+#include <config.h>
 
 #include <gtk/gtk.h>
 #include <gio/gio.h>
@@ -133,7 +134,7 @@ create_card_widget_func (gpointer item,
                 "content", &card_content,
                 NULL);
 
-  GtkBuilder *builder = gtk_builder_new_from_resource ("/com/benwattsjones/kanban/card.ui");
+  GtkBuilder *builder = gtk_builder_new_from_resource (GRESOURCE_PREFIX "card.ui");
   GObject *heading_lbl = gtk_builder_get_object (builder, "heading-lbl");
   GObject *content_lbl = gtk_builder_get_object (builder, "content-lbl");
   GObject *card_grid = gtk_builder_get_object (builder, "card-grid");

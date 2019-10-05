@@ -13,7 +13,8 @@ config_h_defines = [
     ['PACKAGE_NAME',     meson.project_name()],
     ['PACKAGE_VERSION',  meson.project_version()],
     ['PACKAGE_URL',     'https://github.com/benwattsjones/kanban-app'],
-    ['APPLICATION_ID',  'com.benwattsjones.kanban']
+    ['APPLICATION_ID',  'com.benwattsjones.kanban'],
+    ['GRESOURCE_PREFIX',  '/com/benwattsjones/kanban/'],
 ]
 
 foreach define: config_h_defines
