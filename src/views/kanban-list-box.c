@@ -15,7 +15,7 @@
 #include "kanban-list-box.h"
 
 #include "../presenters/kanban-card-viewmodel.h"
-#include <config.h>
+#include <kanban-config.h>
 
 #include <gtk/gtk.h>
 #include <gio/gio.h>

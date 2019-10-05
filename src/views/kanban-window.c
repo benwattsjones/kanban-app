@@ -15,7 +15,7 @@
 #include "kanban-window.h"
 
 #include "kanban-list-box.h"
-#include <config.h>
+#include <kanban-config.h>
 
 #include <gtk/gtk.h>
 

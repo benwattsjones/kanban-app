@@ -22,7 +22,7 @@ foreach define: config_h_defines
 endforeach
 
 configure_file(
-           output: 'config.h',
+           output: 'kanban-config.h',
     configuration: config_h_data
 )
 

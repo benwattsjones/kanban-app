@@ -19,7 +19,7 @@
 #include "views/kanban-window.h"
 #include "views/kanban-grid.h"
 #include "models/kanban-data.h" // TODO - remove after testing
-#include <config.h>
+#include <kanban-config.h>
 
 #include <gtk/gtk.h>
 
