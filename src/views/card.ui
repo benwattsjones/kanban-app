@@ -1,8 +1,8 @@
 <interface>
-  <object id="card-grid" class="GtkGrid">
+  <object id="card-widget" class="GtkGrid">
     <property name ="visible">True</property>
     <child>
-      <object id="heading-lbl" class="GtkLabel">
+      <object id="heading-widget" class="GtkLabel">
         <property name="visible">True</property>
       </object>
       <packing>
@@ -11,8 +11,10 @@
       </packing>
     </child>
     <child>
-      <object id="content-lbl" class="GtkLabel">
+      <object id="content-widget" class="GtkTextView">
         <property name="visible">True</property>
+        <property name="editable">False</property>
+        <property name="cursor-visible">False</property>
       </object>
       <packing>
         <property name="left-attach">0</property>

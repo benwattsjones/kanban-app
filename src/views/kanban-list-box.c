@@ -124,25 +124,23 @@ create_card_widget_func (gpointer item,
                          gpointer user_data)
 {
   (void) user_data; // NULL passed
-  KanbanCardViewModel *new_card_viewmodel;
-  gchar *card_heading = NULL;
-  gchar *card_content = NULL;
+  KanbanCardViewModel *viewmodel = KANBAN_CARD_VIEWMODEL (item);
 
-  new_card_viewmodel = KANBAN_CARD_VIEWMODEL (item);
-  g_object_get (new_card_viewmodel,
+  gchar *card_heading = NULL;
+  g_object_get (viewmodel,
                 "heading", &card_heading,
-                "content", &card_content,
                 NULL);
+  GtkTextBuffer *card_content = kanban_card_viewmodel_get_content (viewmodel);
 
   GtkBuilder *builder = gtk_builder_new_from_resource (GRESOURCE_PREFIX "card.ui");
-  GObject *heading_lbl = gtk_builder_get_object (builder, "heading-lbl");
-  GObject *content_lbl = gtk_builder_get_object (builder, "content-lbl");
-  GObject *card_grid = gtk_builder_get_object (builder, "card-grid");
+  GObject *heading_widget = gtk_builder_get_object (builder, "heading-widget");
+  GObject *content_widget = gtk_builder_get_object (builder, "content-widget");
+  GObject *card_widget = gtk_builder_get_object (builder, "card-widget");
 
   // TODO: bind notify signal of card to update widgets
-  gtk_label_set_text (GTK_LABEL (heading_lbl), card_heading);
-  gtk_label_set_text (GTK_LABEL (content_lbl), card_content);
+  gtk_label_set_text (GTK_LABEL (heading_widget), card_heading);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (content_widget), card_content);
 
-  return GTK_WIDGET (card_grid);
+  return GTK_WIDGET (card_widget);
 }
 
