@@ -174,3 +174,9 @@ kanban_card_viewmodel_update_contents (KanbanCardViewModel *self,
     }
 }
 
+GtkTextBuffer *
+kanban_card_viewmodel_get_content (KanbanCardViewModel *self)
+{
+  return self->content;
+}
+

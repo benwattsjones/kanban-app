@@ -25,12 +25,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanCardViewModel, kanban_card_viewmodel, KANBAN, CARD_VIEWMODEL, GObject)
 
-KanbanCardViewModel *kanban_card_viewmodel_new (const KanbanData    *card_data);
+KanbanCardViewModel *kanban_card_viewmodel_new         (const KanbanData    *card_data);
 
 void                 kanban_card_viewmodel_update_contents 
-                                               (KanbanCardViewModel *self,
-                                                const gchar         *heading,
-                                                const gchar         *content);
+                                                       (KanbanCardViewModel *self,
+                                                        const gchar         *heading,
+                                                        const gchar         *content);
+
+GtkTextBuffer       *kanban_card_viewmodel_get_content (KanbanCardViewModel *self);
 
 G_END_DECLS
 
