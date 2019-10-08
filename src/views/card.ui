@@ -1,9 +1,15 @@
 <interface>
   <object id="card-widget" class="GtkGrid">
     <property name ="visible">True</property>
+    <style>
+      <class name="kanban-card-widget-style"/>
+    </style>
     <child>
       <object id="heading-widget" class="GtkLabel">
         <property name="visible">True</property>
+        <style>
+          <class name="kanban-card-heading-style"/>
+        </style>
       </object>
       <packing>
         <property name="left-attach">0</property>
@@ -15,6 +21,9 @@
         <property name="visible">True</property>
         <property name="editable">False</property>
         <property name="cursor-visible">False</property>
+        <style>
+          <class name="kanban-card-content-style"/>
+        </style>
       </object>
       <packing>
         <property name="left-attach">0</property>

@@ -1,0 +1,11 @@
+.kanban-card-widget-style {
+    color: green;
+}
+
+.kanban-card-heading-style {
+    font-weight: bold;
+}
+
+.kanban-card-content-style {
+    font-style: italic;
+}

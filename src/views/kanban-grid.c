@@ -16,12 +16,15 @@
 
 #include "kanban-list-box.h"
 #include "../presenters/kanban-column-viewer-interface.h"
+#include <kanban-config.h>
 
 #include <gtk/gtk.h>
 
 struct _KanbanGrid
 {
-  GtkGrid       parent_instance;
+  GtkGrid         parent_instance;
+
+  GtkCssProvider *css_provider;
 };
 
 static void kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface);
@@ -52,9 +55,22 @@ kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface)
 // KanbanGrid GObject implementation:
 
 static void
+kanban_grid_finalize (GObject *object)
+{
+  KanbanGrid *self = KANBAN_GRID (object);
+
+  g_object_unref (self->css_provider);
+}
+
+static void
 kanban_grid_init (KanbanGrid *self)
 {
-
+  self->css_provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (self->css_provider,
+                                       GRESOURCE_PREFIX "board.css");
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (self->css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
 }
 
 static void
@@ -62,6 +78,7 @@ kanban_grid_class_init (KanbanGridClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = kanban_grid_finalize;
 }
 
 KanbanGrid *
