@@ -34,6 +34,8 @@ void                 kanban_card_viewmodel_update_contents
 
 GtkTextBuffer       *kanban_card_viewmodel_get_content (KanbanCardViewModel *self);
 
+GtkTextBuffer       *kanban_card_viewmodel_get_heading (KanbanCardViewModel *self);
+
 G_END_DECLS
 
 #endif /* KANBAN_CARD_VIEWMODEL_H */
