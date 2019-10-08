@@ -5,8 +5,11 @@
       <class name="kanban-card-widget-style"/>
     </style>
     <child>
-      <object id="heading-widget" class="GtkLabel">
+      <object id="heading-widget" class="GtkTextView">
         <property name="visible">True</property>
+        <property name="editable">False</property>
+        <property name="cursor-visible">False</property>
+        <property name="wrap-mode">GTK_WRAP_WORD</property>
         <style>
           <class name="kanban-card-heading-style"/>
         </style>
@@ -21,6 +24,7 @@
         <property name="visible">True</property>
         <property name="editable">False</property>
         <property name="cursor-visible">False</property>
+        <property name="wrap-mode">GTK_WRAP_WORD</property>
         <style>
           <class name="kanban-card-content-style"/>
         </style>
