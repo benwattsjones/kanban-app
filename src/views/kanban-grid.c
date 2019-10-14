@@ -71,6 +71,8 @@ kanban_grid_init (KanbanGrid *self)
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (self->css_provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
 }
 
 static void
