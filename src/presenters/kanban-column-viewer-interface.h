@@ -15,7 +15,8 @@
 #ifndef KANBAN_COLUMN_VIEWER_INTERFACE_H
 #define KANBAN_COLUMN_VIEWER_INTERFACE_H
 
-#include <gio/gio.h>
+#include "kanban-list-viewer-interface.h"
+
 #include <glib-object.h>
 
 G_BEGIN_DECLS
@@ -29,11 +30,11 @@ struct _KanbanColumnViewerInterface
   GTypeInterface parent_iface;
 
   void (*add_column) (KanbanColumnViewer *self,
-                      GListModel         *new_column);
+                      KanbanListViewer   *new_column);
 };
 
 void kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                      GListModel         *new_column);
+                                      KanbanListViewer   *new_column);
 
 G_END_DECLS
 

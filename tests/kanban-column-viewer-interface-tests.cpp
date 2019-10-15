@@ -15,6 +15,7 @@
 extern "C"
 {
   #include "../src/presenters/kanban-column-viewer-interface.h"
+  #include "../src/presenters/kanban-list-viewer-interface.h"
 
   #include <gtk/gtk.h>
 }
@@ -41,7 +42,7 @@ extern "C"
 
   static void
   mock_iface_object_add_column (KanbanColumnViewer *self,
-                                GListModel         *new_column)
+                                KanbanListViewer   *new_column)
   {
     ++add_column_called;
   }

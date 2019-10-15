@@ -18,6 +18,7 @@ extern "C"
   #include "../src/presenters/kanban-column-viewer-interface.h"
   #include "../src/presenters/model-observer-interface.h"
   #include "../src/presenters/kanban-list-store.h"
+  #include "../src/presenters/kanban-list-viewer-interface.h"
   #include "../src/presenters/kanban-card-viewmodel.h"
   #include "../src/models/kanban-data.h"
 
@@ -42,7 +43,7 @@ extern "C"
   }
 
   void kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                        GListModel         *new_column)
+                                        KanbanListViewer   *new_column)
   {
     (void) self;
     (void) new_column;

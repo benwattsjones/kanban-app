@@ -14,7 +14,8 @@
 
 #include "kanban-column-viewer-interface.h"
 
-#include <gio/gio.h>
+#include "kanban-list-viewer-interface.h"
+
 #include <glib-object.h>
 
 G_DEFINE_INTERFACE (KanbanColumnViewer, kanban_column_viewer, G_TYPE_OBJECT)
@@ -27,7 +28,7 @@ kanban_column_viewer_default_init (KanbanColumnViewerInterface *iface)
 
 void
 kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                 GListModel         *new_column)
+                                 KanbanListViewer   *new_column)
 {
   if (!self)
     return;
