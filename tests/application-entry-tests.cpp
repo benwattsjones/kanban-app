@@ -19,7 +19,7 @@ extern "C"
   #include "../src/presenters/kanban-column-viewer-interface.h"
   #include "../src/views/kanban-window.h"
   #include "../src/views/kanban-grid.h"
-  #include <config.h>
+  #include <kanban-config.h>
 
   #include <gtk/gtk.h>
 }

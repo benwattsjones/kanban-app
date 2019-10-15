@@ -15,6 +15,7 @@
 extern "C"
 {
   #include "../src/presenters/kanban-column-viewer-interface.h"
+  #include "../src/presenters/kanban-list-viewer-interface.h"
 
   #include <gtk/gtk.h>
 }
@@ -41,7 +42,8 @@ extern "C"
 
   static void
   mock_iface_object_add_column (KanbanColumnViewer *self,
-                                GListModel         *new_column)
+                                KanbanListViewer   *new_column,
+                                gint                priority)
   {
     ++add_column_called;
   }
@@ -87,14 +89,15 @@ protected:
 TEST_F (KanbanColumnViewerInterfaceTests,
         AddColumn_InterfaceArguementIsNull_ImmediateReturnNoErrorsNoSideEffects)
 {
-  kanban_column_viewer_add_column (NULL, NULL);
+  kanban_column_viewer_add_column (NULL, NULL, 0);
   SUCCEED ();
 }
 
 TEST_F (KanbanColumnViewerInterfaceTests,
         AddColumn_InterfaceArguementIsValid_ArguementsAddColumnFunctionisCalled)
 {
-  kanban_column_viewer_add_column (KANBAN_COLUMN_VIEWER (mock_column_viewer), NULL);
+  kanban_column_viewer_add_column (KANBAN_COLUMN_VIEWER (mock_column_viewer),
+                                   NULL, 0);
   EXPECT_EQ (add_column_called, 1);
 }
 

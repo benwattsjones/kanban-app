@@ -44,7 +44,7 @@ test_observers()
   card->card_id = 2;
   card->column_id = 1;
   card->heading = "Second Card";
-  card->content = "content no2";
+  card->content = "content no2. This card is being given a long single line of text to check that it wraps correctly.\nHere is some more text on a new line.";
   card->priority = 1;
   card->task = TASK_ADD_CARD;
   emit_kanban_card_change_signal (card);
@@ -52,7 +52,7 @@ test_observers()
   card->card_id = 3;
   card->column_id = 1;
   card->heading = "Card to be Moved";
-  card->content = "from col 1 priority 2 to col 2 priority 1";
+  card->content = "from col 1 priority 2 to col 2 priority 1.\n\nThis card has some more content after a gap. Long paragraph to test line wrapping.\n\nA third paragraph. Lets try a Markup-style list:\n - point one\n - bullet two\n - a final point\n\nHow about a really long word?\n\nonetwothreefourfivesixseveneightnineteneleventwelvethriteenfourteenfifteensixteenseventeeneighteennineteentwenty.\n\nDone!\n";
   card->priority = 2;
   card->task = TASK_ADD_CARD;
   emit_kanban_card_change_signal (card);
@@ -75,7 +75,7 @@ test_observers()
 
   card->card_id = 5;
   card->column_id = 2;
-  card->heading = "heading col2card2. Blank content.";
+  card->heading = "heading col2card2. Blank content.\nNew line to test cut off abcdefghijklmnopqrstuvwxyzverylongwordtestwrapping.";
   card->content = "";
   card->priority = 1;
   card->task = TASK_ADD_CARD;

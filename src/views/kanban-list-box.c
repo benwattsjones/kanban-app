@@ -15,15 +15,20 @@
 #include "kanban-list-box.h"
 
 #include "../presenters/kanban-card-viewmodel.h"
+#include "../presenters/kanban-list-viewer-interface.h"
+#include <kanban-config.h>
 
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 
 struct _KanbanListBox
 {
-  GtkListBox   parent_instance;
+  GtkBox             parent_instance;
 
-  GListModel  *column_data;
+  GtkWidget         *column_heading;
+  GtkWidget         *column_contents;
+
+  KanbanListViewer  *column_data;
 };
 
 enum
@@ -36,7 +41,7 @@ GtkWidget *create_card_widget_func (gpointer item, gpointer user_data);
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (KanbanListBox, kanban_list_box, GTK_TYPE_LIST_BOX)
+G_DEFINE_TYPE (KanbanListBox, kanban_list_box, GTK_TYPE_BOX)
 
 static void
 kanban_list_box_set_property (GObject      *object,
@@ -82,14 +87,19 @@ static void
 kanban_list_box_constructed (GObject *object)
 {
   KanbanListBox *self = KANBAN_LIST_BOX (object);
-  gtk_list_box_bind_model (GTK_LIST_BOX (self), self->column_data,
+
+  gtk_list_box_bind_model (GTK_LIST_BOX (self->column_contents),
+                           G_LIST_MODEL (self->column_data),
                            create_card_widget_func, NULL, g_free);
+
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->column_heading),
+                            kanban_list_viewer_get_heading (self->column_data));
 }
 
 static void
 kanban_list_box_init (KanbanListBox *self)
 {
-  // _constructed() used to bind model as _init() called before properties set
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
@@ -104,14 +114,21 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
   obj_properties[PROP_COLUMN_DATA] =
     g_param_spec_pointer("column-data",
                          "Column Data",
-                         "Card data of single column to bind to via GListModel iface",
+                         "Card data of column to bind to via KanbanListViewer iface",
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
+
+  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
+                                               GRESOURCE_PREFIX "column.ui");
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (klass),
+                                        KanbanListBox, column_heading);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (klass),
+                                        KanbanListBox, column_contents);
 }
 
 KanbanListBox *
-kanban_list_box_new (GListModel *column_data)
+kanban_list_box_new (KanbanListViewer *column_data)
 {
   return g_object_new (KANBAN_LIST_BOX_TYPE,
                        "column-data", column_data,
@@ -123,25 +140,19 @@ create_card_widget_func (gpointer item,
                          gpointer user_data)
 {
   (void) user_data; // NULL passed
-  KanbanCardViewModel *new_card_viewmodel;
-  gchar *card_heading = NULL;
-  gchar *card_content = NULL;
+  KanbanCardViewModel *viewmodel = KANBAN_CARD_VIEWMODEL (item);
 
-  new_card_viewmodel = KANBAN_CARD_VIEWMODEL (item);
-  g_object_get (new_card_viewmodel,
-                "heading", &card_heading,
-                "content", &card_content,
-                NULL);
+  GtkTextBuffer *card_heading = kanban_card_viewmodel_get_heading (viewmodel);
+  GtkTextBuffer *card_content = kanban_card_viewmodel_get_content (viewmodel);
 
-  // TODO: bind notify signal of card to update widgets
-  GtkWidget *grid = gtk_grid_new();
-  GtkWidget *heading_label = gtk_label_new (card_heading);
-  GtkWidget *content_label = gtk_label_new (card_content);
+  GtkBuilder *builder = gtk_builder_new_from_resource (GRESOURCE_PREFIX "card.ui");
+  GObject *heading_widget = gtk_builder_get_object (builder, "heading-widget");
+  GObject *content_widget = gtk_builder_get_object (builder, "content-widget");
+  GObject *card_widget = gtk_builder_get_object (builder, "card-widget");
 
-  gtk_grid_attach (GTK_GRID (grid), heading_label, 0, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), content_label, 0, 1, 1, 1);
-  gtk_widget_show_all (grid);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (heading_widget), card_heading);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (content_widget), card_content);
 
-  return grid;
+  return GTK_WIDGET (card_widget);
 }
 

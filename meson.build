@@ -13,7 +13,8 @@ config_h_defines = [
     ['PACKAGE_NAME',     meson.project_name()],
     ['PACKAGE_VERSION',  meson.project_version()],
     ['PACKAGE_URL',     'https://github.com/benwattsjones/kanban-app'],
-    ['APPLICATION_ID',  'com.benwattsjones.kanban']
+    ['APPLICATION_ID',  'com.benwattsjones.kanban'],
+    ['GRESOURCE_PREFIX',  '/com/benwattsjones/kanban/'],
 ]
 
 foreach define: config_h_defines
@@ -21,7 +22,7 @@ foreach define: config_h_defines
 endforeach
 
 configure_file(
-           output: 'config.h',
+           output: 'kanban-config.h',
     configuration: config_h_data
 )
 
@@ -34,6 +35,7 @@ kanban_app_sources = files(
     'src/presenters/kanban-column-store.c',
     'src/presenters/kanban-column-viewer-interface.c',
     'src/presenters/kanban-list-store.c',
+    'src/presenters/kanban-list-viewer-interface.c',
     'src/presenters/kanban-card-viewmodel.c',
     'src/views/kanban-window.c',
     'src/views/kanban-list-box.c',

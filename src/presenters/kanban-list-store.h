@@ -25,7 +25,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanListStore, kanban_list_store, KANBAN, LIST_STORE, GObject)
 
-KanbanListStore  *kanban_list_store_new             (gint              col_id);
+KanbanListStore  *kanban_list_store_new             (gint              col_id,
+                                                     const gchar      *col_name);
 void              kanban_list_store_destroy         (gpointer          vself);
 
 GSequenceIter    *kanban_list_store_new_card        (KanbanListStore  *self,

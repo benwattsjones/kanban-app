@@ -15,6 +15,7 @@
 #include "kanban-window.h"
 
 #include "kanban-list-box.h"
+#include <kanban-config.h>
 
 #include <gtk/gtk.h>
 
@@ -35,7 +36,7 @@ static void
 kanban_window_class_init (KanbanWindowClass *klass)
 {
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
-                                               "/com/benwattsjones/kanban/window.ui");
+                                               GRESOURCE_PREFIX "window.ui");
 }
 
 KanbanWindow *

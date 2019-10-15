@@ -16,12 +16,16 @@
 
 #include "kanban-list-box.h"
 #include "../presenters/kanban-column-viewer-interface.h"
+#include "../presenters/kanban-list-viewer-interface.h"
+#include <kanban-config.h>
 
 #include <gtk/gtk.h>
 
 struct _KanbanGrid
 {
-  GtkGrid       parent_instance;
+  GtkGrid         parent_instance;
+
+  GtkCssProvider *css_provider;
 };
 
 static void kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface);
@@ -34,13 +38,13 @@ G_DEFINE_TYPE_WITH_CODE (KanbanGrid, kanban_grid, GTK_TYPE_GRID,
 
 static void
 kanban_grid_add_column (KanbanColumnViewer *self,
-                        GListModel         *new_column)
+                        KanbanListViewer   *new_column,
+                        gint                priority)
 {
   // TODO free KanbanListBox object if column deleted
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
-  gtk_grid_insert_column (GTK_GRID (self), 0); // always prepends new columns TODO
-  gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), 0, 0, 1, 1);
-  gtk_widget_show_all (GTK_WIDGET (new_column_widget));
+  gtk_grid_insert_column (GTK_GRID (self), priority);
+  gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), priority, 0, 1, 1);
 }
 
 static void
@@ -52,9 +56,24 @@ kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface)
 // KanbanGrid GObject implementation:
 
 static void
+kanban_grid_finalize (GObject *object)
+{
+  KanbanGrid *self = KANBAN_GRID (object);
+
+  g_object_unref (self->css_provider);
+}
+
+static void
 kanban_grid_init (KanbanGrid *self)
 {
+  self->css_provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (self->css_provider,
+                                       GRESOURCE_PREFIX "board.css");
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (self->css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
 
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
@@ -62,6 +81,10 @@ kanban_grid_class_init (KanbanGridClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = kanban_grid_finalize;
+
+  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
+                                               GRESOURCE_PREFIX "board.ui");
 }
 
 KanbanGrid *

@@ -14,6 +14,7 @@
 
 #include "kanban-list-store.h"
 
+#include "kanban-list-viewer-interface.h"
 #include "kanban-card-viewmodel.h"
 #include "../models/kanban-data.h"
 
@@ -24,25 +25,29 @@ struct _KanbanListStore
 {
   GObject     parent_instance;
 
-  guint       num_cards;
-  gint        column_id;
-
-  GSequence  *card_list;
+  guint           num_cards;
+  gint            column_id;
+  GtkTextBuffer  *column_name;
+  GSequence      *card_list;
 };
 
 enum
 {
   PROP_COLUMN_ID = 1,
+  PROP_COLUMN_NAME,
   N_PROPERTIES
 };
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
+static void kanban_list_viewer_iface_init (KanbanListViewerInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (KanbanListStore, kanban_list_store, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
-                                                g_list_model_iface_init))
+                                                g_list_model_iface_init)
+                         G_IMPLEMENT_INTERFACE (KANBAN_LIST_VIEWER_TYPE,
+                                                kanban_list_viewer_iface_init))
 
 /* GListModel iface */
 
@@ -78,6 +83,18 @@ g_list_model_iface_init (GListModelInterface *iface)
   iface->get_item = kanban_list_model_get_item;
 }
 
+static GtkTextBuffer *
+kanban_list_model_get_heading (KanbanListViewer *model)
+{
+  return KANBAN_LIST_STORE (model)->column_name;
+}
+
+static void
+kanban_list_viewer_iface_init (KanbanListViewerInterface *iface)
+{
+  iface->get_heading = kanban_list_model_get_heading;
+}
+
 /* funcs for class */
 
 static void
@@ -94,6 +111,10 @@ kanban_list_store_set_property (GObject      *object,
       self->column_id = g_value_get_int (value);
       break;
 
+    case PROP_COLUMN_NAME:
+      gtk_text_buffer_set_text (self->column_name, g_value_get_string (value), -1);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -107,11 +128,20 @@ kanban_list_store_get_property (GObject    *object,
                                 GParamSpec *pspec)
 {
   KanbanListStore *self = KANBAN_LIST_STORE (object);
+  GtkTextIter start, end;
+  gchar *buffer_text = NULL;
 
   switch (property_id)
     {
     case PROP_COLUMN_ID:
       g_value_set_int (value, self->column_id);
+      break;
+
+    case PROP_COLUMN_NAME:
+      gtk_text_buffer_get_bounds (self->column_name, &start, &end);
+      buffer_text = gtk_text_buffer_get_text (self->column_name, &start, &end, FALSE);
+      g_value_set_string (value, buffer_text);
+      g_free (buffer_text);
       break;
 
     default:
@@ -126,6 +156,7 @@ kanban_list_store_finalize (GObject *object)
   KanbanListStore *self = KANBAN_LIST_STORE (object);
 
   g_clear_pointer (&self->card_list, g_sequence_free);
+  g_object_unref (self->column_name);
 
   G_OBJECT_CLASS (kanban_list_store_parent_class)->finalize (object);
 }
@@ -135,6 +166,7 @@ kanban_list_store_init (KanbanListStore *self)
 {
   self->num_cards = 0;
   self->card_list = g_sequence_new (g_object_unref);
+  self->column_name = gtk_text_buffer_new (NULL);
 }
 
 static void
@@ -152,16 +184,24 @@ kanban_list_store_class_init (KanbanListStoreClass *klass)
                      "Unique, immutable kanban column identifier",
                      0, G_MAXINT, 0,
                      G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
+  obj_properties[PROP_COLUMN_NAME] =
+    g_param_spec_string("column-name",
+                        "Column Name",
+                        "Name of column to display above cards list",
+                        NULL,
+                        G_PARAM_CONSTRUCT | G_PARAM_READWRITE);
+
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
 // Funcs to act on object:
 
 KanbanListStore *
-kanban_list_store_new (gint col_id)
+kanban_list_store_new (gint col_id, const gchar *col_name)
 {
   return g_object_new (KANBAN_LIST_STORE_TYPE,
                        "column-id", col_id,
+                       "column-name", col_name,
                        NULL);
 }
 

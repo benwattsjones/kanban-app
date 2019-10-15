@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="KanbanListBox" parent="GtkBox">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <property name="expand">True</property>
+
+    <child>
+      <object class="GtkEventBox">
+        <property name="visible">True</property>
+        <property name="above-child">True</property>
+        <child>
+          <object id="column_heading" class="GtkTextView">
+            <property name="visible">True</property>
+            <property name="editable">False</property>
+            <property name="cursor-visible">False</property>
+            <property name="wrap-mode">GTK_WRAP_WORD_CHAR</property>
+            <property name="hexpand">True</property>
+            <style>
+              <class name="kanban-column-heading-style"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="expand">True</property>
+        <child>
+          <object id="column_contents" class="GtkListBox">
+            <property name="visible">True</property>
+            <child type="placeholder">
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label">This column is empty!</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+
+  </template>
+</interface>
+

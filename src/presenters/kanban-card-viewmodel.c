@@ -20,11 +20,11 @@
 
 struct _KanbanCardViewModel
 {
-  GObject  parent_instance;
+  GObject         parent_instance;
 
-  gint     card_id;
-  gchar   *heading;
-  gchar   *content;
+  gint            card_id;
+  GtkTextBuffer  *heading;
+  GtkTextBuffer  *content;
 };
 
 enum
@@ -54,13 +54,11 @@ kanban_card_viewmodel_set_property (GObject      *object,
       break;
 
     case PROP_HEADING:
-      g_free (self->heading);
-      self->heading = g_value_dup_string (value);
+      gtk_text_buffer_set_text (self->heading, g_value_get_string (value), -1);
       break;
 
     case PROP_CONTENT:
-      g_free (self->content);
-      self->content = g_value_dup_string (value);
+      gtk_text_buffer_set_text (self->content, g_value_get_string (value), -1);
       break;
 
     default:
@@ -76,6 +74,8 @@ kanban_card_viewmodel_get_property (GObject    *object,
                                     GParamSpec *pspec)
 {
   KanbanCardViewModel *self = KANBAN_CARD_VIEWMODEL (object);
+  GtkTextIter start, end;
+  gchar *buffer_text = NULL;
 
   switch (property_id)
     {
@@ -84,11 +84,17 @@ kanban_card_viewmodel_get_property (GObject    *object,
       break;
 
     case PROP_HEADING:
-      g_value_set_string (value, self->heading);
+      gtk_text_buffer_get_bounds (self->heading, &start, &end);
+      buffer_text = gtk_text_buffer_get_text (self->heading, &start, &end, FALSE);
+      g_value_set_string (value, buffer_text);
+      g_free (buffer_text);
       break;
 
     case PROP_CONTENT:
-      g_value_set_string (value, self->content);
+      gtk_text_buffer_get_bounds (self->content, &start, &end);
+      buffer_text = gtk_text_buffer_get_text (self->content, &start, &end, FALSE);
+      g_value_set_string (value, buffer_text);
+      g_free (buffer_text);
       break;
 
     default:
@@ -101,15 +107,16 @@ static void
 kanban_card_viewmodel_finalize (GObject *object)
 {
   KanbanCardViewModel *self = KANBAN_CARD_VIEWMODEL (object);
-  g_free(self->heading);
-  g_free(self->content);
+  g_object_unref (self->heading);
+  g_object_unref (self->content);
   G_OBJECT_CLASS (kanban_card_viewmodel_parent_class)->finalize (object);
 }
 
 static void
 kanban_card_viewmodel_init (KanbanCardViewModel *self)
 {
-  (void) self;
+  self->content = gtk_text_buffer_new (NULL);
+  self->heading = gtk_text_buffer_new (NULL);
 }
 
 static void
@@ -159,15 +166,25 @@ kanban_card_viewmodel_update_contents (KanbanCardViewModel *self,
 {
   if (heading)
     {
-      g_free (self->heading);
-      self->heading = g_strdup (heading);
+      gtk_text_buffer_set_text (self->heading, heading, -1);
       g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_HEADING]);
     }
   if (content)
     {
-      g_free (self->content);
-      self->content = g_strdup (content);
+      gtk_text_buffer_set_text (self->content, content, -1);
       g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_CONTENT]);
     }
+}
+
+GtkTextBuffer *
+kanban_card_viewmodel_get_content (KanbanCardViewModel *self)
+{
+  return self->content;
+}
+
+GtkTextBuffer *
+kanban_card_viewmodel_get_heading (KanbanCardViewModel *self)
+{
+  return self->heading;
 }
 

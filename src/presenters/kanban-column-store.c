@@ -16,6 +16,7 @@
 
 #include "kanban-column-viewer-interface.h"
 #include "kanban-list-store.h"
+#include "kanban-list-viewer-interface.h"
 #include "kanban-card-viewmodel.h"
 #include "model-observer.h"
 #include "model-observer-interface.h"
@@ -130,12 +131,15 @@ kanban_column_store_add_column (void              *vself,
                                 const KanbanData  *column_data)
 {
   KanbanColumnStore *self = vself;
-  KanbanListStore *new_column = kanban_list_store_new (column_data->column_id);
+  KanbanListStore *new_column = kanban_list_store_new (column_data->column_id,
+                                                       column_data->heading);
   g_hash_table_insert (self->column_table,
                        GINT_TO_POINTER (column_data->column_id), new_column);
   GSequence *column_sequence = kanban_list_store_get_sequence (new_column);
   g_hash_table_insert (self->sequence_table, column_sequence, new_column);
-  kanban_column_viewer_add_column (self->view_observer, G_LIST_MODEL (new_column));
+  kanban_column_viewer_add_column (self->view_observer,
+                                   KANBAN_LIST_VIEWER (new_column),
+                                   column_data->priority);
 }
 
 static void

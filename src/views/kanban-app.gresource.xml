@@ -2,5 +2,9 @@
 <gresources>
   <gresource prefix="/com/benwattsjones/kanban">
     <file compressed="true" preprocess="xml-stripblanks">window.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">board.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">column.ui</file>
+    <file compressed="true" preprocess="xml-stripblanks">card.ui</file>
+    <file compressed="true">board.css</file>
   </gresource>
 </gresources>
