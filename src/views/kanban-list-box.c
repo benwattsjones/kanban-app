@@ -22,7 +22,10 @@
 
 struct _KanbanListBox
 {
-  GtkListBox   parent_instance;
+  GtkBox       parent_instance;
+
+  GtkWidget   *column_heading;
+  GtkWidget   *column_contents;
 
   GListModel  *column_data;
 };
@@ -37,7 +40,7 @@ GtkWidget *create_card_widget_func (gpointer item, gpointer user_data);
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (KanbanListBox, kanban_list_box, GTK_TYPE_LIST_BOX)
+G_DEFINE_TYPE (KanbanListBox, kanban_list_box, GTK_TYPE_BOX)
 
 static void
 kanban_list_box_set_property (GObject      *object,
@@ -83,14 +86,14 @@ static void
 kanban_list_box_constructed (GObject *object)
 {
   KanbanListBox *self = KANBAN_LIST_BOX (object);
-  gtk_list_box_bind_model (GTK_LIST_BOX (self), self->column_data,
+  gtk_list_box_bind_model (GTK_LIST_BOX (self->column_contents), self->column_data,
                            create_card_widget_func, NULL, g_free);
 }
 
 static void
 kanban_list_box_init (KanbanListBox *self)
 {
-  // _constructed() used to bind model as _init() called before properties set
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
@@ -109,6 +112,13 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
+
+  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
+                                               GRESOURCE_PREFIX "column.ui");
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (klass),
+                                        KanbanListBox, column_heading);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (klass),
+                                        KanbanListBox, column_contents);
 }
 
 KanbanListBox *

@@ -22,7 +22,7 @@ G_BEGIN_DECLS
 
 #define KANBAN_LIST_BOX_TYPE (kanban_list_box_get_type ())
 
-G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkListBox)
+G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkBox)
 
 KanbanListBox *kanban_list_box_new (GListModel *column_data);
 

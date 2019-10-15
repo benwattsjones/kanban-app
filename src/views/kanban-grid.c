@@ -73,6 +73,7 @@ kanban_grid_init (KanbanGrid *self)
                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
 
   gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
 }
 
 static void
