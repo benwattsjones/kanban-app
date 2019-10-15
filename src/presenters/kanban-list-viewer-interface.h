@@ -20,7 +20,7 @@
 
 G_BEGIN_DECLS
 
-#define KANBAN_COLUMN_VIEWER_TYPE (kanban_column_viewer_get_type ())
+#define KANBAN_LIST_VIEWER_TYPE (kanban_list_viewer_get_type ())
 
 G_DECLARE_INTERFACE (KanbanListViewer, kanban_list_viewer, KANBAN, LIST_VIEWER, GObject)
 

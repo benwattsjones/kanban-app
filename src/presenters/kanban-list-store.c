@@ -14,6 +14,7 @@
 
 #include "kanban-list-store.h"
 
+#include "kanban-list-viewer-interface.h"
 #include "kanban-card-viewmodel.h"
 #include "../models/kanban-data.h"
 
@@ -40,10 +41,13 @@ enum
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
+static void kanban_list_viewer_iface_init (KanbanListViewerInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (KanbanListStore, kanban_list_store, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
-                                                g_list_model_iface_init))
+                                                g_list_model_iface_init)
+                         G_IMPLEMENT_INTERFACE (KANBAN_LIST_VIEWER_TYPE,
+                                                kanban_list_viewer_iface_init))
 
 /* GListModel iface */
 
@@ -77,6 +81,18 @@ g_list_model_iface_init (GListModelInterface *iface)
   iface->get_item_type = kanban_list_model_get_type;
   iface->get_n_items = kanban_list_model_get_n_items;
   iface->get_item = kanban_list_model_get_item;
+}
+
+static GtkTextBuffer *
+kanban_list_model_get_heading (KanbanListViewer *model)
+{
+  return KANBAN_LIST_STORE (model)->column_name;
+}
+
+static void
+kanban_list_viewer_iface_init (KanbanListViewerInterface *iface)
+{
+  iface->get_heading = kanban_list_model_get_heading;
 }
 
 /* funcs for class */
