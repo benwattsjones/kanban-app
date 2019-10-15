@@ -30,11 +30,13 @@ struct _KanbanColumnViewerInterface
   GTypeInterface parent_iface;
 
   void (*add_column) (KanbanColumnViewer *self,
-                      KanbanListViewer   *new_column);
+                      KanbanListViewer   *new_column,
+                      gint                priority);
 };
 
 void kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                      KanbanListViewer   *new_column);
+                                      KanbanListViewer   *new_column,
+                                      gint                priority);
 
 G_END_DECLS
 

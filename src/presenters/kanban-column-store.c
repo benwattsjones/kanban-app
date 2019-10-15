@@ -138,7 +138,8 @@ kanban_column_store_add_column (void              *vself,
   GSequence *column_sequence = kanban_list_store_get_sequence (new_column);
   g_hash_table_insert (self->sequence_table, column_sequence, new_column);
   kanban_column_viewer_add_column (self->view_observer,
-                                   KANBAN_LIST_VIEWER (new_column));
+                                   KANBAN_LIST_VIEWER (new_column),
+                                   column_data->priority);
 }
 
 static void

@@ -43,10 +43,12 @@ extern "C"
   }
 
   void kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                        KanbanListViewer   *new_column)
+                                        KanbanListViewer   *new_column,
+                                        gint                priority)
   {
     (void) self;
     (void) new_column;
+    (void) priority;
   }
 }
 

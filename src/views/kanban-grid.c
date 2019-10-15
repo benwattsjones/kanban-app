@@ -38,12 +38,13 @@ G_DEFINE_TYPE_WITH_CODE (KanbanGrid, kanban_grid, GTK_TYPE_GRID,
 
 static void
 kanban_grid_add_column (KanbanColumnViewer *self,
-                        KanbanListViewer   *new_column)
+                        KanbanListViewer   *new_column,
+                        gint                priority)
 {
   // TODO free KanbanListBox object if column deleted
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
-  gtk_grid_insert_column (GTK_GRID (self), 0); // always prepends new columns TODO
-  gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), 0, 0, 1, 1);
+  gtk_grid_insert_column (GTK_GRID (self), priority);
+  gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), priority, 0, 1, 1);
 }
 
 static void
