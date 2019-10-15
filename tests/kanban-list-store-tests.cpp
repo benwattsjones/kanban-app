@@ -35,6 +35,7 @@ class KanbanListStoreTests : public ::testing::Test
 protected:
   KanbanData card_data;
   KanbanListStore *viewmodel;
+  const char *column_name = "Column name";
 
   void SetUp() override
   {
@@ -44,7 +45,7 @@ protected:
     card_data.content = g_strdup ("card content.");
     card_data.priority = 0;
 
-    viewmodel = kanban_list_store_new (card_data.column_id);
+    viewmodel = kanban_list_store_new (card_data.column_id, column_name);
   }
 
   void TearDown() override

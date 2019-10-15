@@ -181,10 +181,11 @@ kanban_list_store_class_init (KanbanListStoreClass *klass)
 // Funcs to act on object:
 
 KanbanListStore *
-kanban_list_store_new (gint col_id)
+kanban_list_store_new (gint col_id, const gchar *col_name)
 {
   return g_object_new (KANBAN_LIST_STORE_TYPE,
                        "column-id", col_id,
+                       "column-name", col_name,
                        NULL);
 }
 

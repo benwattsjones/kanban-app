@@ -130,7 +130,8 @@ kanban_column_store_add_column (void              *vself,
                                 const KanbanData  *column_data)
 {
   KanbanColumnStore *self = vself;
-  KanbanListStore *new_column = kanban_list_store_new (column_data->column_id);
+  KanbanListStore *new_column = kanban_list_store_new (column_data->column_id,
+                                                       column_data->heading);
   g_hash_table_insert (self->column_table,
                        GINT_TO_POINTER (column_data->column_id), new_column);
   GSequence *column_sequence = kanban_list_store_get_sequence (new_column);
