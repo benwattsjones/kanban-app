@@ -44,7 +44,6 @@ kanban_grid_add_column (KanbanColumnViewer *self,
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
   gtk_grid_insert_column (GTK_GRID (self), 0); // always prepends new columns TODO
   gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), 0, 0, 1, 1);
-  gtk_widget_show_all (GTK_WIDGET (new_column_widget));
 }
 
 static void
@@ -73,8 +72,7 @@ kanban_grid_init (KanbanGrid *self)
                                              GTK_STYLE_PROVIDER (self->css_provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  gtk_grid_set_column_homogeneous (GTK_GRID (self), TRUE);
-  gtk_widget_set_vexpand (GTK_WIDGET (self), TRUE);
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
@@ -83,6 +81,9 @@ kanban_grid_class_init (KanbanGridClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = kanban_grid_finalize;
+
+  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
+                                               GRESOURCE_PREFIX "board.ui");
 }
 
 KanbanGrid *
