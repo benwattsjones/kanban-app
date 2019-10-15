@@ -15,8 +15,9 @@
 #ifndef KANBAN_LIST_BOX_H
 #define KANBAN_LIST_BOX_H
 
+#include "../presenters/kanban-list-viewer-interface.h"
+
 #include <gtk/gtk.h>
-#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -24,7 +25,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkBox)
 
-KanbanListBox *kanban_list_box_new (GListModel *column_data);
+KanbanListBox *kanban_list_box_new (KanbanListViewer *column_data);
 
 G_END_DECLS
 

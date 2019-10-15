@@ -15,6 +15,7 @@
 #include "kanban-list-box.h"
 
 #include "../presenters/kanban-card-viewmodel.h"
+#include "../presenters/kanban-list-viewer-interface.h"
 #include <kanban-config.h>
 
 #include <gtk/gtk.h>
@@ -22,12 +23,12 @@
 
 struct _KanbanListBox
 {
-  GtkBox       parent_instance;
+  GtkBox             parent_instance;
 
-  GtkWidget   *column_heading;
-  GtkWidget   *column_contents;
+  GtkWidget         *column_heading;
+  GtkWidget         *column_contents;
 
-  GListModel  *column_data;
+  KanbanListViewer  *column_data;
 };
 
 enum
@@ -86,7 +87,8 @@ static void
 kanban_list_box_constructed (GObject *object)
 {
   KanbanListBox *self = KANBAN_LIST_BOX (object);
-  gtk_list_box_bind_model (GTK_LIST_BOX (self->column_contents), self->column_data,
+  gtk_list_box_bind_model (GTK_LIST_BOX (self->column_contents),
+                           G_LIST_MODEL (self->column_data),
                            create_card_widget_func, NULL, g_free);
 }
 
@@ -108,7 +110,7 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
   obj_properties[PROP_COLUMN_DATA] =
     g_param_spec_pointer("column-data",
                          "Column Data",
-                         "Card data of single column to bind to via GListModel iface",
+                         "Card data of column to bind to via KanbanListViewer iface",
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
@@ -122,7 +124,7 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
 }
 
 KanbanListBox *
-kanban_list_box_new (GListModel *column_data)
+kanban_list_box_new (KanbanListViewer *column_data)
 {
   return g_object_new (KANBAN_LIST_BOX_TYPE,
                        "column-data", column_data,

@@ -16,6 +16,7 @@
 
 #include "kanban-list-box.h"
 #include "../presenters/kanban-column-viewer-interface.h"
+#include "../presenters/kanban-list-viewer-interface.h"
 #include <kanban-config.h>
 
 #include <gtk/gtk.h>
@@ -37,7 +38,7 @@ G_DEFINE_TYPE_WITH_CODE (KanbanGrid, kanban_grid, GTK_TYPE_GRID,
 
 static void
 kanban_grid_add_column (KanbanColumnViewer *self,
-                        GListModel         *new_column)
+                        KanbanListViewer   *new_column)
 {
   // TODO free KanbanListBox object if column deleted
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
