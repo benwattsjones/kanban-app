@@ -16,6 +16,9 @@
             <property name="cursor-visible">False</property>
             <property name="wrap-mode">GTK_WRAP_WORD_CHAR</property>
             <property name="hexpand">True</property>
+            <style>
+              <class name="kanban-column-heading-style"/>
+            </style>
           </object>
         </child>
       </object>
