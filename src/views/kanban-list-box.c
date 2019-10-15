@@ -87,9 +87,13 @@ static void
 kanban_list_box_constructed (GObject *object)
 {
   KanbanListBox *self = KANBAN_LIST_BOX (object);
+
   gtk_list_box_bind_model (GTK_LIST_BOX (self->column_contents),
                            G_LIST_MODEL (self->column_data),
                            create_card_widget_func, NULL, g_free);
+
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->column_heading),
+                            kanban_list_viewer_get_heading (self->column_data));
 }
 
 static void
