@@ -68,13 +68,11 @@ static gpointer
 kanban_column_viewmodel_get_item (GListModel *model,
                                   guint       i)
 {
-  GSequenceIter *iter;
-  KanbanCardViewModel *card;
   KanbanColumnViewModel *self = KANBAN_COLUMN_VIEWMODEL (model);
   if (i >= self->num_cards)
     return NULL;
-  iter = g_sequence_get_iter_at_pos (self->card_list, i);
-  card =  g_sequence_get(iter);
+  GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list, i);
+  KanbanCardViewModel *card =  g_sequence_get(iter);
   return g_object_ref (card);
 }
 
