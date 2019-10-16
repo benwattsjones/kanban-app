@@ -56,8 +56,6 @@ G_DEFINE_TYPE(KanbanApplication, kanban_application, GTK_TYPE_APPLICATION)
 static void
 kanban_application_startup (GApplication *app)
 {
-  KanbanApplication *self = KANBAN_APPLICATION (app);
-
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
 }
 
@@ -133,7 +131,7 @@ kanban_application_class_init (KanbanApplicationClass *klass)
 int
 initialize_kanban_application (int argc, char *argv[])
 {
-  KanbanApplication *app = g_object_new (KANBAN_APPLICATION_TYPE,
+  KanbanApplication *app = g_object_new (KANBAN_TYPE_APPLICATION,
                                          "application-id", APPLICATION_ID,
                                          "flags", G_APPLICATION_HANDLES_OPEN,
                                          NULL);

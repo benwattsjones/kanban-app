@@ -90,7 +90,7 @@ protected:
     printed_string = NULL;
     g_set_print_handler (redirect_gprint);
     FunctionCallTracker = FunctionCallTrackerReset;
-    app = g_object_new (KANBAN_APPLICATION_TYPE,
+    app = g_object_new (KANBAN_TYPE_APPLICATION,
                         "application-id", APPLICATION_ID,
                         "flags", G_APPLICATION_HANDLES_OPEN,
                         NULL);
