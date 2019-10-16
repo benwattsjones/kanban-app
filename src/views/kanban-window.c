@@ -48,9 +48,10 @@ kanban_window_new (KanbanApplication *app)
 }
 
 void
-kanban_window_add_board (KanbanWindow *self,
-                        GtkWidget     *board)
+kanban_window_display_board (KanbanWindow *self,
+                             GtkWidget    *board)
 {
   gtk_container_add (GTK_CONTAINER (self), board);
+  gtk_widget_show_all (GTK_WIDGET (self));
 }
 

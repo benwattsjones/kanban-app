@@ -68,8 +68,7 @@ kanban_application_activate (GApplication *app)
   self->viewmodel = kanban_column_store_new (KANBAN_COLUMN_VIEWER (self->board_view));
   self->window = kanban_window_new (self);
 
-  kanban_window_add_board (self->window, GTK_WIDGET (self->board_view));
-  gtk_widget_show_all (GTK_WIDGET (self->window));
+  kanban_window_display_board (self->window, GTK_WIDGET (self->board_view));
 
   test_observers();
 }
