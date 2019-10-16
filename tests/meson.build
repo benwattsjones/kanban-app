@@ -17,8 +17,8 @@ test('gtest_tests',
     suite: 'unit',
 )
 
-test('kanban_application_tests',
-    executable('kanban_application_tests',
+test('application_entry_tests',
+    executable('application_entry_tests',
         files('../src/kanban-application.c',
               '../src/presenters/kanban-column-viewer-interface.c',
               'application-entry-tests.cpp'),
