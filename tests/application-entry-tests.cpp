@@ -68,6 +68,12 @@ extern "C"
   {
     return NULL;
   }
+
+  void kanban_window_add_board (KanbanWindow *self, GtkWidget *board)
+  {
+    (void) self;
+    (void) board;
+  }
 }
 
 // Test Fixtures:

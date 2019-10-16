@@ -24,7 +24,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanWindow, kanban_window, KANBAN, WINDOW, GtkApplicationWindow)
 
-KanbanWindow *kanban_window_new (KanbanApplication *app);
+KanbanWindow *kanban_window_new       (KanbanApplication *app);
+
+void          kanban_window_add_board (KanbanWindow      *self,
+                                       GtkWidget         *board);
 
 G_END_DECLS
 
