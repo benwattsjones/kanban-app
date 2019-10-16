@@ -1,4 +1,4 @@
-/* src/presenters/kanban-list-store.h
+/* src/presenters/kanban-column-viewmodel.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *

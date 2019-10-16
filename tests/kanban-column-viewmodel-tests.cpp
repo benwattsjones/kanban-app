@@ -1,4 +1,4 @@
-/* tests/kanban-list-store-tests.cpp
+/* tests/kanban-column-viewmodel-tests.cpp
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,7 +14,7 @@
 
 extern "C"
 {
-  #include "../src/presenters/kanban-list-store.h"
+  #include "../src/presenters/kanban-column-viewmodel.h"
   #include "../src/presenters/kanban-card-viewmodel.h"
   #include "../src/models/kanban-data.h"
 

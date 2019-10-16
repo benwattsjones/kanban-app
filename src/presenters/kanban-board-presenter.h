@@ -33,7 +33,7 @@ void                    kanban_board_presenter_destroy (KanbanBoardPresenter  *s
 #include "kanban-card-viewmodel.h"
 KanbanCardViewModel    *kanban_board_presenter_get_card (KanbanBoardPresenter  *self,
                                                          gint                   card_id);
-#include "kanban-list-store.h"
+#include "kanban-column-viewmodel.h"
 KanbanColumnViewModel  *kanban_board_presenter_get_column
                                                        (KanbanBoardPresenter  *self,
                                                         gint                   column_id);
