@@ -64,6 +64,15 @@ TEST_F (KanbanColumnViewModelTests,
 }
 
 TEST_F (KanbanColumnViewModelTests,
+        New_NullColumnNamePassed_NewObjectReturnedNoError)
+{
+  KanbanColumnViewModel *new_column;
+  new_column = kanban_column_viewmodel_new (2, NULL);
+  ASSERT_NE (viewmodel, nullptr);
+  kanban_column_viewmodel_destroy ((void *) new_column);
+}
+
+TEST_F (KanbanColumnViewModelTests,
         New_ValidColumnIdPassed_ColumnIdStoredAsRetrievableProperty)
 {
   int result_column_id;

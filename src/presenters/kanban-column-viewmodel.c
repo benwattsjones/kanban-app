@@ -200,9 +200,10 @@ KanbanColumnViewModel *
 kanban_column_viewmodel_new (gint         col_id,
                              const gchar *col_name)
 {
+  const gchar *heading = col_name ? col_name : "";
   return g_object_new (KANBAN_TYPE_COLUMN_VIEWMODEL,
                        "column-id", col_id,
-                       "column-name", col_name,
+                       "column-name", heading,
                        NULL);
 }
 
