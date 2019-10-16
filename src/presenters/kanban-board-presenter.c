@@ -59,21 +59,21 @@ get_card_iter_from_id (KanbanBoardPresenter *self,
   return card_iter;
 }
 
-KanbanListStore *
+KanbanColumnViewModel *
 get_column_from_card_iter (KanbanBoardPresenter *self,
                            GSequenceIter        *card_iter)
 {
   GSequence *seq = g_sequence_iter_get_sequence (card_iter);
-  KanbanListStore *column = g_hash_table_lookup (self->sequence_table, seq);
+  KanbanColumnViewModel *column = g_hash_table_lookup (self->sequence_table, seq);
   g_assert (column != NULL);
   return column;
 }
 
-KanbanListStore *
+KanbanColumnViewModel *
 get_column_from_id (KanbanBoardPresenter *self,
                     gint                  column_id)
 {
-  KanbanListStore *column;
+  KanbanColumnViewModel *column;
   column = g_hash_table_lookup (self->column_table, GINT_TO_POINTER (column_id));
   g_assert (column != NULL);
   return column;
@@ -86,8 +86,8 @@ kanban_board_presenter_add_card (void              *vself,
                                  const KanbanData  *card_data)
 {
   KanbanBoardPresenter *self = vself;
-  KanbanListStore *column = get_column_from_id (self, card_data->column_id);
-  GSequenceIter *card_iter = kanban_list_store_new_card (column, card_data); 
+  KanbanColumnViewModel *column = get_column_from_id (self, card_data->column_id);
+  GSequenceIter *card_iter = kanban_column_viewmodel_new_card (column, card_data); 
   g_hash_table_insert (self->card_table,
                        GINT_TO_POINTER (card_data->card_id), card_iter);
 }
@@ -108,21 +108,22 @@ kanban_board_presenter_move_card (void              *vself,
 {
   KanbanBoardPresenter *self = vself;
   GSequenceIter *old_iter = get_card_iter_from_id (self, card_data->card_id);
-  KanbanListStore *old_col = get_column_from_card_iter (self, old_iter);
-  KanbanListStore *new_col = get_column_from_id (self, card_data->column_id);
+  KanbanColumnViewModel *old_col = get_column_from_card_iter (self, old_iter);
+  KanbanColumnViewModel *new_col = get_column_from_id (self, card_data->column_id);
   gint old_position = g_sequence_iter_get_position (old_iter);
   gint new_position = card_data->priority;
-  GSequenceIter *new_iter = kanban_list_store_get_iter_at_pos (new_col, new_position);
+  GSequenceIter *new_iter = kanban_column_viewmodel_get_iter_at_pos (new_col,
+                                                                     new_position);
 
   g_sequence_move (old_iter, new_iter);
   if (new_col != old_col)
     {
-      kanban_list_store_alert_removed (old_col, old_position);
-      kanban_list_store_alert_added (new_col, new_position);
+      kanban_column_viewmodel_alert_removed (old_col, old_position);
+      kanban_column_viewmodel_alert_added (new_col, new_position);
     }
   else
     {
-      kanban_list_store_alert_moved (old_col, old_position, new_position);
+      kanban_column_viewmodel_alert_moved (old_col, old_position, new_position);
     }
 }
 
@@ -131,11 +132,11 @@ kanban_board_presenter_add_column (void              *vself,
                                    const KanbanData  *column_data)
 {
   KanbanBoardPresenter *self = vself;
-  KanbanListStore *new_column = kanban_list_store_new (column_data->column_id,
-                                                       column_data->heading);
+  KanbanColumnViewModel *new_column = kanban_column_viewmodel_new (column_data->column_id,
+                                                                   column_data->heading);
   g_hash_table_insert (self->column_table,
                        GINT_TO_POINTER (column_data->column_id), new_column);
-  GSequence *column_sequence = kanban_list_store_get_sequence (new_column);
+  GSequence *column_sequence = kanban_column_viewmodel_get_sequence (new_column);
   g_hash_table_insert (self->sequence_table, column_sequence, new_column);
   kanban_board_observer_add_column (self->view_observer,
                                     KANBAN_LIST_VIEWER (new_column),
@@ -236,7 +237,7 @@ kanban_board_presenter_init (KanbanBoardPresenter *self)
   self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->sequence_table = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->column_table = g_hash_table_new_full (g_direct_hash, g_direct_equal,
-                                              NULL, kanban_list_store_destroy);
+                                              NULL, kanban_column_viewmodel_destroy);
   self->observer_object = model_observer_iface_init (self);
   register_kanban_viewmodel_observer (self->observer_object);
 }
@@ -287,12 +288,12 @@ kanban_board_presenter_get_card (KanbanBoardPresenter *self,
   return KANBAN_CARD_VIEWMODEL (g_sequence_get (card_iter));
 }
 
-KanbanListStore *
+KanbanColumnViewModel *
 kanban_board_presenter_get_column (KanbanBoardPresenter *self,
                                    gint               column_id)
 {
-  KanbanListStore *column = g_hash_table_lookup (self->column_table,
-                                                  GINT_TO_POINTER (column_id));
+  KanbanColumnViewModel *column = g_hash_table_lookup (self->column_table,
+                                                       GINT_TO_POINTER (column_id));
   return column;
 }
 

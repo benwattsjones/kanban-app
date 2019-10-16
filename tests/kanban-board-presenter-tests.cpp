@@ -91,7 +91,7 @@ TEST_F (KanbanBoardPresenterTests,
         AddColumn_ValidDataPassed_NewColumnAddedToObjectAndRetrievable)
 {
   int column_id_stored;
-  KanbanListStore *column_added;
+  KanbanColumnViewModel *column_added;
   observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
   column_added = kanban_board_presenter_get_column (viewmodel, card_data.column_id);
 
@@ -140,7 +140,7 @@ TEST_F (KanbanBoardPresenterTests,
 TEST_F (KanbanBoardPresenterTests,
         MoveCard_CurrantColumnAndPriorityPassed_BoardUnchanged)
 {
-  KanbanListStore *column;
+  KanbanColumnViewModel *column;
   gpointer card1, card2, top_card_before, bottom_card_before,
            top_card_after, bottom_card_after;
   observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
@@ -172,7 +172,7 @@ TEST_F (KanbanBoardPresenterTests,
 TEST_F (KanbanBoardPresenterTests,
         MoveCard_NewPriorityPassed_CardMovesToPriorityPosition)
 {
-  KanbanListStore *column;
+  KanbanColumnViewModel *column;
   gpointer card1, card2, top_card_before, bottom_card_before,
            top_card_after, bottom_card_after;
   observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
@@ -205,7 +205,7 @@ TEST_F (KanbanBoardPresenterTests,
 TEST_F (KanbanBoardPresenterTests,
         MoveCard_NewColumnPassed_CardMovesToNewColumn)
 {
-  KanbanListStore *column1, *column2;
+  KanbanColumnViewModel *column1, *column2;
   gint col1_count_before, col2_count_before, col1_count_after, col2_count_after;
   observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
   observer->task_func[TASK_ADD_CARD] (observer->viewmodel, &card_data);

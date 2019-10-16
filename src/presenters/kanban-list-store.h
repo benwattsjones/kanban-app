@@ -12,8 +12,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_LIST_STORE_H
-#define KANBAN_LIST_STORE_H
+#ifndef KANBAN_COLUMN_VIEWMODEL_H
+#define KANBAN_COLUMN_VIEWMODEL_H
 
 #include "../models/kanban-data.h"
 
@@ -21,30 +21,44 @@
 
 G_BEGIN_DECLS
 
-#define KANBAN_LIST_STORE_TYPE (kanban_list_store_get_type ())
+#define KANBAN_TYPE_COLUMN_VIEWMODEL (kanban_column_viewmodel_get_type ())
 
-G_DECLARE_FINAL_TYPE (KanbanListStore, kanban_list_store, KANBAN, LIST_STORE, GObject)
+G_DECLARE_FINAL_TYPE (KanbanColumnViewModel, kanban_column_viewmodel, KANBAN, COLUMN_VIEWMODEL, GObject)
 
-KanbanListStore  *kanban_list_store_new             (gint              col_id,
-                                                     const gchar      *col_name);
-void              kanban_list_store_destroy         (gpointer          vself);
+KanbanColumnViewModel  *kanban_column_viewmodel_new
+                                              (gint                    col_id,
+                                               const gchar            *col_name);
 
-GSequenceIter    *kanban_list_store_new_card        (KanbanListStore  *self,
-                                                     const KanbanData *card_data);
-GSequence        *kanban_list_store_get_sequence    (KanbanListStore  *self);
-GSequenceIter    *kanban_list_store_get_iter_at_pos (KanbanListStore  *self,
-                                                     gint              position);
-void              kanban_list_store_alert_removed   (KanbanListStore  *self,
-                                                     gint              position);
-void              kanban_list_store_alert_added     (KanbanListStore  *self,
-                                                     gint              position);
-void              kanban_list_store_alert_moved     (KanbanListStore  *self,
-                                                     gint              old_position,
-                                                     gint              new_position);
+void                    kanban_column_viewmodel_destroy 
+                                              (gpointer                vself);
+
+GSequenceIter          *kanban_column_viewmodel_new_card
+                                              (KanbanColumnViewModel  *self,
+                                               const KanbanData       *card_data);
+
+GSequence              *kanban_column_viewmodel_get_sequence
+                                              (KanbanColumnViewModel  *self);
+
+GSequenceIter          *kanban_column_viewmodel_get_iter_at_pos 
+                                              (KanbanColumnViewModel  *self,
+                                               gint                    position);
+
+void                    kanban_column_viewmodel_alert_removed
+                                              (KanbanColumnViewModel  *self,
+                                               gint                    position);
+
+void                    kanban_column_viewmodel_alert_added 
+                                              (KanbanColumnViewModel  *self,
+                                               gint                    position);
+
+void                    kanban_column_viewmodel_alert_moved
+                                              (KanbanColumnViewModel  *self,
+                                               gint                    old_position,
+                                               gint                    new_position);
 
 
 
 G_END_DECLS
 
-#endif /* KANBAN_LIST_STORE_H */
+#endif /* KANBAN_COLUMN_VIEWMODEL_H */
 

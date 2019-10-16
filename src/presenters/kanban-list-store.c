@@ -21,9 +21,9 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-struct _KanbanListStore
+struct _KanbanColumnViewModel
 {
-  GObject     parent_instance;
+  GObject         parent_instance;
 
   guint           num_cards;
   gint            column_id;
@@ -43,7 +43,7 @@ static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 static void g_list_model_iface_init (GListModelInterface *iface);
 static void kanban_list_viewer_iface_init (KanbanListViewerInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (KanbanListStore, kanban_list_store, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (KanbanColumnViewModel, kanban_column_viewmodel, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
                                                 g_list_model_iface_init)
                          G_IMPLEMENT_INTERFACE (KANBAN_LIST_VIEWER_TYPE,
@@ -52,25 +52,25 @@ G_DEFINE_TYPE_WITH_CODE (KanbanListStore, kanban_list_store, G_TYPE_OBJECT,
 /* GListModel iface */
 
 static GType
-kanban_list_model_get_type (GListModel *model)
+kanban_column_viewmodel_get_item_type (GListModel *model)
 {
   (void) model;
   return KANBAN_TYPE_CARD_VIEWMODEL;
 }
 
 static guint
-kanban_list_model_get_n_items (GListModel *model)
+kanban_column_viewmodel_get_n_items (GListModel *model)
 {
-  return (KANBAN_LIST_STORE (model))->num_cards;
+  return (KANBAN_COLUMN_VIEWMODEL (model))->num_cards;
 }
 
 static gpointer
-kanban_list_model_get_item (GListModel *model,
-                            guint       i)
+kanban_column_viewmodel_get_item (GListModel *model,
+                                  guint       i)
 {
   GSequenceIter *iter;
   KanbanCardViewModel *card;
-  iter = g_sequence_get_iter_at_pos (KANBAN_LIST_STORE (model)->card_list, i);
+  iter = g_sequence_get_iter_at_pos (KANBAN_COLUMN_VIEWMODEL (model)->card_list, i);
   card =  g_sequence_get(iter);
   return g_object_ref (card);
 }
@@ -78,32 +78,32 @@ kanban_list_model_get_item (GListModel *model,
 static void
 g_list_model_iface_init (GListModelInterface *iface)
 {
-  iface->get_item_type = kanban_list_model_get_type;
-  iface->get_n_items = kanban_list_model_get_n_items;
-  iface->get_item = kanban_list_model_get_item;
+  iface->get_item_type = kanban_column_viewmodel_get_item_type;
+  iface->get_n_items = kanban_column_viewmodel_get_n_items;
+  iface->get_item = kanban_column_viewmodel_get_item;
 }
 
 static GtkTextBuffer *
-kanban_list_model_get_heading (KanbanListViewer *model)
+kanban_column_viewmodel_get_heading (KanbanListViewer *model)
 {
-  return KANBAN_LIST_STORE (model)->column_name;
+  return KANBAN_COLUMN_VIEWMODEL (model)->column_name;
 }
 
 static void
 kanban_list_viewer_iface_init (KanbanListViewerInterface *iface)
 {
-  iface->get_heading = kanban_list_model_get_heading;
+  iface->get_heading = kanban_column_viewmodel_get_heading;
 }
 
 /* funcs for class */
 
 static void
-kanban_list_store_set_property (GObject      *object,
-                                guint         property_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+kanban_column_viewmodel_set_property (GObject      *object,
+                                      guint         property_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
 {
-  KanbanListStore *self = KANBAN_LIST_STORE (object);
+  KanbanColumnViewModel *self = KANBAN_COLUMN_VIEWMODEL (object);
 
   switch (property_id)
     {
@@ -122,12 +122,12 @@ kanban_list_store_set_property (GObject      *object,
 }
 
 static void
-kanban_list_store_get_property (GObject    *object,
-                                guint       property_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+kanban_column_viewmodel_get_property (GObject    *object,
+                                      guint       property_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
 {
-  KanbanListStore *self = KANBAN_LIST_STORE (object);
+  KanbanColumnViewModel *self = KANBAN_COLUMN_VIEWMODEL (object);
   GtkTextIter start, end;
   gchar *buffer_text = NULL;
 
@@ -151,18 +151,18 @@ kanban_list_store_get_property (GObject    *object,
 }
 
 static void
-kanban_list_store_finalize (GObject *object)
+kanban_column_viewmodel_finalize (GObject *object)
 {
-  KanbanListStore *self = KANBAN_LIST_STORE (object);
+  KanbanColumnViewModel *self = KANBAN_COLUMN_VIEWMODEL (object);
 
   g_clear_pointer (&self->card_list, g_sequence_free);
   g_object_unref (self->column_name);
 
-  G_OBJECT_CLASS (kanban_list_store_parent_class)->finalize (object);
+  G_OBJECT_CLASS (kanban_column_viewmodel_parent_class)->finalize (object);
 }
 
 static void
-kanban_list_store_init (KanbanListStore *self)
+kanban_column_viewmodel_init (KanbanColumnViewModel *self)
 {
   self->num_cards = 0;
   self->card_list = g_sequence_new (g_object_unref);
@@ -170,13 +170,13 @@ kanban_list_store_init (KanbanListStore *self)
 }
 
 static void
-kanban_list_store_class_init (KanbanListStoreClass *klass)
+kanban_column_viewmodel_class_init (KanbanColumnViewModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->set_property = kanban_list_store_set_property;
-  object_class->get_property = kanban_list_store_get_property;
-  object_class->finalize = kanban_list_store_finalize;
+  object_class->set_property = kanban_column_viewmodel_set_property;
+  object_class->get_property = kanban_column_viewmodel_get_property;
+  object_class->finalize = kanban_column_viewmodel_finalize;
 
   obj_properties[PROP_COLUMN_ID] =
     g_param_spec_int("column-id",
@@ -196,26 +196,27 @@ kanban_list_store_class_init (KanbanListStoreClass *klass)
 
 // Funcs to act on object:
 
-KanbanListStore *
-kanban_list_store_new (gint col_id, const gchar *col_name)
+KanbanColumnViewModel *
+kanban_column_viewmodel_new (gint         col_id,
+                             const gchar *col_name)
 {
-  return g_object_new (KANBAN_LIST_STORE_TYPE,
+  return g_object_new (KANBAN_TYPE_COLUMN_VIEWMODEL,
                        "column-id", col_id,
                        "column-name", col_name,
                        NULL);
 }
 
 void
-kanban_list_store_destroy (gpointer vself)
+kanban_column_viewmodel_destroy (gpointer vself)
 {
-  KanbanListStore *self = KANBAN_LIST_STORE (vself);
+  KanbanColumnViewModel *self = KANBAN_COLUMN_VIEWMODEL (vself);
   g_object_unref (self);
   self = NULL;
 }
 
 GSequenceIter *
-kanban_list_store_new_card (KanbanListStore  *self,
-                            const KanbanData *card_data)
+kanban_column_viewmodel_new_card (KanbanColumnViewModel *self,
+                                  const KanbanData      *card_data)
 {
   KanbanCardViewModel *new_card = kanban_card_viewmodel_new(card_data);
   GSequenceIter *iter = g_sequence_get_iter_at_pos (self->card_list,
@@ -228,38 +229,38 @@ kanban_list_store_new_card (KanbanListStore  *self,
 }
 
 GSequence *
-kanban_list_store_get_sequence (KanbanListStore *self)
+kanban_column_viewmodel_get_sequence (KanbanColumnViewModel *self)
 {
   return self->card_list;
 }
 
 GSequenceIter *
-kanban_list_store_get_iter_at_pos (KanbanListStore *self,
-                                   gint             position)
+kanban_column_viewmodel_get_iter_at_pos (KanbanColumnViewModel *self,
+                                         gint                   position)
 {
   return g_sequence_get_iter_at_pos (self->card_list, position);
 }
 
 void
-kanban_list_store_alert_removed (KanbanListStore *self,
-                                 gint             position)
+kanban_column_viewmodel_alert_removed (KanbanColumnViewModel *self,
+                                       gint                   position)
 {
   self->num_cards--;
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 }
 
 void
-kanban_list_store_alert_added (KanbanListStore *self,
-                               gint             position)
+kanban_column_viewmodel_alert_added (KanbanColumnViewModel *self,
+                                     gint                   position)
 {
   self->num_cards++;
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
 }
 
 void
-kanban_list_store_alert_moved (KanbanListStore *self,
-                               gint             old_position,
-                               gint             new_position)
+kanban_column_viewmodel_alert_moved (KanbanColumnViewModel *self,
+                                     gint                   old_position,
+                                     gint                   new_position)
 {
   g_list_model_items_changed (G_LIST_MODEL (self), old_position, 1, 0);
   g_list_model_items_changed (G_LIST_MODEL (self), new_position, 0, 1);

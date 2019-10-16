@@ -25,19 +25,21 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanBoardPresenter, kanban_board_presenter, KANBAN, BOARD_PRESENTER, GObject)
 
-KanbanBoardPresenter   *kanban_board_presenter_new           (KanbanBoardObserver   *view_observer);
-void                    kanban_board_presenter_destroy       (KanbanBoardPresenter  *self);
+KanbanBoardPresenter   *kanban_board_presenter_new     (KanbanBoardObserver   *view_observer);
+void                    kanban_board_presenter_destroy (KanbanBoardPresenter  *self);
 
 
 #ifdef TESTING_ONLY_ACCESS
 #include "kanban-card-viewmodel.h"
-KanbanCardViewModel    *kanban_board_presenter_get_card      (KanbanBoardPresenter  *self,
-                                                           gint                card_id);
+KanbanCardViewModel    *kanban_board_presenter_get_card (KanbanBoardPresenter  *self,
+                                                         gint                   card_id);
 #include "kanban-list-store.h"
-KanbanListStore        *kanban_board_presenter_get_column    (KanbanBoardPresenter  *self,
-                                                           gint                column_id);
+KanbanColumnViewModel  *kanban_board_presenter_get_column
+                                                       (KanbanBoardPresenter  *self,
+                                                        gint                   column_id);
 #include "model-observer-interface.h"
-ModelObserverInterface *kanban_board_presenter_get_observer  (KanbanBoardPresenter  *self);
+ModelObserverInterface *kanban_board_presenter_get_observer 
+                                                       (KanbanBoardPresenter  *self);
 #endif /* TESTING_ONLY_ACCESS */
 
 G_END_DECLS

@@ -30,11 +30,11 @@ extern "C"
 }
 
 // Test Fixtures:
-class KanbanListStoreTests : public ::testing::Test
+class KanbanColumnViewModelTests : public ::testing::Test
 {
 protected:
   KanbanData card_data;
-  KanbanListStore *viewmodel;
+  KanbanColumnViewModel *viewmodel;
   const char *column_name = "Column name";
 
   void SetUp() override
@@ -45,25 +45,25 @@ protected:
     card_data.content = g_strdup ("card content.");
     card_data.priority = 0;
 
-    viewmodel = kanban_list_store_new (card_data.column_id, column_name);
+    viewmodel = kanban_column_viewmodel_new (card_data.column_id, column_name);
   }
 
   void TearDown() override
   {
-    kanban_list_store_destroy ((void *) viewmodel);
+    kanban_column_viewmodel_destroy ((void *) viewmodel);
     g_free (card_data.heading);
     g_free (card_data.content);
   }
 };
 
 // Tests:
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         New_ValidColumnIdPassed_NewObjectReturned)
 {
   ASSERT_NE (viewmodel, nullptr);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         New_ValidColumnIdPassed_ColumnIdStoredAsRetrievableProperty)
 {
   int result_column_id;
@@ -71,33 +71,33 @@ TEST_F (KanbanListStoreTests,
   EXPECT_EQ (result_column_id, card_data.column_id);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         GListModelGetNItems_NewOjectCreated_ItemCountInitiallyZero)
 {
   int num_items = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   EXPECT_EQ (num_items, 0);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         GListModelGetItem_NewObjectCreated_EmptyListReturnsNull)
 {
   gpointer item = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
   EXPECT_EQ (item, nullptr);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         GListModelGetNItems_NewCardCalled_CardCountIncrements)
 {
   int num_items_orig = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   int num_items_new = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   EXPECT_EQ (num_items_new, num_items_orig + 1);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         GListModelGetItem_NewCardCalled_NewCardIsReturned)
 {
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   KanbanCardViewModel *card = KANBAN_CARD_VIEWMODEL
       (g_list_model_get_item (G_LIST_MODEL (viewmodel), card_data.priority));
   char *content_stored;
@@ -107,10 +107,10 @@ TEST_F (KanbanListStoreTests,
   g_object_unref (card);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         GListModelGetItem_CardRetrievedAndFreed_CardIsNotRemovedFromList)
 {
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   KanbanCardViewModel *card1 = KANBAN_CARD_VIEWMODEL
       (g_list_model_get_item (G_LIST_MODEL (viewmodel), card_data.priority));
   g_object_unref (card1);
@@ -123,19 +123,19 @@ TEST_F (KanbanListStoreTests,
   g_object_unref (card2);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         NewCard_MultipleCardsAddedPriorityOrder_CardsStoredInPriorityOrder)
 {
   int card0_id=42, card1_id=769, card2_id=33;
   card_data.priority = 0;
   card_data.card_id = card0_id;
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   card_data.priority = 1;
   card_data.card_id = card1_id;
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   card_data.priority = 2;
   card_data.card_id = card2_id;
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   int card0_id_result, card1_id_result, card2_id_result;
   KanbanCardViewModel *card;
 
@@ -154,18 +154,18 @@ TEST_F (KanbanListStoreTests,
   EXPECT_EQ (card2_id, card2_id_result);
 }
 
-TEST_F (KanbanListStoreTests,
+TEST_F (KanbanColumnViewModelTests,
         NewCard_MultipleCardsAdded_CountCorrect)
 {
   card_data.priority = 0;
   card_data.card_id = 734;
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   card_data.priority = 1;
   card_data.card_id = 98087;
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
   card_data.priority = 2;
   card_data.card_id = 223;
-  kanban_list_store_new_card (viewmodel, &card_data);
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
 
   int num_items = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
   EXPECT_EQ (3, num_items);
