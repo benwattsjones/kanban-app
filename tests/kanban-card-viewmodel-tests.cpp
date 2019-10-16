@@ -126,4 +126,44 @@ TEST_F (KanbanCardViewModelTests,
   free (card_data.heading);
 }
 
+TEST_F (KanbanCardViewModelTests,
+        GetHeading_StringHeadingPassedConstructor_TextInGtkBufferReturned)
+{
+  card_data.heading = g_strdup ("card heading");
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+  GtkTextIter start, end;
+  GtkTextBuffer *card_heading;
+  gchar *buffer_text;
+
+  card_heading = kanban_card_viewmodel_get_heading (viewmodel);
+  ASSERT_TRUE (GTK_IS_TEXT_BUFFER (card_heading));
+  gtk_text_buffer_get_bounds (card_heading, &start, &end);
+  buffer_text = gtk_text_buffer_get_text (card_heading, &start, &end, FALSE);
+  EXPECT_STREQ (buffer_text, "card heading");
+
+  g_object_unref (viewmodel);
+  free (card_data.heading);
+  free (buffer_text);
+}
+
+TEST_F (KanbanCardViewModelTests,
+        GetContent_StringHeadingPassedConstructor_TextInGtkBufferReturned)
+{
+  card_data.content = g_strdup ("card content");
+  KanbanCardViewModel *viewmodel = kanban_card_viewmodel_new (&card_data);
+  GtkTextIter start, end;
+  GtkTextBuffer *card_content;
+  gchar *buffer_text;
+
+  card_content = kanban_card_viewmodel_get_content (viewmodel);
+  ASSERT_TRUE (GTK_IS_TEXT_BUFFER (card_content));
+  gtk_text_buffer_get_bounds (card_content, &start, &end);
+  buffer_text = gtk_text_buffer_get_text (card_content, &start, &end, FALSE);
+  EXPECT_STREQ (buffer_text, "card content");
+
+  g_object_unref (viewmodel);
+  free (card_data.content);
+  free (buffer_text);
+}
+
 
