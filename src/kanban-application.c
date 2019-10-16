@@ -15,7 +15,7 @@
 #include "kanban-application.h"
 
 #include "presenters/kanban-board-presenter.h"
-#include "presenters/kanban-column-viewer-interface.h"
+#include "presenters/kanban-board-observer-interface.h"
 #include "views/kanban-window.h"
 #include "views/kanban-grid.h"
 #include "models/kanban-data.h" // TODO - remove after testing

@@ -1,4 +1,4 @@
-/* src/presenters/column-view-interface.h
+/* src/presenters/kanban-board-observer-interface.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *

@@ -1,4 +1,4 @@
-/* tests/kanban-column-viewer-interface-tests.cpp
+/* tests/kanban-board-observer-interface-tests.cpp
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,7 +14,7 @@
 
 extern "C"
 {
-  #include "../src/presenters/kanban-column-viewer-interface.h"
+  #include "../src/presenters/kanban-board-observer-interface.h"
   #include "../src/presenters/kanban-list-viewer-interface.h"
 
   #include <gtk/gtk.h>

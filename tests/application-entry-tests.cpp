@@ -16,7 +16,7 @@ extern "C"
 {
   #include "../src/kanban-application.h"
   #include "../src/presenters/kanban-board-presenter.h"
-  #include "../src/presenters/kanban-column-viewer-interface.h"
+  #include "../src/presenters/kanban-board-observer-interface.h"
   #include "../src/views/kanban-window.h"
   #include "../src/views/kanban-grid.h"
   #include <kanban-config.h>

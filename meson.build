@@ -33,7 +33,7 @@ gnome = import('gnome')
 kanban_app_sources = files(
     'src/presenters/model-observer.c',
     'src/presenters/kanban-board-presenter.c',
-    'src/presenters/kanban-column-viewer-interface.c',
+    'src/presenters/kanban-board-observer-interface.c',
     'src/presenters/kanban-list-store.c',
     'src/presenters/kanban-list-viewer-interface.c',
     'src/presenters/kanban-card-viewmodel.c',

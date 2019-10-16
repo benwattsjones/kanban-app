@@ -15,7 +15,7 @@
 #ifndef KANBAN_BOARD_PRESENTER_H
 #define KANBAN_BOARD_PRESENTER_H
 
-#include "kanban-column-viewer-interface.h"
+#include "kanban-board-observer-interface.h"
 
 #include <gtk/gtk.h>
 
