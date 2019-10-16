@@ -70,7 +70,10 @@ kanban_column_viewmodel_get_item (GListModel *model,
 {
   GSequenceIter *iter;
   KanbanCardViewModel *card;
-  iter = g_sequence_get_iter_at_pos (KANBAN_COLUMN_VIEWMODEL (model)->card_list, i);
+  KanbanColumnViewModel *self = KANBAN_COLUMN_VIEWMODEL (model);
+  if (i >= self->num_cards)
+    return NULL;
+  iter = g_sequence_get_iter_at_pos (self->card_list, i);
   card =  g_sequence_get(iter);
   return g_object_ref (card);
 }
