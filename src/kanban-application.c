@@ -50,7 +50,7 @@ static GOptionEntry entries[] =
 };
 
 
-G_DEFINE_TYPE(KanbanApplication, kanban_application, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE (KanbanApplication, kanban_application, GTK_TYPE_APPLICATION)
 
 
 static void
@@ -93,7 +93,7 @@ kanban_application_handle_local_options (GApplication *app,
   (void) app;
   if (g_variant_dict_contains (options, "version"))
     {
-      g_print("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
+      g_print ("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
       return SUCCESS_KANBAN_PROGRAM_CODE;
     }
   return CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE;
@@ -111,7 +111,7 @@ static void
 kanban_application_init (KanbanApplication *app)
 {
   g_application_set_option_context_parameter_string (G_APPLICATION (app), 
-    "- description of program for help");
+      "- description of program for help");
   g_application_add_main_option_entries (G_APPLICATION (app), entries);
   app->viewmodel = NULL;
 }
