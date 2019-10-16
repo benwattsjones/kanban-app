@@ -1,4 +1,4 @@
-/* src/presenters/kanban-board-observer.c
+/* src/presenters/kanban-board-observer-interface.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -24,6 +24,7 @@ static void
 kanban_board_observer_default_init (KanbanBoardObserverInterface *iface)
 {
   // Add properties and signals to interface here
+  (void) iface;
 }
 
 void
