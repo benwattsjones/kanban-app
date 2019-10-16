@@ -1,4 +1,4 @@
-/* tests/kanban-column-store-tests.cpp
+/* tests/kanban-board-presenter-tests.cpp
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,7 +14,7 @@
 
 extern "C"
 {
-  #include "../src/presenters/kanban-column-store.h"
+  #include "../src/presenters/kanban-board-presenter.h"
   #include "../src/presenters/kanban-column-viewer-interface.h"
   #include "../src/presenters/model-observer-interface.h"
   #include "../src/presenters/kanban-list-store.h"

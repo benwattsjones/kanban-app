@@ -14,7 +14,7 @@
 
 #include "kanban-application.h"
 
-#include "presenters/kanban-column-store.h"
+#include "presenters/kanban-board-presenter.h"
 #include "presenters/kanban-column-viewer-interface.h"
 #include "views/kanban-window.h"
 #include "views/kanban-grid.h"
