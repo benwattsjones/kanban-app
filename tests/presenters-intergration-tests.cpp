@@ -71,12 +71,12 @@ extern "C"
 class PresentersCardsIntergrationTests : public ::testing::Test
 {
 protected:
-  KanbanColumnStore *presenter;
+  KanbanBoardPresenter *presenter;
   KanbanData model_data;
 
   void SetUp() override
   {
-    presenter = kanban_column_store_new (NULL);
+    presenter = kanban_board_presenter_new (NULL);
 
     model_data.card_id = 1;
     model_data.column_id = 1;
@@ -87,7 +87,7 @@ protected:
 
   void TearDown() override
   {
-    kanban_column_store_destroy (presenter);
+    kanban_board_presenter_destroy (presenter);
   }
 };
 
@@ -104,8 +104,8 @@ TEST_F (PresentersCardsIntergrationTests, checkCreateColumnSuccessful)
 {
   model_data.task = TASK_ADD_COLUMN;
   observer_model.notification (observer_model.instance, &model_data);
-  gpointer new_column = kanban_column_store_get_column (presenter,
-                                                        model_data.column_id);
+  gpointer new_column = kanban_board_presenter_get_column (presenter,
+                                                           model_data.column_id);
   EXPECT_NE (new_column, nullptr);
 }
 

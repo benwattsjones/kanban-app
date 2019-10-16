@@ -49,7 +49,7 @@ extern "C"
   {
   }
 
-  KanbanColumnStore *kanban_column_store_new (KanbanColumnViewer *view_observer)
+  KanbanBoardPresenter *kanban_board_presenter_new (KanbanColumnViewer *view_observer)
   {
     (void) view_observer;
     FunctionCallTracker.initialize_viewmodel_func_count =
@@ -57,7 +57,7 @@ extern "C"
     return NULL;
   }
 
-  void kanban_column_store_destroy (KanbanColumnStore *self)
+  void kanban_board_presenter_destroy (KanbanBoardPresenter *self)
   {
     (void) self;
     FunctionCallTracker.destroy_viewmodel_func_count =

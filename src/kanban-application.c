@@ -34,11 +34,11 @@ enum
 
 struct _KanbanApplication
 {
-  GtkApplication      parent_instance;
+  GtkApplication         parent_instance;
 
-  KanbanWindow       *window;
-  KanbanGrid         *board_view;
-  KanbanColumnStore  *viewmodel;
+  KanbanWindow          *window;
+  KanbanGrid            *board_view;
+  KanbanBoardPresenter  *viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -65,7 +65,7 @@ kanban_application_activate (GApplication *app)
   KanbanApplication *self = KANBAN_APPLICATION (app);
 
   self->board_view = kanban_grid_new();
-  self->viewmodel = kanban_column_store_new (KANBAN_COLUMN_VIEWER (self->board_view));
+  self->viewmodel = kanban_board_presenter_new (KANBAN_COLUMN_VIEWER (self->board_view));
   self->window = kanban_window_new (self);
 
   kanban_window_display_board (self->window, GTK_WIDGET (self->board_view));
@@ -102,7 +102,7 @@ static void
 kanban_application_shutdown (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  kanban_column_store_destroy (self->viewmodel);
+  kanban_board_presenter_destroy (self->viewmodel);
   G_APPLICATION_CLASS (kanban_application_parent_class)->shutdown (app);
 }
 

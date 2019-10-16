@@ -25,7 +25,7 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-struct _KanbanColumnStore
+struct _KanbanBoardPresenter
 {
   GObject                 parent_instance;
 
@@ -45,12 +45,12 @@ enum
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (KanbanColumnStore, kanban_column_store, G_TYPE_OBJECT)
+G_DEFINE_TYPE (KanbanBoardPresenter, kanban_board_presenter, G_TYPE_OBJECT)
 
 // helper funcs for readability
 
 inline GSequenceIter *
-get_card_iter_from_id (KanbanColumnStore *self,
+get_card_iter_from_id (KanbanBoardPresenter *self,
                        gint               card_id)
 {
   GSequenceIter *card_iter;
@@ -60,8 +60,8 @@ get_card_iter_from_id (KanbanColumnStore *self,
 }
 
 KanbanListStore *
-get_column_from_card_iter (KanbanColumnStore *self,
-                           GSequenceIter     *card_iter)
+get_column_from_card_iter (KanbanBoardPresenter *self,
+                           GSequenceIter        *card_iter)
 {
   GSequence *seq = g_sequence_iter_get_sequence (card_iter);
   KanbanListStore *column = g_hash_table_lookup (self->sequence_table, seq);
@@ -70,8 +70,8 @@ get_column_from_card_iter (KanbanColumnStore *self,
 }
 
 KanbanListStore *
-get_column_from_id (KanbanColumnStore *self,
-                    gint               column_id)
+get_column_from_id (KanbanBoardPresenter *self,
+                    gint                  column_id)
 {
   KanbanListStore *column;
   column = g_hash_table_lookup (self->column_table, GINT_TO_POINTER (column_id));
@@ -82,10 +82,10 @@ get_column_from_id (KanbanColumnStore *self,
 // implementation vfuncs for ModelObserverInterface
 
 static void
-kanban_column_store_add_card (void              *vself,
-                              const KanbanData  *card_data)
+kanban_board_presenter_add_card (void              *vself,
+                                 const KanbanData  *card_data)
 {
-  KanbanColumnStore *self = vself;
+  KanbanBoardPresenter *self = vself;
   KanbanListStore *column = get_column_from_id (self, card_data->column_id);
   GSequenceIter *card_iter = kanban_list_store_new_card (column, card_data); 
   g_hash_table_insert (self->card_table,
@@ -93,20 +93,20 @@ kanban_column_store_add_card (void              *vself,
 }
 
 static void
-kanban_column_store_edit_card (void              *vself,
-                               const KanbanData  *card_data)
+kanban_board_presenter_edit_card (void              *vself,
+                                  const KanbanData  *card_data)
 {
-  KanbanColumnStore *self = vself;
+  KanbanBoardPresenter *self = vself;
   GSequenceIter *card_iter = get_card_iter_from_id (self, card_data->card_id);
   KanbanCardViewModel *card = g_sequence_get (card_iter);
   kanban_card_viewmodel_update_contents (card, card_data->heading, card_data->content);
 }
 
 static void
-kanban_column_store_move_card (void              *vself,
-                               const KanbanData  *card_data)
+kanban_board_presenter_move_card (void              *vself,
+                                  const KanbanData  *card_data)
 {
-  KanbanColumnStore *self = vself;
+  KanbanBoardPresenter *self = vself;
   GSequenceIter *old_iter = get_card_iter_from_id (self, card_data->card_id);
   KanbanListStore *old_col = get_column_from_card_iter (self, old_iter);
   KanbanListStore *new_col = get_column_from_id (self, card_data->column_id);
@@ -127,10 +127,10 @@ kanban_column_store_move_card (void              *vself,
 }
 
 static void
-kanban_column_store_add_column (void              *vself,
-                                const KanbanData  *column_data)
+kanban_board_presenter_add_column (void              *vself,
+                                   const KanbanData  *column_data)
 {
-  KanbanColumnStore *self = vself;
+  KanbanBoardPresenter *self = vself;
   KanbanListStore *new_column = kanban_list_store_new (column_data->column_id,
                                                        column_data->heading);
   g_hash_table_insert (self->column_table,
@@ -143,46 +143,46 @@ kanban_column_store_add_column (void              *vself,
 }
 
 static void
-kanban_column_store_edit_column (void              *vself,
-                                 const KanbanData  *column_data)
+kanban_board_presenter_edit_column (void              *vself,
+                                    const KanbanData  *column_data)
 {
-  KanbanColumnStore *self = vself;
+  KanbanBoardPresenter *self = vself;
   g_print ("Edited column: ID: %d; HEADING: %s\n",
            column_data->column_id, column_data->heading);
 }
 
 static void
-kanban_column_store_move_column (void              *vself,
-                                 const KanbanData  *column_data)
+kanban_board_presenter_move_column (void              *vself,
+                                    const KanbanData  *column_data)
 {
-  KanbanColumnStore *self = vself;
+  KanbanBoardPresenter *self = vself;
   g_print ("Moved column: ID: %d; HEADING: %s\n",
            column_data->column_id, column_data->heading);
 }
 
 static ModelObserverInterface *
-model_observer_iface_init (KanbanColumnStore *self)
+model_observer_iface_init (KanbanBoardPresenter *self)
 {
   ModelObserverInterface *observer = g_malloc (sizeof *observer);
   observer->viewmodel = self;
-  observer->task_func[TASK_ADD_CARD] = kanban_column_store_add_card;
-  observer->task_func[TASK_EDIT_CARD] = kanban_column_store_edit_card;
-  observer->task_func[TASK_MOVE_CARD] = kanban_column_store_move_card;
-  observer->task_func[TASK_ADD_COLUMN] = kanban_column_store_add_column;
-  observer->task_func[TASK_EDIT_COLUMN] = kanban_column_store_edit_column;
-  observer->task_func[TASK_MOVE_COLUMN] = kanban_column_store_move_column;
+  observer->task_func[TASK_ADD_CARD] = kanban_board_presenter_add_card;
+  observer->task_func[TASK_EDIT_CARD] = kanban_board_presenter_edit_card;
+  observer->task_func[TASK_MOVE_CARD] = kanban_board_presenter_move_card;
+  observer->task_func[TASK_ADD_COLUMN] = kanban_board_presenter_add_column;
+  observer->task_func[TASK_EDIT_COLUMN] = kanban_board_presenter_edit_column;
+  observer->task_func[TASK_MOVE_COLUMN] = kanban_board_presenter_move_column;
   return observer;
 }
 
-// Functions for KanbanColumnStore GObject
+// Functions for KanbanBoardPresenter GObject
 
 static void
-kanban_column_store_set_property (GObject      *object,
+kanban_board_presenter_set_property (GObject      *object,
                                   guint         property_id,
                                   const GValue *value,
                                   GParamSpec   *pspec)
 {
-  KanbanColumnStore *self = KANBAN_COLUMN_STORE (object);
+  KanbanBoardPresenter *self = KANBAN_BOARD_PRESENTER (object);
 
   switch (property_id)
     {
@@ -197,12 +197,12 @@ kanban_column_store_set_property (GObject      *object,
 }
 
 static void
-kanban_column_store_get_property (GObject    *object,
+kanban_board_presenter_get_property (GObject    *object,
                                   guint       property_id,
                                   GValue     *value,
                                   GParamSpec *pspec)
 {
-  KanbanColumnStore *self = KANBAN_COLUMN_STORE (object);
+  KanbanBoardPresenter *self = KANBAN_BOARD_PRESENTER (object);
 
   switch (property_id)
     {
@@ -217,9 +217,9 @@ kanban_column_store_get_property (GObject    *object,
 }
 
 static void
-kanban_column_store_finalize (GObject *object)
+kanban_board_presenter_finalize (GObject *object)
 {
-  KanbanColumnStore *self = KANBAN_COLUMN_STORE (object);
+  KanbanBoardPresenter *self = KANBAN_BOARD_PRESENTER (object);
 
   deregister_kanban_viewmodel_observer (self->observer_object);
   g_free (self->observer_object);
@@ -227,11 +227,11 @@ kanban_column_store_finalize (GObject *object)
   g_clear_pointer (&self->sequence_table, g_hash_table_destroy);
   g_clear_pointer (&self->card_table, g_hash_table_destroy);
 
-  G_OBJECT_CLASS (kanban_column_store_parent_class)->finalize (object);
+  G_OBJECT_CLASS (kanban_board_presenter_parent_class)->finalize (object);
 }
 
 static void
-kanban_column_store_init (KanbanColumnStore *self)
+kanban_board_presenter_init (KanbanBoardPresenter *self)
 {
   self->card_table = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->sequence_table = g_hash_table_new (g_direct_hash, g_direct_equal);
@@ -242,12 +242,12 @@ kanban_column_store_init (KanbanColumnStore *self)
 }
 
 static void
-kanban_column_store_class_init (KanbanColumnStoreClass *klass)
+kanban_board_presenter_class_init (KanbanBoardPresenterClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  object_class->finalize = kanban_column_store_finalize;
-  object_class->set_property = kanban_column_store_set_property;
-  object_class->get_property = kanban_column_store_get_property;
+  object_class->finalize = kanban_board_presenter_finalize;
+  object_class->set_property = kanban_board_presenter_set_property;
+  object_class->get_property = kanban_board_presenter_get_property;
 
 
   obj_properties[PROP_VIEW_OBSERVER] =
@@ -259,16 +259,16 @@ kanban_column_store_class_init (KanbanColumnStoreClass *klass)
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
-KanbanColumnStore *
-kanban_column_store_new (KanbanColumnViewer *view_observer)
+KanbanBoardPresenter *
+kanban_board_presenter_new (KanbanColumnViewer *view_observer)
 {
-  return g_object_new (KANBAN_COLUMN_STORE_TYPE,
+  return g_object_new (KANBAN_TYPE_BOARD_PRESENTER,
                        "view-observer", view_observer,
                        NULL);
 }
 
 void
-kanban_column_store_destroy (KanbanColumnStore *self)
+kanban_board_presenter_destroy (KanbanBoardPresenter *self)
 {
   g_object_unref (self);
   self = NULL;
@@ -279,8 +279,8 @@ kanban_column_store_destroy (KanbanColumnStore *self)
 #ifdef TESTING_ONLY_ACCESS
 
 KanbanCardViewModel *
-kanban_column_store_get_card (KanbanColumnStore *self,
-                              gint               card_id)
+kanban_board_presenter_get_card (KanbanBoardPresenter *self,
+                                 gint               card_id)
 {
   GSequenceIter *card_iter = g_hash_table_lookup (self->card_table,
                                                   GINT_TO_POINTER (card_id));
@@ -288,8 +288,8 @@ kanban_column_store_get_card (KanbanColumnStore *self,
 }
 
 KanbanListStore *
-kanban_column_store_get_column (KanbanColumnStore *self,
-                                gint               column_id)
+kanban_board_presenter_get_column (KanbanBoardPresenter *self,
+                                   gint               column_id)
 {
   KanbanListStore *column = g_hash_table_lookup (self->column_table,
                                                   GINT_TO_POINTER (column_id));
@@ -297,7 +297,7 @@ kanban_column_store_get_column (KanbanColumnStore *self,
 }
 
 ModelObserverInterface *
-kanban_column_store_get_observer (KanbanColumnStore *self)
+kanban_board_presenter_get_observer (KanbanBoardPresenter *self)
 {
   return self->observer_object;
 }
