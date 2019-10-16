@@ -21,7 +21,7 @@
 
 G_BEGIN_DECLS
 
-#define KANBAN_CARD_VIEWMODEL_TYPE (kanban_card_viewmodel_get_type ())
+#define KANBAN_TYPE_CARD_VIEWMODEL (kanban_card_viewmodel_get_type ())
 
 G_DECLARE_FINAL_TYPE (KanbanCardViewModel, kanban_card_viewmodel, KANBAN, CARD_VIEWMODEL, GObject)
 

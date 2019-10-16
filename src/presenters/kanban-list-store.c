@@ -55,7 +55,7 @@ static GType
 kanban_list_model_get_type (GListModel *model)
 {
   (void) model;
-  return KANBAN_CARD_VIEWMODEL_TYPE;
+  return KANBAN_TYPE_CARD_VIEWMODEL;
 }
 
 static guint
