@@ -12,8 +12,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_COLUMN_VIEWER_INTERFACE_H
-#define KANBAN_COLUMN_VIEWER_INTERFACE_H
+#ifndef KANBAN_BOARD_OBSERVER_INTERFACE_H
+#define KANBAN_BOARD_OBSERVER_INTERFACE_H
 
 #include "kanban-list-viewer-interface.h"
 
@@ -21,24 +21,24 @@
 
 G_BEGIN_DECLS
 
-#define KANBAN_COLUMN_VIEWER_TYPE (kanban_column_viewer_get_type ())
+#define KANBAN_TYPE_BOARD_OBSERVER (kanban_board_observer_get_type ())
 
-G_DECLARE_INTERFACE (KanbanColumnViewer, kanban_column_viewer, KANBAN, COLUMN_VIEWER, GObject)
+G_DECLARE_INTERFACE (KanbanBoardObserver, kanban_board_observer, KANBAN, BOARD_OBSERVER, GObject)
 
-struct _KanbanColumnViewerInterface
+struct _KanbanBoardObserverInterface
 {
   GTypeInterface parent_iface;
 
-  void (*add_column) (KanbanColumnViewer *self,
-                      KanbanListViewer   *new_column,
-                      gint                priority);
+  void (*add_column) (KanbanBoardObserver *self,
+                      KanbanListViewer    *new_column,
+                      gint                 priority);
 };
 
-void kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                      KanbanListViewer   *new_column,
-                                      gint                priority);
+void kanban_board_observer_add_column (KanbanBoardObserver *self,
+                                       KanbanListViewer    *new_column,
+                                       gint                 priority);
 
 G_END_DECLS
 
-#endif /* KANBAN_COLUMN_VIEWER_INTERFACE_H */
+#endif /* KANBAN_BOARD_OBSERVER_INTERFACE_H */
 

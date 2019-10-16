@@ -18,24 +18,24 @@
 
 #include <glib-object.h>
 
-G_DEFINE_INTERFACE (KanbanColumnViewer, kanban_column_viewer, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (KanbanBoardObserver, kanban_board_observer, G_TYPE_OBJECT)
 
 static void
-kanban_column_viewer_default_init (KanbanColumnViewerInterface *iface)
+kanban_board_observer_default_init (KanbanBoardObserverInterface *iface)
 {
   // Add properties and signals to interface here
 }
 
 void
-kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                 KanbanListViewer   *new_column,
-                                 gint                priority)
+kanban_board_observer_add_column (KanbanBoardObserver *self,
+                                  KanbanListViewer    *new_column,
+                                  gint                 priority)
 {
   if (!self)
     return;
-  KanbanColumnViewerInterface *iface;
-  g_return_if_fail (KANBAN_IS_COLUMN_VIEWER (self));
-  iface = KANBAN_COLUMN_VIEWER_GET_IFACE (self);
+  KanbanBoardObserverInterface *iface;
+  g_return_if_fail (KANBAN_IS_BOARD_OBSERVER (self));
+  iface = KANBAN_BOARD_OBSERVER_GET_IFACE (self);
   g_return_if_fail (iface->add_column != NULL);
   iface->add_column (self, new_column, priority);
 }

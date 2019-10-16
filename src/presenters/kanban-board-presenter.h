@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanBoardPresenter, kanban_board_presenter, KANBAN, BOARD_PRESENTER, GObject)
 
-KanbanBoardPresenter   *kanban_board_presenter_new           (KanbanColumnViewer *view_observer);
+KanbanBoardPresenter   *kanban_board_presenter_new           (KanbanBoardObserver   *view_observer);
 void                    kanban_board_presenter_destroy       (KanbanBoardPresenter  *self);
 
 

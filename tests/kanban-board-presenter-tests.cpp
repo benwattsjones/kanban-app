@@ -42,9 +42,9 @@ extern "C"
     (void) observer;
   }
 
-  void kanban_column_viewer_add_column (KanbanColumnViewer *self,
-                                        KanbanListViewer   *new_column,
-                                        gint                priority)
+  void kanban_board_observer_add_column (KanbanBoardObserver *self,
+                                         KanbanListViewer    *new_column,
+                                         gint                 priority)
   {
     (void) self;
     (void) new_column;

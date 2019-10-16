@@ -28,18 +28,18 @@ struct _KanbanGrid
   GtkCssProvider *css_provider;
 };
 
-static void kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface);
+static void kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (KanbanGrid, kanban_grid, GTK_TYPE_GRID,
-                         G_IMPLEMENT_INTERFACE (KANBAN_COLUMN_VIEWER_TYPE,
-                                                kanban_column_viewer_iface_init))
+                         G_IMPLEMENT_INTERFACE (KANBAN_TYPE_BOARD_OBSERVER,
+                                                kanban_board_observer_iface_init))
 
-// KanbanColumnViewer iface implementation:
+// KanbanBoardObserver iface implementation:
 
 static void
-kanban_grid_add_column (KanbanColumnViewer *self,
-                        KanbanListViewer   *new_column,
-                        gint                priority)
+kanban_grid_add_column (KanbanBoardObserver *self,
+                        KanbanListViewer    *new_column,
+                        gint                 priority)
 {
   // TODO free KanbanListBox object if column deleted
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
@@ -48,7 +48,7 @@ kanban_grid_add_column (KanbanColumnViewer *self,
 }
 
 static void
-kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface)
+kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface)
 {
   iface->add_column = kanban_grid_add_column;
 }

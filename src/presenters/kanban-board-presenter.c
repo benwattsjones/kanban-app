@@ -34,7 +34,7 @@ struct _KanbanBoardPresenter
   GHashTable             *sequence_table;
 
   ModelObserverInterface *observer_object;
-  KanbanColumnViewer     *view_observer;
+  KanbanBoardObserver    *view_observer;
 };
 
 enum
@@ -137,9 +137,9 @@ kanban_board_presenter_add_column (void              *vself,
                        GINT_TO_POINTER (column_data->column_id), new_column);
   GSequence *column_sequence = kanban_list_store_get_sequence (new_column);
   g_hash_table_insert (self->sequence_table, column_sequence, new_column);
-  kanban_column_viewer_add_column (self->view_observer,
-                                   KANBAN_LIST_VIEWER (new_column),
-                                   column_data->priority);
+  kanban_board_observer_add_column (self->view_observer,
+                                    KANBAN_LIST_VIEWER (new_column),
+                                    column_data->priority);
 }
 
 static void
@@ -253,14 +253,14 @@ kanban_board_presenter_class_init (KanbanBoardPresenterClass *klass)
   obj_properties[PROP_VIEW_OBSERVER] =
     g_param_spec_pointer("view-observer",
                          "View Observer",
-                         "GUI observer bound via KanbanColumnViewer iface",
+                         "GUI observer bound via KanbanBoardObserver iface",
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
 
 KanbanBoardPresenter *
-kanban_board_presenter_new (KanbanColumnViewer *view_observer)
+kanban_board_presenter_new (KanbanBoardObserver *view_observer)
 {
   return g_object_new (KANBAN_TYPE_BOARD_PRESENTER,
                        "view-observer", view_observer,

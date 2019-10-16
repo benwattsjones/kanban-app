@@ -49,7 +49,7 @@ extern "C"
   {
   }
 
-  KanbanBoardPresenter *kanban_board_presenter_new (KanbanColumnViewer *view_observer)
+  KanbanBoardPresenter *kanban_board_presenter_new (KanbanBoardObserver *view_observer)
   {
     (void) view_observer;
     FunctionCallTracker.initialize_viewmodel_func_count =
