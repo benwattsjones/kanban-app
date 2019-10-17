@@ -39,24 +39,11 @@ GSequenceIter          *kanban_column_viewmodel_new_card
 GSequence              *kanban_column_viewmodel_get_sequence
                                               (KanbanColumnViewModel  *self);
 
-GSequenceIter          *kanban_column_viewmodel_get_iter_at_pos 
-                                              (KanbanColumnViewModel  *self,
-                                               gint                    position);
-
-void                    kanban_column_viewmodel_alert_removed
-                                              (KanbanColumnViewModel  *self,
-                                               gint                    position);
-
-void                    kanban_column_viewmodel_alert_added 
-                                              (KanbanColumnViewModel  *self,
-                                               gint                    position);
-
-void                    kanban_column_viewmodel_alert_moved
-                                              (KanbanColumnViewModel  *self,
-                                               gint                    old_position,
+void                    kanban_column_viewmodel_move_card 
+                                              (KanbanColumnViewModel  *current_column,
+                                               KanbanColumnViewModel  *new_column,
+                                               GSequenceIter          *card_iter,
                                                gint                    new_position);
-
-
 
 G_END_DECLS
 

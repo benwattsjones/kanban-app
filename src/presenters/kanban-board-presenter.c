@@ -110,21 +110,7 @@ kanban_board_presenter_move_card (void              *vself,
   GSequenceIter *old_iter = get_card_iter_from_id (self, card_data->card_id);
   KanbanColumnViewModel *old_col = get_column_from_card_iter (self, old_iter);
   KanbanColumnViewModel *new_col = get_column_from_id (self, card_data->column_id);
-  gint old_position = g_sequence_iter_get_position (old_iter);
-  gint new_position = card_data->priority;
-  GSequenceIter *new_iter = kanban_column_viewmodel_get_iter_at_pos (new_col,
-                                                                     new_position);
-
-  g_sequence_move (old_iter, new_iter);
-  if (new_col != old_col)
-    {
-      kanban_column_viewmodel_alert_removed (old_col, old_position);
-      kanban_column_viewmodel_alert_added (new_col, new_position);
-    }
-  else
-    {
-      kanban_column_viewmodel_alert_moved (old_col, old_position, new_position);
-    }
+  kanban_column_viewmodel_move_card (old_col, new_col, old_iter, card_data->priority);
 }
 
 static void

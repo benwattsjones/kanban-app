@@ -236,35 +236,23 @@ kanban_column_viewmodel_get_sequence (KanbanColumnViewModel *self)
   return self->card_list;
 }
 
-GSequenceIter *
-kanban_column_viewmodel_get_iter_at_pos (KanbanColumnViewModel *self,
-                                         gint                   position)
-{
-  return g_sequence_get_iter_at_pos (self->card_list, position);
-}
-
 void
-kanban_column_viewmodel_alert_removed (KanbanColumnViewModel *self,
-                                       gint                   position)
+kanban_column_viewmodel_move_card (KanbanColumnViewModel *current_column,
+                                   KanbanColumnViewModel *new_column,
+                                   GSequenceIter         *card_iter,
+                                   gint                   new_position)
 {
-  self->num_cards--;
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
-}
+  gint old_position = g_sequence_iter_get_position (card_iter);
+  GSequenceIter *new_iter = g_sequence_get_iter_at_pos (new_column->card_list,
+                                                        new_position);
+  g_sequence_move (card_iter, new_iter);
 
-void
-kanban_column_viewmodel_alert_added (KanbanColumnViewModel *self,
-                                     gint                   position)
-{
-  self->num_cards++;
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
-}
-
-void
-kanban_column_viewmodel_alert_moved (KanbanColumnViewModel *self,
-                                     gint                   old_position,
-                                     gint                   new_position)
-{
-  g_list_model_items_changed (G_LIST_MODEL (self), old_position, 1, 0);
-  g_list_model_items_changed (G_LIST_MODEL (self), new_position, 0, 1);
+  if (new_column != current_column)
+    {
+      current_column->num_cards--;
+      new_column->num_cards++;
+    }
+  g_list_model_items_changed (G_LIST_MODEL (current_column), old_position, 1, 0);
+  g_list_model_items_changed (G_LIST_MODEL (new_column), new_position, 0, 1);
 }
 
