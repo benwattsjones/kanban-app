@@ -180,3 +180,125 @@ TEST_F (KanbanColumnViewModelTests,
   EXPECT_EQ (3, num_items);
 }
 
+TEST_F (KanbanColumnViewModelTests,
+        MoveCard_OldAndNewSame_NoChangeNoErrors)
+{
+  GSequenceIter *card_iter;
+  int num_items_before, num_items_after;
+  // Note that in C (not C++) you can implicitly convert void* to actual type
+  gpointer first_card_before, first_card_after;
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
+  card_data.priority++;
+  card_data.card_id++;
+  card_iter = kanban_column_viewmodel_new_card (viewmodel, &card_data);
+
+  first_card_before = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
+  num_items_before = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  kanban_column_viewmodel_move_card (viewmodel, viewmodel,
+                                     card_iter, card_data.priority);
+  num_items_after = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  first_card_after = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
+
+  ASSERT_NE (first_card_after, nullptr);
+  ASSERT_NE (num_items_after, 0);
+  EXPECT_EQ (first_card_after, first_card_before);
+  EXPECT_EQ (num_items_after, num_items_before);
+
+  g_object_unref (first_card_before);
+  g_object_unref (first_card_after);
+}
+
+TEST_F (KanbanColumnViewModelTests,
+        MoveCard_ColumnSamePositionIncrease_CardMovesCountUnchanged)
+{
+  GSequenceIter *card_iter;
+  int num_items_before, num_items_after;
+  gpointer first_card_before, first_card_after, second_card_before, second_card_after;
+  card_iter = kanban_column_viewmodel_new_card (viewmodel, &card_data);
+  card_data.priority++;
+  card_data.card_id++;
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
+
+  first_card_before = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
+  second_card_before = g_list_model_get_item (G_LIST_MODEL (viewmodel), 1);
+  num_items_before = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  kanban_column_viewmodel_move_card (viewmodel, viewmodel,
+                                     card_iter, card_data.priority);
+  num_items_after = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  first_card_after = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
+  second_card_after = g_list_model_get_item (G_LIST_MODEL (viewmodel), 1);
+
+  ASSERT_NE (first_card_after, nullptr);
+  ASSERT_NE (num_items_after, 0);
+  EXPECT_EQ (first_card_after, second_card_before);
+  EXPECT_EQ (second_card_after, first_card_before);
+  EXPECT_EQ (num_items_after, num_items_before);
+
+  g_object_unref (first_card_before);
+  g_object_unref (first_card_after);
+  g_object_unref (second_card_before);
+  g_object_unref (second_card_after);
+}
+
+TEST_F (KanbanColumnViewModelTests,
+        MoveCard_ColumnSamePositionDecrease_CardMovesCountUnchanged)
+{
+  GSequenceIter *card_iter;
+  int num_items_before, num_items_after;
+  gpointer first_card_before, first_card_after, second_card_before, second_card_after;
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
+  card_data.priority++;
+  card_data.card_id++;
+  card_iter = kanban_column_viewmodel_new_card (viewmodel, &card_data);
+
+  first_card_before = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
+  second_card_before = g_list_model_get_item (G_LIST_MODEL (viewmodel), 1);
+  num_items_before = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  kanban_column_viewmodel_move_card (viewmodel, viewmodel,
+                                     card_iter, --card_data.priority);
+  num_items_after = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  first_card_after = g_list_model_get_item (G_LIST_MODEL (viewmodel), 0);
+  second_card_after = g_list_model_get_item (G_LIST_MODEL (viewmodel), 1);
+
+  ASSERT_NE (first_card_after, nullptr);
+  ASSERT_NE (num_items_after, 0);
+  EXPECT_EQ (first_card_after, second_card_before);
+  EXPECT_EQ (second_card_after, first_card_before);
+  EXPECT_EQ (num_items_after, num_items_before);
+
+  g_object_unref (first_card_before);
+  g_object_unref (first_card_after);
+  g_object_unref (second_card_before);
+  g_object_unref (second_card_after);
+}
+
+TEST_F (KanbanColumnViewModelTests,
+        MoveCard_ColumnChanges_CardMovesCountsUpdated)
+{
+  GSequenceIter *card_iter;
+  KanbanColumnViewModel *new_column;
+  int num_items_col1_before, num_items_col1_after;
+  int num_items_col2_before, num_items_col2_after;
+  gpointer card_before, card_after;
+  new_column = kanban_column_viewmodel_new (++card_data.column_id, "Column Heading");
+  card_iter = kanban_column_viewmodel_new_card (viewmodel, &card_data);
+
+  card_before = g_list_model_get_item (G_LIST_MODEL (viewmodel), card_data.priority);
+  num_items_col1_before = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  num_items_col2_before = g_list_model_get_n_items (G_LIST_MODEL (new_column));
+  kanban_column_viewmodel_move_card (viewmodel, new_column,
+                                     card_iter, card_data.priority);
+  num_items_col1_after = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
+  num_items_col2_after = g_list_model_get_n_items (G_LIST_MODEL (new_column));
+  card_after = g_list_model_get_item (G_LIST_MODEL (new_column), card_data.priority);
+
+  ASSERT_NE (card_after, nullptr);
+  EXPECT_EQ (card_after, card_before);
+  EXPECT_EQ (num_items_col2_after, num_items_col1_before);
+  EXPECT_EQ (num_items_col1_after, num_items_col1_before - 1);
+
+  g_object_unref (card_before);
+  g_object_unref (card_after);
+  kanban_column_viewmodel_destroy (new_column);
+}
+

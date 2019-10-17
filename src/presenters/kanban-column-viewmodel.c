@@ -243,11 +243,16 @@ kanban_column_viewmodel_move_card (KanbanColumnViewModel *current_column,
                                    gint                   new_position)
 {
   gint old_position = g_sequence_iter_get_position (card_iter);
+  gboolean columns_same = (new_column == current_column);
+  gint corrected_position = (columns_same && new_position > old_position) ?
+      new_position+1 : new_position;
   GSequenceIter *new_iter = g_sequence_get_iter_at_pos (new_column->card_list,
-                                                        new_position);
+                                                        corrected_position);
+  if (card_iter == new_iter)
+    return;
   g_sequence_move (card_iter, new_iter);
 
-  if (new_column != current_column)
+  if (!columns_same)
     {
       current_column->num_cards--;
       new_column->num_cards++;
