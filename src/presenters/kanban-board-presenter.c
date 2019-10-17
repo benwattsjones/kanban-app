@@ -49,7 +49,7 @@ G_DEFINE_TYPE (KanbanBoardPresenter, kanban_board_presenter, G_TYPE_OBJECT)
 
 // helper funcs for readability
 
-inline GSequenceIter *
+static inline GSequenceIter *
 get_card_iter_from_id (KanbanBoardPresenter *self,
                        gint               card_id)
 {
@@ -59,7 +59,7 @@ get_card_iter_from_id (KanbanBoardPresenter *self,
   return card_iter;
 }
 
-KanbanColumnViewModel *
+static KanbanColumnViewModel *
 get_column_from_card_iter (KanbanBoardPresenter *self,
                            GSequenceIter        *card_iter)
 {
@@ -69,7 +69,7 @@ get_column_from_card_iter (KanbanBoardPresenter *self,
   return column;
 }
 
-KanbanColumnViewModel *
+static KanbanColumnViewModel *
 get_column_from_id (KanbanBoardPresenter *self,
                     gint                  column_id)
 {
@@ -179,9 +179,9 @@ model_observer_iface_init (KanbanBoardPresenter *self)
 
 static void
 kanban_board_presenter_set_property (GObject      *object,
-                                  guint         property_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
+                                     guint         property_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
 {
   KanbanBoardPresenter *self = KANBAN_BOARD_PRESENTER (object);
 
@@ -199,9 +199,9 @@ kanban_board_presenter_set_property (GObject      *object,
 
 static void
 kanban_board_presenter_get_property (GObject    *object,
-                                  guint       property_id,
-                                  GValue     *value,
-                                  GParamSpec *pspec)
+                                     guint       property_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   KanbanBoardPresenter *self = KANBAN_BOARD_PRESENTER (object);
 
@@ -281,7 +281,7 @@ kanban_board_presenter_destroy (KanbanBoardPresenter *self)
 
 KanbanCardViewModel *
 kanban_board_presenter_get_card (KanbanBoardPresenter *self,
-                                 gint               card_id)
+                                 gint                  card_id)
 {
   GSequenceIter *card_iter = g_hash_table_lookup (self->card_table,
                                                   GINT_TO_POINTER (card_id));
