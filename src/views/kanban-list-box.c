@@ -15,7 +15,7 @@
 #include "kanban-list-box.h"
 
 #include "../presenters/kanban-card-viewmodel.h"
-#include "../presenters/kanban-list-viewer-interface.h"
+#include "../presenters/kanban-column-observable-interface.h"
 #include <kanban-config.h>
 
 #include <gtk/gtk.h>

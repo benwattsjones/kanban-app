@@ -18,7 +18,7 @@ extern "C"
   #include "../src/presenters/kanban-board-observer-interface.h"
   #include "../src/presenters/model-observer-interface.h"
   #include "../src/presenters/kanban-column-viewmodel.h"
-  #include "../src/presenters/kanban-list-viewer-interface.h"
+  #include "../src/presenters/kanban-column-observable-interface.h"
   #include "../src/presenters/kanban-card-viewmodel.h"
   #include "../src/models/kanban-data.h"
 

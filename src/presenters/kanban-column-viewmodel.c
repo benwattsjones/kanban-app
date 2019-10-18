@@ -14,7 +14,7 @@
 
 #include "kanban-column-viewmodel.h"
 
-#include "kanban-list-viewer-interface.h"
+#include "kanban-column-observable-interface.h"
 #include "kanban-card-viewmodel.h"
 #include "../models/kanban-data.h"
 

@@ -15,7 +15,7 @@
 extern "C"
 {
   #include "../src/presenters/kanban-board-observer-interface.h"
-  #include "../src/presenters/kanban-list-viewer-interface.h"
+  #include "../src/presenters/kanban-column-observable-interface.h"
 
   #include <gtk/gtk.h>
 }

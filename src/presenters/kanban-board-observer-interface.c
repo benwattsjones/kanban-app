@@ -14,7 +14,7 @@
 
 #include "kanban-board-observer-interface.h"
 
-#include "kanban-list-viewer-interface.h"
+#include "kanban-column-observable-interface.h"
 
 #include <glib-object.h>
 

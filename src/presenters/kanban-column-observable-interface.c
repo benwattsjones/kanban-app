@@ -1,4 +1,4 @@
-/* src/presenters/kanban-list-viewer-interface.c
+/* src/presenters/kanban-column-observable-interface.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,7 +12,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "kanban-list-viewer-interface.h"
+#include "kanban-column-observable-interface.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>

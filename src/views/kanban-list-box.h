@@ -15,7 +15,7 @@
 #ifndef KANBAN_LIST_BOX_H
 #define KANBAN_LIST_BOX_H
 
-#include "../presenters/kanban-list-viewer-interface.h"
+#include "../presenters/kanban-column-observable-interface.h"
 
 #include <gtk/gtk.h>
 

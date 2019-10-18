@@ -15,7 +15,7 @@
 #ifndef KANBAN_BOARD_OBSERVER_INTERFACE_H
 #define KANBAN_BOARD_OBSERVER_INTERFACE_H
 
-#include "kanban-list-viewer-interface.h"
+#include "kanban-column-observable-interface.h"
 
 #include <glib-object.h>
 

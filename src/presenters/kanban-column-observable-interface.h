@@ -1,4 +1,4 @@
-/* src/presenters/kanban-list-viewer-interface.h
+/* src/presenters/kanban-column-observable-interface.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
