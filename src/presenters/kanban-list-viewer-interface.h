@@ -12,28 +12,29 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_LIST_VIEWER_INTERFACE_H
-#define KANBAN_LIST_VIEWER_INTERFACE_H
+#ifndef KANBAN_COLUMN_OBSERVABLE_INTERFACE_H
+#define KANBAN_COLUMN_OBSERVABLE_INTERFACE_H
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define KANBAN_LIST_VIEWER_TYPE (kanban_list_viewer_get_type ())
+#define KANBAN_TYPE_COLUMN_OBSERVABLE (kanban_column_observable_get_type ())
 
-G_DECLARE_INTERFACE (KanbanListViewer, kanban_list_viewer, KANBAN, LIST_VIEWER, GObject)
+G_DECLARE_INTERFACE (KanbanColumnObservable, kanban_column_observable,
+                     KANBAN, COLUMN_OBSERVABLE, GObject)
 
-struct _KanbanListViewerInterface
+struct _KanbanColumnObservableInterface
 {
   GTypeInterface parent_iface;
 
-  GtkTextBuffer *   (*get_heading)    (KanbanListViewer *self);
+  GtkTextBuffer *   (*get_heading)    (KanbanColumnObservable *self);
 };
 
-GtkTextBuffer  *kanban_list_viewer_get_heading  (KanbanListViewer *self);
+GtkTextBuffer  *kanban_column_observable_get_heading  (KanbanColumnObservable *self);
 
 G_END_DECLS
 
-#endif /* KANBAN_LIST_VIEWER_INTERFACE_H */
+#endif /* KANBAN_COLUMN_OBSERVABLE_INTERFACE_H */
 

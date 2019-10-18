@@ -41,9 +41,9 @@ extern "C"
                                                   kanban_board_observer_iface_init))
 
   static void
-  mock_iface_object_add_column (KanbanBoardObserver *self,
-                                KanbanListViewer    *new_column,
-                                gint                 priority)
+  mock_iface_object_add_column (KanbanBoardObserver     *self,
+                                KanbanColumnObservable  *new_column,
+                                gint                     priority)
   {
     ++add_column_called;
   }

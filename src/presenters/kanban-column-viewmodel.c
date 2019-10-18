@@ -41,13 +41,13 @@ enum
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 static void g_list_model_iface_init (GListModelInterface *iface);
-static void kanban_list_viewer_iface_init (KanbanListViewerInterface *iface);
+static void kanban_column_observable_iface_init (KanbanColumnObservableInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (KanbanColumnViewModel, kanban_column_viewmodel, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
                                                 g_list_model_iface_init)
-                         G_IMPLEMENT_INTERFACE (KANBAN_LIST_VIEWER_TYPE,
-                                                kanban_list_viewer_iface_init))
+                         G_IMPLEMENT_INTERFACE (KANBAN_TYPE_COLUMN_OBSERVABLE,
+                                                kanban_column_observable_iface_init))
 
 /* GListModel iface */
 
@@ -85,13 +85,13 @@ g_list_model_iface_init (GListModelInterface *iface)
 }
 
 static GtkTextBuffer *
-kanban_column_viewmodel_get_heading (KanbanListViewer *model)
+kanban_column_viewmodel_get_heading (KanbanColumnObservable *model)
 {
   return KANBAN_COLUMN_VIEWMODEL (model)->column_name;
 }
 
 static void
-kanban_list_viewer_iface_init (KanbanListViewerInterface *iface)
+kanban_column_observable_iface_init (KanbanColumnObservableInterface *iface)
 {
   iface->get_heading = kanban_column_viewmodel_get_heading;
 }

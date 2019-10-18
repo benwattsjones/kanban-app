@@ -28,9 +28,9 @@ kanban_board_observer_default_init (KanbanBoardObserverInterface *iface)
 }
 
 void
-kanban_board_observer_add_column (KanbanBoardObserver *self,
-                                  KanbanListViewer    *new_column,
-                                  gint                 priority)
+kanban_board_observer_add_column (KanbanBoardObserver     *self,
+                                  KanbanColumnObservable  *new_column,
+                                  gint                     priority)
 {
   if (!self)
     return;

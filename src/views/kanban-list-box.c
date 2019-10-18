@@ -23,12 +23,12 @@
 
 struct _KanbanListBox
 {
-  GtkBox             parent_instance;
+  GtkBox                   parent_instance;
 
-  GtkWidget         *column_heading;
-  GtkWidget         *column_contents;
+  GtkWidget               *column_heading;
+  GtkWidget               *column_contents;
 
-  KanbanListViewer  *column_data;
+  KanbanColumnObservable  *column_data;
 };
 
 enum
@@ -93,7 +93,7 @@ kanban_list_box_constructed (GObject *object)
                            create_card_widget_func, NULL, g_free);
 
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->column_heading),
-                            kanban_list_viewer_get_heading (self->column_data));
+                            kanban_column_observable_get_heading (self->column_data));
 }
 
 static void
@@ -114,7 +114,7 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
   obj_properties[PROP_COLUMN_DATA] =
     g_param_spec_pointer("column-data",
                          "Column Data",
-                         "Card data of column to bind to via KanbanListViewer iface",
+                         "Column data to bind to via KanbanColumnObservable iface",
                          G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
@@ -128,7 +128,7 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
 }
 
 KanbanListBox *
-kanban_list_box_new (KanbanListViewer *column_data)
+kanban_list_box_new (KanbanColumnObservable *column_data)
 {
   return g_object_new (KANBAN_LIST_BOX_TYPE,
                        "column-data", column_data,

@@ -125,7 +125,7 @@ kanban_board_presenter_add_column (void              *vself,
   GSequence *column_sequence = kanban_column_viewmodel_get_sequence (new_column);
   g_hash_table_insert (self->sequence_table, column_sequence, new_column);
   kanban_board_observer_add_column (self->view_observer,
-                                    KANBAN_LIST_VIEWER (new_column),
+                                    KANBAN_COLUMN_OBSERVABLE (new_column),
                                     column_data->priority);
 }
 

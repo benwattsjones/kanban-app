@@ -37,9 +37,9 @@ G_DEFINE_TYPE_WITH_CODE (KanbanGrid, kanban_grid, GTK_TYPE_GRID,
 // KanbanBoardObserver iface implementation:
 
 static void
-kanban_grid_add_column (KanbanBoardObserver *self,
-                        KanbanListViewer    *new_column,
-                        gint                 priority)
+kanban_grid_add_column (KanbanBoardObserver     *self,
+                        KanbanColumnObservable  *new_column,
+                        gint                     priority)
 {
   // TODO free KanbanListBox object if column deleted
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);

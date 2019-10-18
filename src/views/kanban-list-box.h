@@ -25,7 +25,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkBox)
 
-KanbanListBox *kanban_list_box_new (KanbanListViewer *column_data);
+KanbanListBox *kanban_list_box_new (KanbanColumnObservable *column_data);
 
 G_END_DECLS
 
