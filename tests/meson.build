@@ -49,6 +49,17 @@ test('column_viewmodel_tests',
     suite: 'unit',
 )
 
+test('column_observable_interface_tests',
+    executable('column_observable_interface_tests',
+        files('../src/presenters/kanban-column-observable-interface.c',
+              '../src/presenters/kanban-column-viewmodel.c',
+              '../src/presenters/kanban-card-viewmodel.c',
+              'kanban-column-observable-interface-tests.cpp'),
+        kwargs: default_test_args,
+    ),
+    suite: 'unit',
+)
+
 test('board_presenter_tests',
     executable('board_presenter_tests',
         files('../src/presenters/kanban-board-presenter.c',
