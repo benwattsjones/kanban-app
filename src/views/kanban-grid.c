@@ -21,7 +21,7 @@
 
 #include <gtk/gtk.h>
 
-struct _KanbanGrid
+struct _KanbanBoardView
 {
   GtkGrid         parent_instance;
 
@@ -30,16 +30,16 @@ struct _KanbanGrid
 
 static void kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (KanbanGrid, kanban_grid, GTK_TYPE_GRID,
+G_DEFINE_TYPE_WITH_CODE (KanbanBoardView, kanban_board_view, GTK_TYPE_GRID,
                          G_IMPLEMENT_INTERFACE (KANBAN_TYPE_BOARD_OBSERVER,
                                                 kanban_board_observer_iface_init))
 
 // KanbanBoardObserver iface implementation:
 
 static void
-kanban_grid_add_column (KanbanBoardObserver     *self,
-                        KanbanColumnObservable  *new_column,
-                        gint                     priority)
+kanban_board_view_add_column (KanbanBoardObserver     *self,
+                              KanbanColumnObservable  *new_column,
+                              gint                     priority)
 {
   // TODO free KanbanListBox object if column deleted
   KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
@@ -50,21 +50,21 @@ kanban_grid_add_column (KanbanBoardObserver     *self,
 static void
 kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface)
 {
-  iface->add_column = kanban_grid_add_column;
+  iface->add_column = kanban_board_view_add_column;
 }
 
-// KanbanGrid GObject implementation:
+// KanbanBoardView GObject implementation:
 
 static void
-kanban_grid_finalize (GObject *object)
+kanban_board_view_finalize (GObject *object)
 {
-  KanbanGrid *self = KANBAN_GRID (object);
+  KanbanBoardView *self = KANBAN_BOARD_VIEW (object);
 
   g_object_unref (self->css_provider);
 }
 
 static void
-kanban_grid_init (KanbanGrid *self)
+kanban_board_view_init (KanbanBoardView *self)
 {
   self->css_provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (self->css_provider,
@@ -77,19 +77,19 @@ kanban_grid_init (KanbanGrid *self)
 }
 
 static void
-kanban_grid_class_init (KanbanGridClass *klass)
+kanban_board_view_class_init (KanbanBoardViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = kanban_grid_finalize;
+  object_class->finalize = kanban_board_view_finalize;
 
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
                                                GRESOURCE_PREFIX "board.ui");
 }
 
-KanbanGrid *
-kanban_grid_new ()
+KanbanBoardView *
+kanban_board_view_new ()
 {
-  return g_object_new (KANBAN_GRID_TYPE, NULL);
+  return g_object_new (KANBAN_TYPE_BOARD_VIEW, NULL);
 }
 

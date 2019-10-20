@@ -12,20 +12,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_GRID_H
-#define KANBAN_GRID_H
+#ifndef KANBAN_BOARD_VIEW_H
+#define KANBAN_BOARD_VIEW_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define KANBAN_GRID_TYPE (kanban_grid_get_type ())
+#define KANBAN_TYPE_BOARD_VIEW (kanban_board_view_get_type ())
 
-G_DECLARE_FINAL_TYPE (KanbanGrid, kanban_grid, KANBAN, GRID, GtkGrid)
+G_DECLARE_FINAL_TYPE (KanbanBoardView, kanban_board_view, KANBAN, BOARD_VIEW, GtkGrid)
 
-KanbanGrid *kanban_grid_new ();
+KanbanBoardView *kanban_board_view_new ();
 
 G_END_DECLS
 
-#endif /* KANBAN_GRID_H */
+#endif /* KANBAN_BOARD_VIEW_H */
 

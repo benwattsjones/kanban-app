@@ -37,7 +37,7 @@ struct _KanbanApplication
   GtkApplication         parent_instance;
 
   KanbanWindow          *window;
-  KanbanGrid            *board_view;
+  KanbanBoardView       *board_view;
   KanbanBoardPresenter  *viewmodel;
 };
 
@@ -64,7 +64,7 @@ kanban_application_activate (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
 
-  self->board_view = kanban_grid_new();
+  self->board_view = kanban_board_view_new();
   self->viewmodel = kanban_board_presenter_new (KANBAN_BOARD_OBSERVER (self->board_view));
   self->window = kanban_window_new (self);
 

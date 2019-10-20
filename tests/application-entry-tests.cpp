@@ -64,7 +64,7 @@ extern "C"
         ++FunctionCallTracker.func_call_counter;
   }
 
-  KanbanGrid *kanban_grid_new ()
+  KanbanBoardView *kanban_board_view_new ()
   {
     return NULL;
   }
