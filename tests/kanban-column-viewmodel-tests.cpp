@@ -277,15 +277,13 @@ TEST_F (KanbanColumnViewModelTests,
 {
   GSequenceIter *card_iter;
   KanbanColumnViewModel *new_column;
-  int num_items_col1_before, num_items_col1_after;
-  int num_items_col2_before, num_items_col2_after;
+  int num_items_col1_before, num_items_col1_after, num_items_col2_after;
   gpointer card_before, card_after;
   new_column = kanban_column_viewmodel_new (++card_data.column_id, "Column Heading");
   card_iter = kanban_column_viewmodel_new_card (viewmodel, &card_data);
 
   card_before = g_list_model_get_item (G_LIST_MODEL (viewmodel), card_data.priority);
   num_items_col1_before = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
-  num_items_col2_before = g_list_model_get_n_items (G_LIST_MODEL (new_column));
   kanban_column_viewmodel_move_card (viewmodel, new_column,
                                      card_iter, card_data.priority);
   num_items_col1_after = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
