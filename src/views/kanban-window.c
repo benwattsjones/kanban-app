@@ -22,19 +22,42 @@
 struct _KanbanWindow
 {
   GtkApplicationWindow parent_instance;
+
+  GtkCssProvider *css_provider;
 };
 
 G_DEFINE_TYPE (KanbanWindow, kanban_window, GTK_TYPE_APPLICATION_WINDOW)
 
 static void
+kanban_window_finalize (GObject *object)
+{
+  KanbanWindow *self = KANBAN_WINDOW (object);
+
+  g_object_unref (self->css_provider);
+
+  G_OBJECT_CLASS (kanban_window_parent_class)->finalize (object);
+}
+
+static void
 kanban_window_init (KanbanWindow *self)
 {
+  self->css_provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (self->css_provider,
+                                       GRESOURCE_PREFIX "board.css");
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (self->css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
 kanban_window_class_init (KanbanWindowClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = kanban_window_finalize;
+
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
                                                GRESOURCE_PREFIX "window.ui");
 }

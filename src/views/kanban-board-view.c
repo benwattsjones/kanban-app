@@ -24,8 +24,6 @@
 struct _KanbanBoardView
 {
   GtkGrid         parent_instance;
-
-  GtkCssProvider *css_provider;
 };
 
 static void kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface);
@@ -56,33 +54,14 @@ kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface)
 // KanbanBoardView GObject implementation:
 
 static void
-kanban_board_view_finalize (GObject *object)
-{
-  KanbanBoardView *self = KANBAN_BOARD_VIEW (object);
-
-  g_object_unref (self->css_provider);
-}
-
-static void
 kanban_board_view_init (KanbanBoardView *self)
 {
-  self->css_provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (self->css_provider,
-                                       GRESOURCE_PREFIX "board.css");
-  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                             GTK_STYLE_PROVIDER (self->css_provider),
-                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
 kanban_board_view_class_init (KanbanBoardViewClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = kanban_board_view_finalize;
-
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
                                                GRESOURCE_PREFIX "board.ui");
 }
