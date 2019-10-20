@@ -1,4 +1,4 @@
-/* src/views/kanban-grid.c
+/* src/views/kanban-board-view.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,7 +12,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "kanban-grid.h"
+#include "kanban-board-view.h"
 
 #include "kanban-list-box.h"
 #include "../presenters/kanban-board-observer-interface.h"
