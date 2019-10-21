@@ -21,7 +21,7 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 
-struct _KanbanListBox
+struct _KanbanColumnView
 {
   GtkBox                   parent_instance;
 
@@ -41,15 +41,15 @@ GtkWidget *create_card_widget_func (gpointer item, gpointer user_data);
 
 static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (KanbanListBox, kanban_list_box, GTK_TYPE_BOX)
+G_DEFINE_TYPE (KanbanColumnView, kanban_column_view, GTK_TYPE_BOX)
 
 static void
-kanban_list_box_set_property (GObject      *object,
+kanban_column_view_set_property (GObject      *object,
                               guint         property_id,
                               const GValue *value,
                               GParamSpec   *pspec)
 {
-  KanbanListBox *self = KANBAN_LIST_BOX (object);
+  KanbanColumnView *self = KANBAN_COLUMN_VIEW (object);
 
   switch (property_id)
     {
@@ -64,12 +64,12 @@ kanban_list_box_set_property (GObject      *object,
 }
 
 static void
-kanban_list_box_get_property (GObject    *object,
+kanban_column_view_get_property (GObject    *object,
                               guint       property_id,
                               GValue     *value,
                               GParamSpec *pspec)
 {
-  KanbanListBox *self = KANBAN_LIST_BOX (object);
+  KanbanColumnView *self = KANBAN_COLUMN_VIEW (object);
 
   switch (property_id)
     {
@@ -84,9 +84,9 @@ kanban_list_box_get_property (GObject    *object,
 }
 
 static void
-kanban_list_box_constructed (GObject *object)
+kanban_column_view_constructed (GObject *object)
 {
-  KanbanListBox *self = KANBAN_LIST_BOX (object);
+  KanbanColumnView *self = KANBAN_COLUMN_VIEW (object);
 
   gtk_list_box_bind_model (GTK_LIST_BOX (self->column_contents),
                            G_LIST_MODEL (self->column_data),
@@ -97,19 +97,19 @@ kanban_list_box_constructed (GObject *object)
 }
 
 static void
-kanban_list_box_init (KanbanListBox *self)
+kanban_column_view_init (KanbanColumnView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
-kanban_list_box_class_init (KanbanListBoxClass *klass)
+kanban_column_view_class_init (KanbanColumnViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->set_property = kanban_list_box_set_property;
-  object_class->get_property = kanban_list_box_get_property;
-  object_class->constructed = kanban_list_box_constructed;
+  object_class->set_property = kanban_column_view_set_property;
+  object_class->get_property = kanban_column_view_get_property;
+  object_class->constructed = kanban_column_view_constructed;
 
   obj_properties[PROP_COLUMN_DATA] =
     g_param_spec_pointer("column-data",
@@ -122,15 +122,15 @@ kanban_list_box_class_init (KanbanListBoxClass *klass)
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
                                                GRESOURCE_PREFIX "column.ui");
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (klass),
-                                        KanbanListBox, column_heading);
+                                        KanbanColumnView, column_heading);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (klass),
-                                        KanbanListBox, column_contents);
+                                        KanbanColumnView, column_contents);
 }
 
-KanbanListBox *
-kanban_list_box_new (KanbanColumnObservable *column_data)
+KanbanColumnView *
+kanban_column_view_new (KanbanColumnObservable *column_data)
 {
-  return g_object_new (KANBAN_LIST_BOX_TYPE,
+  return g_object_new (KANBAN_TYPE_COLUMN_VIEW,
                        "column-data", column_data,
                        NULL);
 }

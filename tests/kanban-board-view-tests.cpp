@@ -26,29 +26,29 @@ extern "C"
 // Stubs:
 extern "C"
 {
-  struct _KanbanListBox
+  struct _KanbanColumnView
   {
-    GtkBox                   parent_instance;
+    GtkBox  parent_instance;
   };
 
-  G_DEFINE_TYPE (KanbanListBox, kanban_list_box, GTK_TYPE_BOX)
+  G_DEFINE_TYPE (KanbanColumnView, kanban_column_view, GTK_TYPE_BOX)
 
   static void
-  kanban_list_box_init (KanbanListBox *self)
+  kanban_column_view_init (KanbanColumnView *self)
   {
     (void) self;
   }
 
   static void
-  kanban_list_box_class_init (KanbanListBoxClass *klass)
+  kanban_column_view_class_init (KanbanColumnViewClass *klass)
   {
     (void) klass;
   }
 
-  KanbanListBox *kanban_list_box_new (KanbanColumnObservable *column_data)
+  KanbanColumnView *kanban_column_view_new (KanbanColumnObservable *column_data)
   {
     (void) column_data;
-    return KANBAN_LIST_BOX (g_object_new (KANBAN_LIST_BOX_TYPE, NULL));
+    return KANBAN_COLUMN_VIEW (g_object_new (KANBAN_TYPE_COLUMN_VIEW, NULL));
   }
 }
 

@@ -12,8 +12,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_LIST_BOX_H
-#define KANBAN_LIST_BOX_H
+#ifndef KANBAN_COLUMN_VIEW_H
+#define KANBAN_COLUMN_VIEW_H
 
 #include "../presenters/kanban-column-observable-interface.h"
 
@@ -21,13 +21,13 @@
 
 G_BEGIN_DECLS
 
-#define KANBAN_LIST_BOX_TYPE (kanban_list_box_get_type ())
+#define KANBAN_TYPE_COLUMN_VIEW (kanban_column_view_get_type ())
 
-G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkBox)
+G_DECLARE_FINAL_TYPE (KanbanColumnView, kanban_column_view, KANBAN, COLUMN_VIEW, GtkBox)
 
-KanbanListBox *kanban_list_box_new (KanbanColumnObservable *column_data);
+KanbanColumnView *kanban_column_view_new (KanbanColumnObservable *column_data);
 
 G_END_DECLS
 
-#endif /* KANBAN_LIST_BOX_H */
+#endif /* KANBAN_COLUMN_VIEW_H */
 

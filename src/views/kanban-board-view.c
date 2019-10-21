@@ -39,8 +39,8 @@ kanban_board_view_add_column (KanbanBoardObserver     *self,
                               KanbanColumnObservable  *new_column,
                               gint                     priority)
 {
-  // TODO free KanbanListBox object if column deleted
-  KanbanListBox *new_column_widget = kanban_list_box_new (new_column);
+  // TODO free KanbanColumnView object if column deleted
+  KanbanColumnView *new_column_widget = kanban_column_view_new (new_column);
   gtk_grid_insert_column (GTK_GRID (self), priority);
   gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), priority, 0, 1, 1);
 }

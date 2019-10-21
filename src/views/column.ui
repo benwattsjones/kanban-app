@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="KanbanListBox" parent="GtkBox">
+  <template class="KanbanColumnView" parent="GtkBox">
     <property name="visible">True</property>
     <property name="orientation">vertical</property>
     <property name="expand">True</property>
