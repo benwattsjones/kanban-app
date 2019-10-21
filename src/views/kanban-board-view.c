@@ -14,7 +14,7 @@
 
 #include "kanban-board-view.h"
 
-#include "kanban-list-box.h"
+#include "kanban-column-view.h"
 #include "../presenters/kanban-board-observer-interface.h"
 #include "../presenters/kanban-column-observable-interface.h"
 #include <kanban-config.h>

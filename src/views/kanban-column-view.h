@@ -1,4 +1,4 @@
-/* src/views/kanban-list-box.h
+/* src/views/kanban-column-view.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *

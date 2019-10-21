@@ -1,4 +1,4 @@
-/* src/views/kanban-list-box.c
+/* src/views/kanban-column-view.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,7 +12,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "kanban-list-box.h"
+#include "kanban-column-view.h"
 
 #include "../presenters/kanban-card-viewmodel.h"
 #include "../presenters/kanban-column-observable-interface.h"
