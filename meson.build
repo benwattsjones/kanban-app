@@ -46,12 +46,14 @@ kanban_app_sources = files(
     'src/main.c'
 )
 
-kanban_app_sources += gnome.compile_resources(
+kanban_app_gresources = gnome.compile_resources(
     'kanban-app-resources',
     'src/views/kanban-app.gresource.xml',
     source_dir: 'src/views',
     export: true
 )
+
+kanban_app_sources += kanban_app_gresources
 
 kanban_app_c_args = [
     '-fexceptions',                             # hardening options...
