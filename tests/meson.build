@@ -119,6 +119,19 @@ test('board_view_tests',
     suite: 'unit',
 )
 
+test('column_view_tests',
+    executable('column_view_tests',
+        files('../src/views/kanban-column-view.c',
+              '../src/presenters/kanban-card-viewmodel.c',
+              '../src/presenters/kanban-column-observable-interface.c',
+              'kanban-column-view-tests.cpp'),
+        kanban_app_gresources,
+        kwargs: default_test_args,
+        include_directories: config_h_inc,
+    ),
+    suite: 'unit',
+)
+
 
 add_test_setup('valgrind',
     exe_wrapper: ['valgrind', '--leak-check=full', '--suppressions=/usr/share/glib-2.0/valgrind/glib.supp', '--error-exitcode=1', '--show-leak-kinds=all', '--trace-children=yes', '--errors-for-leak-kinds=definite,indirect', '-s'],

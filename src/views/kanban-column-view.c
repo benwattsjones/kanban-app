@@ -45,9 +45,9 @@ G_DEFINE_TYPE (KanbanColumnView, kanban_column_view, GTK_TYPE_BOX)
 
 static void
 kanban_column_view_set_property (GObject      *object,
-                              guint         property_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
+                                 guint         property_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
 {
   KanbanColumnView *self = KANBAN_COLUMN_VIEW (object);
 
@@ -65,9 +65,9 @@ kanban_column_view_set_property (GObject      *object,
 
 static void
 kanban_column_view_get_property (GObject    *object,
-                              guint       property_id,
-                              GValue     *value,
-                              GParamSpec *pspec)
+                                 guint       property_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
 {
   KanbanColumnView *self = KANBAN_COLUMN_VIEW (object);
 
