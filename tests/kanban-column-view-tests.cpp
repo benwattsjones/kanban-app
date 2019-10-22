@@ -16,6 +16,8 @@ extern "C"
 {
   #include "../src/views/kanban-column-view.h"
   #include "../src/presenters/kanban-column-observable-interface.h"
+  #include "../src/presenters/kanban-column-viewmodel.h"
+  #include "../src/models/kanban-data.h"
 
   #include <gtk/gtk.h>
 }
@@ -31,17 +33,34 @@ extern "C"
 class KanbanColumnViewTests : public ::testing::Test
 {
 protected:
-  KanbanColumnView *column;
+  KanbanData card_data;
+  KanbanColumnViewModel *viewmodel;
+  KanbanColumnView *view;
+  GtkWidget *column_contents;
 
   void SetUp() override
   {
     gtk_init (0, NULL);
-    column = kanban_column_view_new (NULL);
+    card_data.card_id = 1;
+    card_data.column_id = 2;
+    card_data.heading = g_strdup ("card heading!");
+    card_data.content = g_strdup ("card content.");
+    card_data.priority = 0;
+
+    viewmodel = kanban_column_viewmodel_new (card_data.column_id, "column name");
+
+    view = kanban_column_view_new (KANBAN_COLUMN_OBSERVABLE (viewmodel));
+    column_contents = kanban_column_view_get_contents (view);
   }
 
   void TearDown() override
   {
-    g_object_ref_sink (column);
+    g_object_ref_sink (view);
+
+    kanban_column_viewmodel_destroy ((void *) viewmodel);
+    g_free (card_data.heading);
+    g_free (card_data.content);
+
   }
 };
 
@@ -50,6 +69,26 @@ protected:
 TEST_F (KanbanColumnViewTests,
         New_GtkInitializedNewCalled_ColumnCreatedNotNull)
 {
-  ASSERT_NE (column, nullptr);
+  ASSERT_NE (view, nullptr);
+}
+
+TEST_F (KanbanColumnViewTests,
+        AddColumn_ColumnAddedToViewModel_ColumnAddedToView)
+{
+  int num_columns_before = 0, num_columns_after = 0;
+  GList *cards_added_before, *cards_added_after, *l;
+  cards_added_before = gtk_container_get_children (GTK_CONTAINER (column_contents));
+  for (l = cards_added_before; l != NULL; l = l->next)
+    ++num_columns_before;
+
+  kanban_column_viewmodel_new_card (viewmodel, &card_data);
+  cards_added_after = gtk_container_get_children (GTK_CONTAINER (column_contents));
+  for (l = cards_added_after; l != NULL; l = l->next)
+    ++num_columns_after;
+
+  EXPECT_EQ (num_columns_after, num_columns_before + 1);
+
+  g_list_free (cards_added_before);
+  g_list_free (cards_added_after);
 }
 

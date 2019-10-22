@@ -153,6 +153,16 @@ create_card_widget_func (gpointer item,
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (heading_widget), card_heading);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (content_widget), card_content);
 
+  g_object_ref (card_widget);
+  g_object_unref (builder);
   return GTK_WIDGET (card_widget);
 }
+
+#ifdef TESTING_ONLY_ACCESS
+GtkWidget *
+kanban_column_view_get_contents (KanbanColumnView *self)
+{
+  return GTK_WIDGET (self->column_contents);
+}
+#endif
 

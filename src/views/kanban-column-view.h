@@ -25,7 +25,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanColumnView, kanban_column_view, KANBAN, COLUMN_VIEW, GtkBox)
 
-KanbanColumnView *kanban_column_view_new (KanbanColumnObservable *column_data);
+KanbanColumnView *kanban_column_view_new          (KanbanColumnObservable *column_data);
+
+#ifdef TESTING_ONLY_ACCESS
+GtkWidget        *kanban_column_view_get_contents (KanbanColumnView       *self);
+#endif
 
 G_END_DECLS
 
