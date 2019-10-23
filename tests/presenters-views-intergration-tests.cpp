@@ -15,9 +15,12 @@
 extern "C"
 {
   #include "../src/kanban-application.h"
+  #include "../src/models/model-presenter-interface.h"
   #include "../src/presenters/kanban-board-presenter.h"
   #include "../src/presenters/model-observer-interface.h"
-  #include "../src/models/model-presenter-interface.h"
+  #include "../src/presenters/kanban-board-observer-interface.h"
+  #include "../src/views/kanban-board-view.h"
+  #include "../src/views/kanban-column-view.h"
 
   #include <gtk/gtk.h>
 }
@@ -71,12 +74,16 @@ extern "C"
 class PresentersCardsIntergrationTests : public ::testing::Test
 {
 protected:
+  KanbanBoardView *view;
   KanbanBoardPresenter *presenter;
   KanbanData model_data;
 
   void SetUp() override
   {
-    presenter = kanban_board_presenter_new (NULL);
+    gtk_init (0, NULL);
+
+    view = kanban_board_view_new ();
+    presenter = kanban_board_presenter_new (KANBAN_BOARD_OBSERVER (view));
 
     model_data.card_id = 1;
     model_data.column_id = 1;
@@ -93,19 +100,46 @@ protected:
 
 
 // Tests:
-TEST_F (PresentersCardsIntergrationTests, checkPresenterNotNull)
+TEST_F (PresentersCardsIntergrationTests, checkObjectsNotNull)
 {
+  EXPECT_NE (view, nullptr);
   EXPECT_NE (presenter, nullptr);
   EXPECT_NE (observer_model.notification, nullptr);
   EXPECT_NE (observer_model.instance, nullptr);
 }
 
-TEST_F (PresentersCardsIntergrationTests, checkCreateColumnSuccessful)
+TEST_F (PresentersCardsIntergrationTests, checkAddColumnSuccessful)
 {
+  int column_id_stored;
   model_data.task = TASK_ADD_COLUMN;
   observer_model.notification (observer_model.instance, &model_data);
   gpointer new_column = kanban_board_presenter_get_column (presenter,
                                                            model_data.column_id);
+  g_object_get (new_column, "column-id", &column_id_stored, NULL);
   EXPECT_NE (new_column, nullptr);
+  EXPECT_EQ (column_id_stored, model_data.column_id);
+}
+
+TEST_F (PresentersCardsIntergrationTests, checkAddCardCreatesWidget)
+{
+  GList *columns_added_before, *columns_added_after, *l;
+  int num_columns_before = 0, num_columns_after = 0;
+
+  columns_added_before = gtk_container_get_children (GTK_CONTAINER (view));
+  for (l = columns_added_before; l != NULL; l = l->next)
+    ++num_columns_before;
+  model_data.task = TASK_ADD_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  model_data.task = TASK_ADD_CARD;
+  observer_model.notification (observer_model.instance, &model_data);
+  columns_added_after = gtk_container_get_children (GTK_CONTAINER (view));
+  for (l = columns_added_after; l != NULL; l = l->next)
+    ++num_columns_after;
+
+  ASSERT_NE (num_columns_after, 0);
+  EXPECT_EQ (num_columns_after, num_columns_before + 1);
+
+  g_list_free (columns_added_before);
+  g_list_free (columns_added_after);
 }
 
