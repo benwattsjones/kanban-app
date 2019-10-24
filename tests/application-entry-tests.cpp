@@ -15,10 +15,10 @@
 extern "C"
 {
   #include "../src/kanban-application.h"
-  #include "../src/presenters/kanban-column-store.h"
-  #include "../src/presenters/kanban-column-viewer-interface.h"
+  #include "../src/presenters/kanban-board-presenter.h"
+  #include "../src/presenters/kanban-board-observer-interface.h"
   #include "../src/views/kanban-window.h"
-  #include "../src/views/kanban-grid.h"
+  #include "../src/views/kanban-board-view.h"
   #include <kanban-config.h>
 
   #include <gtk/gtk.h>
@@ -49,7 +49,7 @@ extern "C"
   {
   }
 
-  KanbanColumnStore *kanban_column_store_new (KanbanColumnViewer *view_observer)
+  KanbanBoardPresenter *kanban_board_presenter_new (KanbanBoardObserver *view_observer)
   {
     (void) view_observer;
     FunctionCallTracker.initialize_viewmodel_func_count =
@@ -57,16 +57,22 @@ extern "C"
     return NULL;
   }
 
-  void kanban_column_store_destroy (KanbanColumnStore *self)
+  void kanban_board_presenter_destroy (KanbanBoardPresenter *self)
   {
     (void) self;
     FunctionCallTracker.destroy_viewmodel_func_count =
         ++FunctionCallTracker.func_call_counter;
   }
 
-  KanbanGrid *kanban_grid_new ()
+  KanbanBoardView *kanban_board_view_new ()
   {
     return NULL;
+  }
+
+  void kanban_window_display_board (KanbanWindow *self, GtkWidget *board)
+  {
+    (void) self;
+    (void) board;
   }
 }
 
@@ -90,7 +96,7 @@ protected:
     printed_string = NULL;
     g_set_print_handler (redirect_gprint);
     FunctionCallTracker = FunctionCallTrackerReset;
-    app = g_object_new (KANBAN_APPLICATION_TYPE,
+    app = g_object_new (KANBAN_TYPE_APPLICATION,
                         "application-id", APPLICATION_ID,
                         "flags", G_APPLICATION_HANDLES_OPEN,
                         NULL);

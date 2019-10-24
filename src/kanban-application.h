@@ -15,13 +15,11 @@
 #ifndef KANBAN_APPLICATION_H
 #define KANBAN_APPLICATION_H
 
-#include "presenters/kanban-list-store.h"
-
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define KANBAN_APPLICATION_TYPE (kanban_application_get_type ())
+#define KANBAN_TYPE_APPLICATION (kanban_application_get_type ())
 
 G_DECLARE_FINAL_TYPE (KanbanApplication, kanban_application, KANBAN, APPLICATION, GtkApplication)
 

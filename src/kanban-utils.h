@@ -1,4 +1,4 @@
-/* src/views/kanban-list-box.h
+/* src/kanban-utils.h
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,22 +12,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef KANBAN_LIST_BOX_H
-#define KANBAN_LIST_BOX_H
-
-#include "../presenters/kanban-list-viewer-interface.h"
+#ifndef KANBAN_UTILS_H
+#define KANBAN_UTILS_H
 
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define KANBAN_LIST_BOX_TYPE (kanban_list_box_get_type ())
+#ifdef TESTING_ONLY_ACCESS
 
-G_DECLARE_FINAL_TYPE (KanbanListBox, kanban_list_box, KANBAN, LIST_BOX, GtkBox)
+GtkWidget  *kanban_utils_find_widget_by_name  (GtkWidget   *parent,
+                                               const gchar *name);
 
-KanbanListBox *kanban_list_box_new (KanbanListViewer *column_data);
+gchar      *kanban_utils_get_text_from_view   (GtkTextView *textview);
+
+#endif /* TESTING_ONLY_ACCESS */
 
 G_END_DECLS
 
-#endif /* KANBAN_LIST_BOX_H */
+#endif /* KANBAN_UTILS_H */
 

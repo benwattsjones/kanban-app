@@ -1,4 +1,4 @@
-/* src/presenters/kanban-list-viewer-interface.c
+/* src/presenters/kanban-column-observable-interface.c
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -12,26 +12,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "kanban-list-viewer-interface.h"
+#include "kanban-column-observable-interface.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-G_DEFINE_INTERFACE (KanbanListViewer, kanban_list_viewer, G_TYPE_LIST_MODEL)
+G_DEFINE_INTERFACE (KanbanColumnObservable, kanban_column_observable, G_TYPE_LIST_MODEL)
 
 static void
-kanban_list_viewer_default_init (KanbanListViewerInterface *iface)
+kanban_column_observable_default_init (KanbanColumnObservableInterface *iface)
 {
   // Add properties and signals to interface here
+  (void) iface;
 }
 
 
 GtkTextBuffer *
-kanban_list_viewer_get_heading (KanbanListViewer *self)
+kanban_column_observable_get_heading (KanbanColumnObservable *self)
 {
-  KanbanListViewerInterface *iface;
-  g_return_val_if_fail (KANBAN_IS_LIST_VIEWER (self), NULL);
-  iface = KANBAN_LIST_VIEWER_GET_IFACE (self);
+#ifdef TESTING_ONLY_ACCESS
+  if (!self)
+    return NULL;
+#endif
+  KanbanColumnObservableInterface *iface;
+  g_return_val_if_fail (KANBAN_IS_COLUMN_OBSERVABLE (self), NULL);
+  iface = KANBAN_COLUMN_OBSERVABLE_GET_IFACE (self);
   g_return_val_if_fail (iface->get_heading != NULL, NULL);
   return iface->get_heading (self);
 }

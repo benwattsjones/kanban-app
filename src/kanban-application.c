@@ -14,10 +14,10 @@
 
 #include "kanban-application.h"
 
-#include "presenters/kanban-column-store.h"
-#include "presenters/kanban-column-viewer-interface.h"
+#include "presenters/kanban-board-presenter.h"
+#include "presenters/kanban-board-observer-interface.h"
 #include "views/kanban-window.h"
-#include "views/kanban-grid.h"
+#include "views/kanban-board-view.h"
 #include "models/kanban-data.h" // TODO - remove after testing
 #include <kanban-config.h>
 
@@ -34,11 +34,11 @@ enum
 
 struct _KanbanApplication
 {
-  GtkApplication      parent_instance;
+  GtkApplication         parent_instance;
 
-  KanbanWindow       *window;
-  KanbanGrid         *board_view;
-  KanbanColumnStore  *viewmodel;
+  KanbanWindow          *window;
+  KanbanBoardView       *board_view;
+  KanbanBoardPresenter  *viewmodel;
 };
 
 static GOptionEntry entries[] =
@@ -50,14 +50,12 @@ static GOptionEntry entries[] =
 };
 
 
-G_DEFINE_TYPE(KanbanApplication, kanban_application, GTK_TYPE_APPLICATION)
+G_DEFINE_TYPE (KanbanApplication, kanban_application, GTK_TYPE_APPLICATION)
 
 
 static void
 kanban_application_startup (GApplication *app)
 {
-  KanbanApplication *self = KANBAN_APPLICATION (app);
-
   G_APPLICATION_CLASS (kanban_application_parent_class)->startup (app);
 }
 
@@ -66,13 +64,11 @@ kanban_application_activate (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
 
-  self->board_view = kanban_grid_new();
-  self->viewmodel = kanban_column_store_new (KANBAN_COLUMN_VIEWER (self->board_view));
+  self->board_view = kanban_board_view_new();
+  self->viewmodel = kanban_board_presenter_new (KANBAN_BOARD_OBSERVER (self->board_view));
   self->window = kanban_window_new (self);
 
-  gtk_container_add (GTK_CONTAINER (self->window), GTK_WIDGET (self->board_view));
-  gtk_window_present (GTK_WINDOW (self->window));
-  gtk_widget_show_all (GTK_WIDGET (self->window));
+  kanban_window_display_board (self->window, GTK_WIDGET (self->board_view));
 
   test_observers();
 }
@@ -96,7 +92,7 @@ kanban_application_handle_local_options (GApplication *app,
   (void) app;
   if (g_variant_dict_contains (options, "version"))
     {
-      g_print("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
+      g_print ("%s %s\n", PACKAGE_NAME, PACKAGE_VERSION);
       return SUCCESS_KANBAN_PROGRAM_CODE;
     }
   return CONTINUE_DEFAULT_KANBAN_PROGRAM_CODE;
@@ -106,7 +102,7 @@ static void
 kanban_application_shutdown (GApplication *app)
 {
   KanbanApplication *self = KANBAN_APPLICATION (app);
-  kanban_column_store_destroy (self->viewmodel);
+  kanban_board_presenter_destroy (self->viewmodel);
   G_APPLICATION_CLASS (kanban_application_parent_class)->shutdown (app);
 }
 
@@ -114,7 +110,7 @@ static void
 kanban_application_init (KanbanApplication *app)
 {
   g_application_set_option_context_parameter_string (G_APPLICATION (app), 
-    "- description of program for help");
+      "- description of program for help");
   g_application_add_main_option_entries (G_APPLICATION (app), entries);
   app->viewmodel = NULL;
 }
@@ -133,7 +129,7 @@ kanban_application_class_init (KanbanApplicationClass *klass)
 int
 initialize_kanban_application (int argc, char *argv[])
 {
-  KanbanApplication *app = g_object_new (KANBAN_APPLICATION_TYPE,
+  KanbanApplication *app = g_object_new (KANBAN_TYPE_APPLICATION,
                                          "application-id", APPLICATION_ID,
                                          "flags", G_APPLICATION_HANDLES_OPEN,
                                          NULL);

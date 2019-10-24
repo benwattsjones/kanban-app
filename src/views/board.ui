@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="KanbanGrid" parent="GtkGrid">
+  <template class="KanbanBoardView" parent="GtkGrid">
     <property name="visible">True</property>
     <property name="column-homogeneous">True</property>
     <property name="vexpand">True</property>

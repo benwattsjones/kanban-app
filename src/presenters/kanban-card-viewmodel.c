@@ -152,10 +152,12 @@ kanban_card_viewmodel_class_init (KanbanCardViewModelClass *klass)
 KanbanCardViewModel *
 kanban_card_viewmodel_new (const KanbanData *card_data)
 {
-  return g_object_new (KANBAN_CARD_VIEWMODEL_TYPE,
+  const gchar *heading = card_data->heading ? card_data->heading : "";
+  const gchar *content = card_data->content ? card_data->content : "";
+  return g_object_new (KANBAN_TYPE_CARD_VIEWMODEL,
                        "card-id", card_data->card_id,
-                       "heading", card_data->heading,
-                       "content", card_data->content,
+                       "heading", heading,
+                       "content", content,
                        NULL);
 }
 

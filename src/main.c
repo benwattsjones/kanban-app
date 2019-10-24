@@ -17,7 +17,8 @@
 #include <gtk/gtk.h>
 
 int
-main (int argc, char *argv[])
+main (int   argc,
+      char *argv[])
 {
   return initialize_kanban_application (argc, argv);
 }

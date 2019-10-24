@@ -10,11 +10,11 @@ project(
 config_h_data = configuration_data()
 
 config_h_defines = [
-    ['PACKAGE_NAME',     meson.project_name()],
-    ['PACKAGE_VERSION',  meson.project_version()],
-    ['PACKAGE_URL',     'https://github.com/benwattsjones/kanban-app'],
-    ['APPLICATION_ID',  'com.benwattsjones.kanban'],
-    ['GRESOURCE_PREFIX',  '/com/benwattsjones/kanban/'],
+    ['PACKAGE_NAME',      meson.project_name()],
+    ['PACKAGE_VERSION',   meson.project_version()],
+    ['PACKAGE_URL',      'https://github.com/benwattsjones/kanban-app'],
+    ['APPLICATION_ID',   'com.benwattsjones.kanban'],
+    ['GRESOURCE_PREFIX', '/com/benwattsjones/kanban/'],
 ]
 
 foreach define: config_h_defines
@@ -32,26 +32,29 @@ gnome = import('gnome')
 
 kanban_app_sources = files(
     'src/presenters/model-observer.c',
-    'src/presenters/kanban-column-store.c',
-    'src/presenters/kanban-column-viewer-interface.c',
-    'src/presenters/kanban-list-store.c',
-    'src/presenters/kanban-list-viewer-interface.c',
+    'src/presenters/kanban-board-presenter.c',
+    'src/presenters/kanban-board-observer-interface.c',
+    'src/presenters/kanban-column-viewmodel.c',
+    'src/presenters/kanban-column-observable-interface.c',
     'src/presenters/kanban-card-viewmodel.c',
     'src/views/kanban-window.c',
-    'src/views/kanban-list-box.c',
-    'src/views/kanban-grid.c',
+    'src/views/kanban-column-view.c',
+    'src/views/kanban-board-view.c',
     'src/models/model-presenter-interface.c',
     'src/models/kanban-data.c',
     'src/kanban-application.c',
+    'src/kanban-utils.c',
     'src/main.c'
 )
 
-kanban_app_sources += gnome.compile_resources(
+kanban_app_gresources = gnome.compile_resources(
     'kanban-app-resources',
     'src/views/kanban-app.gresource.xml',
     source_dir: 'src/views',
     export: true
 )
+
+kanban_app_sources += kanban_app_gresources
 
 kanban_app_c_args = [
     '-fexceptions',                             # hardening options...

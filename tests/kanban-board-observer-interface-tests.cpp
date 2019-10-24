@@ -1,4 +1,4 @@
-/* tests/kanban-column-viewer-interface-tests.cpp
+/* tests/kanban-board-observer-interface-tests.cpp
  *
  * Copyright (C) 2019 Ben Watts-Jones
  *
@@ -14,8 +14,8 @@
 
 extern "C"
 {
-  #include "../src/presenters/kanban-column-viewer-interface.h"
-  #include "../src/presenters/kanban-list-viewer-interface.h"
+  #include "../src/presenters/kanban-board-observer-interface.h"
+  #include "../src/presenters/kanban-column-observable-interface.h"
 
   #include <gtk/gtk.h>
 }
@@ -34,22 +34,22 @@ extern "C"
     GObject parent_instance;
   };
 
-  static void kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface);
+  static void kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface);
 
   G_DEFINE_TYPE_WITH_CODE (MockIfaceObject, mock_iface_object, G_TYPE_OBJECT,
-                           G_IMPLEMENT_INTERFACE (KANBAN_COLUMN_VIEWER_TYPE,
-                                                  kanban_column_viewer_iface_init))
+                           G_IMPLEMENT_INTERFACE (KANBAN_TYPE_BOARD_OBSERVER,
+                                                  kanban_board_observer_iface_init))
 
   static void
-  mock_iface_object_add_column (KanbanColumnViewer *self,
-                                KanbanListViewer   *new_column,
-                                gint                priority)
+  mock_iface_object_add_column (KanbanBoardObserver     *self,
+                                KanbanColumnObservable  *new_column,
+                                gint                     priority)
   {
     ++add_column_called;
   }
 
   static void
-  kanban_column_viewer_iface_init (KanbanColumnViewerInterface *iface)
+  kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface)
   {
     iface->add_column = mock_iface_object_add_column;
   }
@@ -68,36 +68,36 @@ extern "C"
 }
 
 // Test Fixtures:
-class KanbanColumnViewerInterfaceTests : public ::testing::Test
+class KanbanBoardObserverInterfaceTests : public ::testing::Test
 {
 protected:
-  gpointer mock_column_viewer;
+  gpointer mock_board_observer;
 
   void SetUp() override
   {
-    mock_column_viewer = g_object_new (MOCK_TYPE_IFACE_OBJECT, NULL);
+    mock_board_observer = g_object_new (MOCK_TYPE_IFACE_OBJECT, NULL);
     add_column_called = 0;
   }
 
   void TearDown() override
   {
-    g_object_unref (mock_column_viewer);
+    g_object_unref (mock_board_observer);
   }
 };
 
 // Tests:
-TEST_F (KanbanColumnViewerInterfaceTests,
+TEST_F (KanbanBoardObserverInterfaceTests,
         AddColumn_InterfaceArguementIsNull_ImmediateReturnNoErrorsNoSideEffects)
 {
-  kanban_column_viewer_add_column (NULL, NULL, 0);
+  kanban_board_observer_add_column (NULL, NULL, 0);
   SUCCEED ();
 }
 
-TEST_F (KanbanColumnViewerInterfaceTests,
+TEST_F (KanbanBoardObserverInterfaceTests,
         AddColumn_InterfaceArguementIsValid_ArguementsAddColumnFunctionisCalled)
 {
-  kanban_column_viewer_add_column (KANBAN_COLUMN_VIEWER (mock_column_viewer),
-                                   NULL, 0);
+  kanban_board_observer_add_column (KANBAN_BOARD_OBSERVER (mock_board_observer),
+                                    NULL, 0);
   EXPECT_EQ (add_column_called, 1);
 }
 
