@@ -135,7 +135,7 @@ TEST_F (PresentersViewsIntergrationTests, checkAddCardCreatesWidget)
   EXPECT_EQ (num_cards_after, num_cards_before + 1);
 }
 
-TEST_F (PresentersViewsIntergrationTests, checkChangeHeadingUpdatesWidget)
+TEST_F (PresentersViewsIntergrationTests, checkEditCardHeadingUpdatesWidget)
 {
   KanbanColumnView *column;
   gchar *heading;
@@ -156,5 +156,34 @@ TEST_F (PresentersViewsIntergrationTests, checkChangeHeadingUpdatesWidget)
 
   g_free (heading);
   g_free (new_heading);
+}
+
+TEST_F (PresentersViewsIntergrationTests, checkMoveCardMovesWidget)
+{
+  KanbanColumnView *column1, *column2;
+  model_data.task = TASK_ADD_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  model_data.task = TASK_ADD_CARD;
+  observer_model.notification (observer_model.instance, &model_data);
+  model_data.task = TASK_ADD_COLUMN;
+  model_data.column_id++;
+  observer_model.notification (observer_model.instance, &model_data);
+  column1 = kanban_board_view_get_nth_column (view, model_data.priority);
+  column2 = kanban_board_view_get_nth_column (view, model_data.priority+1);
+
+
+  int col1_len_before = kanban_column_view_count_cards (column1);
+  int col2_len_before = kanban_column_view_count_cards (column2);
+  model_data.task = TASK_MOVE_CARD;
+  observer_model.notification (observer_model.instance, &model_data);
+  int col1_len_after = kanban_column_view_count_cards (column1);
+  int col2_len_after = kanban_column_view_count_cards (column2);
+
+  ASSERT_NE (column1, nullptr);
+  ASSERT_NE (column2, nullptr);
+  EXPECT_NE (col2_len_before, 0);
+  EXPECT_EQ (col2_len_after, col2_len_before - 1);
+  EXPECT_NE (col1_len_after, 0);
+  EXPECT_EQ (col1_len_after, col1_len_before + 1);
 }
 
