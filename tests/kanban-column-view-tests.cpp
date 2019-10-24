@@ -36,7 +36,6 @@ protected:
   KanbanData card_data;
   KanbanColumnViewModel *viewmodel;
   KanbanColumnView *view;
-  GtkWidget *column_contents;
 
   void SetUp() override
   {
@@ -50,7 +49,6 @@ protected:
     viewmodel = kanban_column_viewmodel_new (card_data.column_id, "column name");
 
     view = kanban_column_view_new (KANBAN_COLUMN_OBSERVABLE (viewmodel));
-    column_contents = kanban_column_view_get_contents (view);
   }
 
   void TearDown() override
@@ -60,7 +58,6 @@ protected:
     kanban_column_viewmodel_destroy ((void *) viewmodel);
     g_free (card_data.heading);
     g_free (card_data.content);
-
   }
 };
 
@@ -73,49 +70,30 @@ TEST_F (KanbanColumnViewTests,
 }
 
 TEST_F (KanbanColumnViewTests,
-        AddColumn_ColumnAddedToViewModel_ColumnAddedToView)
+        AddCard_CardAddedToViewModel_CardAddedToView)
 {
-  int num_columns_before = 0, num_columns_after = 0;
-  GList *cards_added_before, *cards_added_after, *l;
-  cards_added_before = gtk_container_get_children (GTK_CONTAINER (column_contents));
-  for (l = cards_added_before; l != NULL; l = l->next)
-    ++num_columns_before;
-
+  int num_cards_before = kanban_column_view_count_cards (view);
   kanban_column_viewmodel_new_card (viewmodel, &card_data);
-  cards_added_after = gtk_container_get_children (GTK_CONTAINER (column_contents));
-  for (l = cards_added_after; l != NULL; l = l->next)
-    ++num_columns_after;
+  int num_cards_after = kanban_column_view_count_cards (view);
 
-  EXPECT_EQ (num_columns_after, num_columns_before + 1);
-
-  g_list_free (cards_added_before);
-  g_list_free (cards_added_after);
+  EXPECT_EQ (num_cards_after, num_cards_before + 1);
 }
 
 TEST_F (KanbanColumnViewTests,
-        MoveColum_CardRemovedFromViewModelList_CardRemovedFromViewList)
+        MoveCard_CardRemovedFromViewModelList_CardRemovedFromViewList)
 {
   KanbanColumnViewModel *viewmodel2;
   GSequenceIter *card_iter;
-  GList *cards_added_before, *cards_added_after, *l;
-  int num_columns_before = 0, num_columns_after = 0;
-  card_iter = kanban_column_viewmodel_new_card (viewmodel, &card_data);
-  cards_added_before = gtk_container_get_children (GTK_CONTAINER (column_contents));
-  for (l = cards_added_before; l != NULL; l = l->next)
-    ++num_columns_before;
-
   viewmodel2 = kanban_column_viewmodel_new (card_data.column_id+1, "Column Heading");
+  card_iter = kanban_column_viewmodel_new_card (viewmodel, &card_data);
+
+  int num_cards_before = kanban_column_view_count_cards (view);
   kanban_column_viewmodel_move_card (viewmodel, viewmodel2,
                                      card_iter, card_data.priority);
-  cards_added_after = gtk_container_get_children (GTK_CONTAINER (column_contents));
-  for (l = cards_added_after; l != NULL; l = l->next)
-    ++num_columns_after;
+  int num_cards_after = kanban_column_view_count_cards (view);
 
-  EXPECT_EQ (num_columns_after, num_columns_before - 1);
+  EXPECT_EQ (num_cards_after, num_cards_before - 1);
 
-  g_list_free (cards_added_before);
-  g_list_free (cards_added_after);
   kanban_column_viewmodel_destroy (viewmodel2);
 }
-
 

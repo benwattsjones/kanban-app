@@ -29,10 +29,10 @@ KanbanColumnView *kanban_column_view_new          (KanbanColumnObservable *colum
 
 #ifdef TESTING_ONLY_ACCESS
 
-GtkWidget        *kanban_column_view_get_contents      (KanbanColumnView  *self);
-
 gchar            *kanban_column_view_get_card_heading  (KanbanColumnView  *self,
                                                         gint               priority);
+
+gint              kanban_column_view_count_cards       (KanbanColumnView  *self);
 
 #endif /* TESTING_ONLY_ACCESS */
 

@@ -161,12 +161,6 @@ create_card_widget_func (gpointer item,
 
 #ifdef TESTING_ONLY_ACCESS
 
-GtkWidget *
-kanban_column_view_get_contents (KanbanColumnView *self)
-{
-  return GTK_WIDGET (self->column_contents);
-}
-
 gchar *
 kanban_column_view_get_card_heading (KanbanColumnView *self,
                                      gint              priority)
@@ -187,6 +181,18 @@ kanban_column_view_get_card_heading (KanbanColumnView *self,
   text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (heading_widget));
   gtk_text_buffer_get_bounds (text_buffer, &start, &end);
   return gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+}
+
+gint
+kanban_column_view_count_cards (KanbanColumnView *self)
+{
+  GList *cards_list, *l;
+  int num_cards = 0;
+  cards_list = gtk_container_get_children (GTK_CONTAINER (self->column_contents));
+  for (l = cards_list ; l != NULL; l = l->next)
+    ++num_cards;
+  g_list_free (cards_list);
+  return num_cards;
 }
 
 #endif /* TESTING_ONLY_ACCESS */
