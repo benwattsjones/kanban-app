@@ -28,7 +28,10 @@ G_DECLARE_FINAL_TYPE (KanbanColumnView, kanban_column_view, KANBAN, COLUMN_VIEW,
 KanbanColumnView *kanban_column_view_new          (KanbanColumnObservable *column_data);
 
 #ifdef TESTING_ONLY_ACCESS
-GtkWidget        *kanban_column_view_get_contents (KanbanColumnView       *self);
+GtkWidget        *kanban_column_view_get_contents      (KanbanColumnView  *self);
+
+gchar            *kanban_column_view_get_card_heading  (KanbanColumnView  *self,
+                                                        gint               priority);
 #endif
 
 G_END_DECLS
