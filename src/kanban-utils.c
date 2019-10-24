@@ -43,5 +43,17 @@ kanban_utils_find_widget_by_name (GtkWidget   *parent,
   return named_widget;
 }
 
+gchar *
+kanban_utils_get_text_from_view (GtkTextView *textview)
+{
+  GtkTextIter start, end;
+  GtkTextBuffer *text_buffer;
+
+  text_buffer = gtk_text_view_get_buffer (textview);
+  gtk_text_buffer_get_bounds (text_buffer, &start, &end);
+  return gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+
+}
+
 #endif /* TESTING_ONLY_ACCESS */
 

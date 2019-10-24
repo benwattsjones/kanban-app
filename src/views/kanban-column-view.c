@@ -161,26 +161,33 @@ create_card_widget_func (gpointer item,
 
 #ifdef TESTING_ONLY_ACCESS
 
-gchar *
-kanban_column_view_get_card_heading (KanbanColumnView *self,
-                                     gint              priority)
+static GtkWidget *
+kanban_column_view_get_nth_card (KanbanColumnView *self,
+                                 gint              priority)
 {
   GList *cards_list;
-  GtkWidget *chosen_card, *heading_widget;
-  GtkTextIter start, end;
-  GtkTextBuffer *text_buffer;
+  GtkWidget *chosen_card;
 
   cards_list = gtk_container_get_children (GTK_CONTAINER (self->column_contents));
   chosen_card = g_list_nth_data (cards_list, priority);
   g_list_free (cards_list);
+  return chosen_card;
+}
+
+gchar *
+kanban_column_view_get_card_heading (KanbanColumnView *self,
+                                     gint              priority)
+{
+  GtkWidget *chosen_card;
+  GtkWidget *heading_widget;
+
+  chosen_card = kanban_column_view_get_nth_card (self, priority);
   if (!chosen_card)
     return NULL;
   heading_widget = kanban_utils_find_widget_by_name (chosen_card, "heading-widget");
   if (!heading_widget)
     return NULL;
-  text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (heading_widget));
-  gtk_text_buffer_get_bounds (text_buffer, &start, &end);
-  return gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
+  return kanban_utils_get_text_from_view (GTK_TEXT_VIEW (heading_widget));
 }
 
 gint

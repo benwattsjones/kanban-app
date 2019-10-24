@@ -24,6 +24,8 @@ G_BEGIN_DECLS
 GtkWidget  *kanban_utils_find_widget_by_name  (GtkWidget   *parent,
                                                const gchar *name);
 
+gchar      *kanban_utils_get_text_from_view   (GtkTextView *textview);
+
 #endif /* TESTING_ONLY_ACCESS */
 
 G_END_DECLS
