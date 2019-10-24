@@ -89,9 +89,9 @@ TEST_F (KanbanBoardViewTests,
 TEST_F (KanbanBoardViewTests,
         AddColumn_ParametersValid_NewColumnAdded)
 {
-  int num_columns_before = kanban_board_count_columns (board);
+  int num_columns_before = kanban_board_view_count_columns (board);
   kanban_board_observer_add_column (KANBAN_BOARD_OBSERVER (board), NULL, 0);
-  int num_columns_after = kanban_board_count_columns (board);
+  int num_columns_after = kanban_board_view_count_columns (board);
 
   ASSERT_NE (num_columns_after, 0);
   EXPECT_EQ (num_columns_after, num_columns_before + 1);

@@ -75,7 +75,7 @@ kanban_board_view_new ()
 #ifdef TESTING_ONLY_ACCESS
 
 gint
-kanban_board_count_columns (KanbanBoardView *self)
+kanban_board_view_count_columns (KanbanBoardView *self)
 {
   GList *columns_list, *l;
   int num_columns = 0;
@@ -84,6 +84,16 @@ kanban_board_count_columns (KanbanBoardView *self)
     ++num_columns;
   g_list_free (columns_list);
   return num_columns;
+}
+
+KanbanColumnView *
+kanban_board_view_get_nth_column (KanbanBoardView *self,
+                                  gint             priority)
+{
+  GList *columns_list = gtk_container_get_children (GTK_CONTAINER (self));
+  KanbanColumnView *chosen_column = g_list_nth_data (columns_list, priority);
+  g_list_free (columns_list);
+  return chosen_column;
 }
 
 #endif /* TESTING_ONLY_ACCESS */

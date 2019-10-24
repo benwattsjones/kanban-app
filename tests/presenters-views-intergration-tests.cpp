@@ -110,10 +110,10 @@ TEST_F (PresentersViewsIntergrationTests, checkObjectsNotNull)
 
 TEST_F (PresentersViewsIntergrationTests, checkAddColumnCreatesWidget)
 {
-  int num_columns_before = kanban_board_count_columns (view);
+  int num_columns_before = kanban_board_view_count_columns (view);
   model_data.task = TASK_ADD_COLUMN;
   observer_model.notification (observer_model.instance, &model_data);
-  int num_columns_after = kanban_board_count_columns (view);
+  int num_columns_after = kanban_board_view_count_columns (view);
 
   ASSERT_NE (num_columns_after, 0);
   EXPECT_EQ (num_columns_after, num_columns_before + 1);
@@ -121,30 +121,22 @@ TEST_F (PresentersViewsIntergrationTests, checkAddColumnCreatesWidget)
 
 TEST_F (PresentersViewsIntergrationTests, checkAddCardCreatesWidget)
 {
-  GList *columns_added_before, *columns_added_after, *l;
-  int num_columns_before = 0, num_columns_after = 0;
-
-  columns_added_before = gtk_container_get_children (GTK_CONTAINER (view));
-  for (l = columns_added_before; l != NULL; l = l->next)
-    ++num_columns_before;
+  KanbanColumnView *column;
   model_data.task = TASK_ADD_COLUMN;
   observer_model.notification (observer_model.instance, &model_data);
+
+  column = kanban_board_view_get_nth_column (view, model_data.priority);
+  int num_cards_before = kanban_column_view_count_cards (column);
   model_data.task = TASK_ADD_CARD;
   observer_model.notification (observer_model.instance, &model_data);
-  columns_added_after = gtk_container_get_children (GTK_CONTAINER (view));
-  for (l = columns_added_after; l != NULL; l = l->next)
-    ++num_columns_after;
+  int num_cards_after = kanban_column_view_count_cards (column);
 
-  ASSERT_NE (num_columns_after, 0);
-  EXPECT_EQ (num_columns_after, num_columns_before + 1);
-
-  g_list_free (columns_added_before);
-  g_list_free (columns_added_after);
+  ASSERT_NE (num_cards_after, 0);
+  EXPECT_EQ (num_cards_after, num_cards_before + 1);
 }
 
 TEST_F (PresentersViewsIntergrationTests, checkChangeHeadingUpdatesWidget)
 {
-  GList *columns;
   KanbanColumnView *column;
   gchar *heading;
   gchar *new_heading = g_strdup ("New Card Heading");
@@ -156,14 +148,12 @@ TEST_F (PresentersViewsIntergrationTests, checkChangeHeadingUpdatesWidget)
   model_data.heading = new_heading;
   model_data.task = TASK_EDIT_CARD;
   observer_model.notification (observer_model.instance, &model_data);
-  columns = gtk_container_get_children (GTK_CONTAINER (view));
-  column = KANBAN_COLUMN_VIEW (columns->data);
+  column = kanban_board_view_get_nth_column (view, model_data.priority);
   heading = kanban_column_view_get_card_heading (column, model_data.priority);
 
   ASSERT_NE (heading, nullptr);
   EXPECT_STREQ (heading, new_heading);
 
-  g_list_free (columns);
   g_free (heading);
   g_free (new_heading);
 }
