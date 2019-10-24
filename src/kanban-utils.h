@@ -19,8 +19,12 @@
 
 G_BEGIN_DECLS
 
+#ifdef TESTING_ONLY_ACCESS
+
 GtkWidget  *kanban_utils_find_widget_by_name  (GtkWidget   *parent,
                                                const gchar *name);
+
+#endif /* TESTING_ONLY_ACCESS */
 
 G_END_DECLS
 

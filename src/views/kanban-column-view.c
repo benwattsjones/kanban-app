@@ -160,39 +160,13 @@ create_card_widget_func (gpointer item,
 }
 
 #ifdef TESTING_ONLY_ACCESS
+
 GtkWidget *
 kanban_column_view_get_contents (KanbanColumnView *self)
 {
   return GTK_WIDGET (self->column_contents);
 }
-/*
-static GtkWidget *
-find_widget_by_buildable_name (GtkWidget   *parent,
-                               const gchar *name)
-{
-  GtkWidget *named_widget = NULL;
-  GList *children, *l;
-  if (g_strcmp0 (gtk_buildable_get_name (GTK_BUILDABLE (parent)), name) == 0)
-    {
-      named_widget = parent;
-    }
-  else if (GTK_IS_BIN (parent))
-    {
-      named_widget = find_widget_by_buildable_name (
-                         gtk_bin_get_child (GTK_BIN (parent)), name);
-    }
-  else if (GTK_IS_CONTAINER (parent))
-    {
-      children = gtk_container_get_children (GTK_CONTAINER (parent));
-      for (l = children; l != NULL && named_widget == NULL; l = l->next)
-        {
-          named_widget = find_widget_by_buildable_name (GTK_WIDGET (l->data), name);
-        }
-      g_list_free (children);
-    }
-  return named_widget;
-}
-*/
+
 gchar *
 kanban_column_view_get_card_heading (KanbanColumnView *self,
                                      gint              priority)
@@ -214,5 +188,6 @@ kanban_column_view_get_card_heading (KanbanColumnView *self,
   gtk_text_buffer_get_bounds (text_buffer, &start, &end);
   return gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
 }
+
 #endif /* TESTING_ONLY_ACCESS */
 
