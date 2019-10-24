@@ -16,6 +16,7 @@
 
 #include "../presenters/kanban-card-viewmodel.h"
 #include "../presenters/kanban-column-observable-interface.h"
+#include "../kanban-utils.h"
 #include <kanban-config.h>
 
 #include <gtk/gtk.h>
@@ -164,7 +165,7 @@ kanban_column_view_get_contents (KanbanColumnView *self)
 {
   return GTK_WIDGET (self->column_contents);
 }
-
+/*
 static GtkWidget *
 find_widget_by_buildable_name (GtkWidget   *parent,
                                const gchar *name)
@@ -191,7 +192,7 @@ find_widget_by_buildable_name (GtkWidget   *parent,
     }
   return named_widget;
 }
-
+*/
 gchar *
 kanban_column_view_get_card_heading (KanbanColumnView *self,
                                      gint              priority)
@@ -206,7 +207,7 @@ kanban_column_view_get_card_heading (KanbanColumnView *self,
   g_list_free (cards_list);
   if (!chosen_card)
     return NULL;
-  heading_widget = find_widget_by_buildable_name (GTK_WIDGET (chosen_card), "heading-widget");
+  heading_widget = kanban_utils_find_widget_by_name (chosen_card, "heading-widget");
   if (!heading_widget)
     return NULL;
   text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (heading_widget));

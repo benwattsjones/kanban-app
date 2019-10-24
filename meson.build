@@ -43,6 +43,7 @@ kanban_app_sources = files(
     'src/models/model-presenter-interface.c',
     'src/models/kanban-data.c',
     'src/kanban-application.c',
+    'src/kanban-utils.c',
     'src/main.c'
 )
 
