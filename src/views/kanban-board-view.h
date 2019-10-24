@@ -23,7 +23,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanBoardView, kanban_board_view, KANBAN, BOARD_VIEW, GtkGrid)
 
-KanbanBoardView *kanban_board_view_new ();
+KanbanBoardView  *kanban_board_view_new       ();
+
+#ifdef TESTING_ONLY_ACCESS
+
+gint              kanban_board_count_columns  (KanbanBoardView *self);
+
+#endif /* TESTING_ONLY_ACCESS */
 
 G_END_DECLS
 

@@ -72,3 +72,19 @@ kanban_board_view_new ()
   return g_object_new (KANBAN_TYPE_BOARD_VIEW, NULL);
 }
 
+#ifdef TESTING_ONLY_ACCESS
+
+gint
+kanban_board_count_columns (KanbanBoardView *self)
+{
+  GList *columns_list, *l;
+  int num_columns = 0;
+  columns_list = gtk_container_get_children (GTK_CONTAINER (self));
+  for (l = columns_list ; l != NULL; l = l->next)
+    ++num_columns;
+  g_list_free (columns_list);
+  return num_columns;
+}
+
+#endif /* TESTING_ONLY_ACCESS */
+

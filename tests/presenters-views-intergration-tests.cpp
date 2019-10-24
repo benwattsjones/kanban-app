@@ -110,23 +110,13 @@ TEST_F (PresentersViewsIntergrationTests, checkObjectsNotNull)
 
 TEST_F (PresentersViewsIntergrationTests, checkAddColumnCreatesWidget)
 {
-  GList *columns_added_before, *columns_added_after, *l;
-  int num_columns_before = 0, num_columns_after = 0;
-  columns_added_before = gtk_container_get_children (GTK_CONTAINER (view));
-  for (l = columns_added_before; l != NULL; l = l->next)
-    ++num_columns_before;
-
+  int num_columns_before = kanban_board_count_columns (view);
   model_data.task = TASK_ADD_COLUMN;
   observer_model.notification (observer_model.instance, &model_data);
-  columns_added_after = gtk_container_get_children (GTK_CONTAINER (view));
-  for (l = columns_added_after; l != NULL; l = l->next)
-    ++num_columns_after;
+  int num_columns_after = kanban_board_count_columns (view);
 
   ASSERT_NE (num_columns_after, 0);
   EXPECT_EQ (num_columns_after, num_columns_before + 1);
-
-  g_list_free (columns_added_before);
-  g_list_free (columns_added_after);
 }
 
 TEST_F (PresentersViewsIntergrationTests, checkAddCardCreatesWidget)
