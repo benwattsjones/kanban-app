@@ -81,6 +81,26 @@ TEST_F (KanbanColumnViewModelTests,
 }
 
 TEST_F (KanbanColumnViewModelTests,
+        New_ValidColumnNamePassed_ColumnNameStoredAsRetrievableProperty)
+{
+  char *result_column_name;
+  g_object_get (viewmodel, "column-name", &result_column_name, NULL);
+  EXPECT_STREQ (result_column_name, column_name);
+  g_free (result_column_name);
+}
+
+TEST_F (KanbanColumnViewModelTests,
+        SetHeading_ValidColumnNamePassed_ColumnNameUpdatedAsRetrievableProperty)
+{
+  char *result_column_name;
+  const char *new_column_name = "My new column name!";
+  kanban_column_viewmodel_set_heading (viewmodel, new_column_name);
+  g_object_get (viewmodel, "column-name", &result_column_name, NULL);
+  EXPECT_STREQ (result_column_name, new_column_name);
+  g_free (result_column_name);
+}
+
+TEST_F (KanbanColumnViewModelTests,
         GListModelGetNItems_NewOjectCreated_ItemCountInitiallyZero)
 {
   int num_items = g_list_model_get_n_items (G_LIST_MODEL (viewmodel));
