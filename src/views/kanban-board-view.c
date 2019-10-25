@@ -90,10 +90,7 @@ KanbanColumnView *
 kanban_board_view_get_nth_column (KanbanBoardView *self,
                                   gint             priority)
 {
-  GList *columns_list = gtk_container_get_children (GTK_CONTAINER (self));
-  KanbanColumnView *chosen_column = g_list_nth_data (columns_list, priority);
-  g_list_free (columns_list);
-  return chosen_column;
+  return KANBAN_COLUMN_VIEW (gtk_grid_get_child_at (GTK_GRID (self), priority, 0));
 }
 
 #endif /* TESTING_ONLY_ACCESS */
