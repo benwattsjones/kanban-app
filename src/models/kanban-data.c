@@ -87,6 +87,15 @@ test_observers()
   card->task = TASK_MOVE_CARD;
   emit_kanban_card_change_signal (card);
 
+  card->card_id = 0;
+  card->column_id = 2;
+  card->heading = "COLUMN 2 renamed!";
+  card->content = NULL;
+  card->priority = 1;
+  card->task = TASK_EDIT_COLUMN;
+  emit_kanban_card_change_signal (card);
+
+
   free (card);
   card = NULL;
 }

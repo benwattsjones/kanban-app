@@ -161,6 +161,12 @@ create_card_widget_func (gpointer item,
 
 #ifdef TESTING_ONLY_ACCESS
 
+gchar *
+kanban_column_view_get_heading (KanbanColumnView *self)
+{
+  return kanban_utils_get_text_from_view (GTK_TEXT_VIEW (self->column_heading));
+}
+
 static GtkWidget *
 kanban_column_view_get_nth_card (KanbanColumnView *self,
                                  gint              priority)
