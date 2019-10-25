@@ -30,9 +30,11 @@ struct _KanbanColumnObservableInterface
   GTypeInterface parent_iface;
 
   GtkTextBuffer *   (*get_heading)    (KanbanColumnObservable *self);
+  gint              (*get_id)         (KanbanColumnObservable *self);
 };
 
 GtkTextBuffer  *kanban_column_observable_get_heading  (KanbanColumnObservable *self);
+gint            kanban_column_observable_get_id       (KanbanColumnObservable *self);
 
 G_END_DECLS
 

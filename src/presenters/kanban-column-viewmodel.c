@@ -92,10 +92,17 @@ kanban_column_viewmodel_get_heading (KanbanColumnObservable *model)
   return KANBAN_COLUMN_VIEWMODEL (model)->column_name;
 }
 
+static gint
+kanban_column_viewmodel_get_id (KanbanColumnObservable *model)
+{
+  return KANBAN_COLUMN_VIEWMODEL (model)->column_id;
+}
+
 static void
 kanban_column_observable_iface_init (KanbanColumnObservableInterface *iface)
 {
   iface->get_heading = kanban_column_viewmodel_get_heading;
+  iface->get_id = kanban_column_viewmodel_get_id;
 }
 
 /* funcs for class */

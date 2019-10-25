@@ -78,3 +78,10 @@ TEST_F (KanbanColumnObservableInterfaceTests,
   g_free (buffer_text);
 }
 
+TEST_F (KanbanColumnObservableInterfaceTests,
+        GetId_ValidKanbanColumnViewModelPassed_ColumnIdReturned)
+{
+  KanbanColumnObservable *column_iface = KANBAN_COLUMN_OBSERVABLE (viewmodel);
+  int column_id = kanban_column_observable_get_id (column_iface);
+  EXPECT_EQ (column_id, COLUMN_ID);
+}
