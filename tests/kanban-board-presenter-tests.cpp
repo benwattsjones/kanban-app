@@ -50,6 +50,15 @@ extern "C"
     (void) new_column;
     (void) priority;
   }
+
+  void kanban_board_observer_move_column (KanbanBoardObserver  *self,
+                                          gint                  column_id,
+                                          gint                  priority)
+  {
+    (void) self;
+    (void) column_id;
+    (void) priority;
+  }
 }
 
 // Test Fixtures:

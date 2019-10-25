@@ -52,9 +52,18 @@ kanban_board_view_add_column (KanbanBoardObserver     *self,
 }
 
 static void
+kanban_board_view_move_column (KanbanBoardObserver *self,
+                               gint                 column_id,
+                               gint                 priority)
+{
+  g_print ("hello\n");
+}
+
+static void
 kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface)
 {
   iface->add_column = kanban_board_view_add_column;
+  iface->move_column = kanban_board_view_move_column;
 }
 
 // KanbanBoardView GObject implementation:

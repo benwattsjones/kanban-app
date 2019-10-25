@@ -40,3 +40,18 @@ kanban_board_observer_add_column (KanbanBoardObserver     *self,
   g_return_if_fail (iface->add_column != NULL);
   iface->add_column (self, new_column, priority);
 }
+
+void
+kanban_board_observer_move_column (KanbanBoardObserver *self,
+                                   gint                 column_id,
+                                   gint                 priority)
+{
+  if (!self)
+    return;
+  KanbanBoardObserverInterface *iface;
+  g_return_if_fail (KANBAN_IS_BOARD_OBSERVER (self));
+  iface = KANBAN_BOARD_OBSERVER_GET_IFACE (self);
+  g_return_if_fail (iface->move_column != NULL);
+  iface->move_column (self, column_id, priority);
+}
+
