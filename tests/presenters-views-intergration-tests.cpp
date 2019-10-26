@@ -207,3 +207,26 @@ TEST_F (PresentersViewsIntergrationTests, checkEditColumnChangesColumnWidgetText
   g_free (model_data.heading);
 }
 
+TEST_F (PresentersViewsIntergrationTests, checkMoveColumnMovesColumnWidget)
+{
+  KanbanColumnView *column1_before, *column2_before, *column1_after, *column2_after;
+  model_data.task = TASK_ADD_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  column1_before = kanban_board_view_get_nth_column (view, model_data.priority);
+  model_data.column_id++;
+  model_data.priority++;
+  observer_model.notification (observer_model.instance, &model_data);
+  column2_before = kanban_board_view_get_nth_column (view, model_data.priority);
+
+  model_data.priority--;
+  model_data.task = TASK_MOVE_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  column1_after = kanban_board_view_get_nth_column (view, model_data.priority);
+  column2_after = kanban_board_view_get_nth_column (view, model_data.priority + 1);
+
+  ASSERT_NE (column1_after, nullptr);
+  ASSERT_NE (column2_after, nullptr);
+  EXPECT_EQ (column1_after, column2_before);
+  EXPECT_EQ (column2_after, column1_before);
+}
+
