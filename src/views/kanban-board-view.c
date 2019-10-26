@@ -56,7 +56,17 @@ kanban_board_view_move_column (KanbanBoardObserver *self,
                                gint                 column_id,
                                gint                 priority)
 {
-  g_print ("hello\n");
+  gint current_position;
+  GtkWidget *column_widget = g_hash_table_lookup (
+                                 KANBAN_BOARD_VIEW (self)->id_column_table,
+                                 GINT_TO_POINTER (column_id));
+  gtk_container_child_get (GTK_CONTAINER (self), column_widget,
+                           "left-attach", &current_position, NULL);
+  g_object_ref (G_OBJECT (column_widget));
+  gtk_grid_remove_column (GTK_GRID (self), current_position);
+  gtk_grid_insert_column (GTK_GRID (self), priority);
+  gtk_grid_attach (GTK_GRID (self), column_widget, priority, 0, 1, 1);
+  g_object_unref (G_OBJECT (column_widget));
 }
 
 static void
