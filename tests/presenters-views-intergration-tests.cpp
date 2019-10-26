@@ -187,3 +187,46 @@ TEST_F (PresentersViewsIntergrationTests, checkMoveCardMovesWidget)
   EXPECT_EQ (col1_len_after, col1_len_before + 1);
 }
 
+TEST_F (PresentersViewsIntergrationTests, checkEditColumnChangesColumnWidgetText)
+{
+  KanbanColumnView *column;
+  char *column_name_stored;
+  model_data.task = TASK_ADD_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  column = kanban_board_view_get_nth_column (view, model_data.priority);
+
+  model_data.heading = g_strdup ("new column name");
+  model_data.task = TASK_EDIT_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  column_name_stored = kanban_column_view_get_heading (column);
+
+  ASSERT_NE (column_name_stored, nullptr);
+  EXPECT_STREQ (column_name_stored, model_data.heading);
+
+  g_free (column_name_stored);
+  g_free (model_data.heading);
+}
+
+TEST_F (PresentersViewsIntergrationTests, checkMoveColumnMovesColumnWidget)
+{
+  KanbanColumnView *column1_before, *column2_before, *column1_after, *column2_after;
+  model_data.task = TASK_ADD_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  column1_before = kanban_board_view_get_nth_column (view, model_data.priority);
+  model_data.column_id++;
+  model_data.priority++;
+  observer_model.notification (observer_model.instance, &model_data);
+  column2_before = kanban_board_view_get_nth_column (view, model_data.priority);
+
+  model_data.priority--;
+  model_data.task = TASK_MOVE_COLUMN;
+  observer_model.notification (observer_model.instance, &model_data);
+  column1_after = kanban_board_view_get_nth_column (view, model_data.priority);
+  column2_after = kanban_board_view_get_nth_column (view, model_data.priority + 1);
+
+  ASSERT_NE (column1_after, nullptr);
+  ASSERT_NE (column2_after, nullptr);
+  EXPECT_EQ (column1_after, column2_before);
+  EXPECT_EQ (column2_after, column1_before);
+}
+

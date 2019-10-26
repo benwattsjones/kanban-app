@@ -26,6 +26,20 @@ kanban_column_observable_default_init (KanbanColumnObservableInterface *iface)
   (void) iface;
 }
 
+gint
+kanban_column_observable_get_id (KanbanColumnObservable *self)
+{
+#ifdef TESTING_ONLY_ACCESS
+  if (!self)
+    return 0;
+#endif
+  KanbanColumnObservableInterface *iface;
+  g_return_val_if_fail (KANBAN_IS_COLUMN_OBSERVABLE (self), 0);
+  iface = KANBAN_COLUMN_OBSERVABLE_GET_IFACE (self);
+  g_return_val_if_fail (iface->get_id != NULL, 0);
+  return iface->get_id (self);
+
+}
 
 GtkTextBuffer *
 kanban_column_observable_get_heading (KanbanColumnObservable *self)

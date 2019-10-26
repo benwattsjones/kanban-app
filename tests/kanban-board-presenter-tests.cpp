@@ -50,6 +50,15 @@ extern "C"
     (void) new_column;
     (void) priority;
   }
+
+  void kanban_board_observer_move_column (KanbanBoardObserver  *self,
+                                          gint                  column_id,
+                                          gint                  priority)
+  {
+    (void) self;
+    (void) column_id;
+    (void) priority;
+  }
 }
 
 // Test Fixtures:
@@ -227,5 +236,23 @@ TEST_F (KanbanBoardPresenterTests,
   EXPECT_EQ (col2_count_before, 0);
   EXPECT_EQ (col1_count_after, 0);
   EXPECT_EQ (col2_count_after, 1);
+}
+
+TEST_F (KanbanBoardPresenterTests,
+        EditColumn_NewHeadingDataPassed_ColumnNameChanged)
+{
+  char *column_name_stored;
+  KanbanColumnViewModel *column_added;
+  observer->task_func[TASK_ADD_COLUMN] (observer->viewmodel, &card_data);
+  column_added = kanban_board_presenter_get_column (viewmodel, card_data.column_id);
+  g_free (card_data.heading);
+  card_data.heading = g_strdup ("My new column heading.");
+
+  observer->task_func[TASK_EDIT_COLUMN] (observer->viewmodel, &card_data);
+  g_object_get (column_added, "column-name", &column_name_stored, NULL);
+
+  EXPECT_STREQ (card_data.heading, column_name_stored);
+
+  g_free (column_name_stored);
 }
 

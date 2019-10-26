@@ -29,14 +29,22 @@ struct _KanbanBoardObserverInterface
 {
   GTypeInterface parent_iface;
 
-  void (*add_column) (KanbanBoardObserver     *self,
-                      KanbanColumnObservable  *new_column,
-                      gint                     priority);
+  void (*add_column)  (KanbanBoardObserver     *self,
+                       KanbanColumnObservable  *new_column,
+                       gint                     priority);
+
+  void (*move_column) (KanbanBoardObserver     *self,
+                       gint                     column_id,
+                       gint                     priority);
 };
 
-void kanban_board_observer_add_column (KanbanBoardObserver     *self,
-                                       KanbanColumnObservable  *new_column,
-                                       gint                     priority);
+void kanban_board_observer_add_column  (KanbanBoardObserver     *self,
+                                        KanbanColumnObservable  *new_column,
+                                        gint                     priority);
+
+void kanban_board_observer_move_column (KanbanBoardObserver     *self,
+                                        gint                     column_id,
+                                        gint                     priority);
 
 G_END_DECLS
 

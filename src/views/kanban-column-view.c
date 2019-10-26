@@ -161,17 +161,18 @@ create_card_widget_func (gpointer item,
 
 #ifdef TESTING_ONLY_ACCESS
 
+gchar *
+kanban_column_view_get_heading (KanbanColumnView *self)
+{
+  return kanban_utils_get_text_from_view (GTK_TEXT_VIEW (self->column_heading));
+}
+
 static GtkWidget *
 kanban_column_view_get_nth_card (KanbanColumnView *self,
                                  gint              priority)
 {
-  GList *cards_list;
-  GtkWidget *chosen_card;
-
-  cards_list = gtk_container_get_children (GTK_CONTAINER (self->column_contents));
-  chosen_card = g_list_nth_data (cards_list, priority);
-  g_list_free (cards_list);
-  return chosen_card;
+  return GTK_WIDGET (gtk_list_box_get_row_at_index (
+                         GTK_LIST_BOX (self->column_contents), priority));
 }
 
 gchar *

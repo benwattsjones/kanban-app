@@ -25,14 +25,19 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanColumnView, kanban_column_view, KANBAN, COLUMN_VIEW, GtkBox)
 
-KanbanColumnView *kanban_column_view_new          (KanbanColumnObservable *column_data);
+KanbanColumnView  *kanban_column_view_new  (KanbanColumnObservable *column_data);
 
 #ifdef TESTING_ONLY_ACCESS
 
-gchar            *kanban_column_view_get_card_heading  (KanbanColumnView  *self,
-                                                        gint               priority);
+gchar             *kanban_column_view_get_heading
+                                           (KanbanColumnView       *self);
 
-gint              kanban_column_view_count_cards       (KanbanColumnView  *self);
+gchar             *kanban_column_view_get_card_heading
+                                           (KanbanColumnView       *self,
+                                            gint                    priority);
+
+gint               kanban_column_view_count_cards
+                                           (KanbanColumnView       *self);
 
 #endif /* TESTING_ONLY_ACCESS */
 

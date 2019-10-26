@@ -21,6 +21,8 @@
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
+#define NULL_TERMINATED_LENGTH -1
+
 struct _KanbanColumnViewModel
 {
   GObject         parent_instance;
@@ -90,10 +92,17 @@ kanban_column_viewmodel_get_heading (KanbanColumnObservable *model)
   return KANBAN_COLUMN_VIEWMODEL (model)->column_name;
 }
 
+static gint
+kanban_column_viewmodel_get_id (KanbanColumnObservable *model)
+{
+  return KANBAN_COLUMN_VIEWMODEL (model)->column_id;
+}
+
 static void
 kanban_column_observable_iface_init (KanbanColumnObservableInterface *iface)
 {
   iface->get_heading = kanban_column_viewmodel_get_heading;
+  iface->get_id = kanban_column_viewmodel_get_id;
 }
 
 /* funcs for class */
@@ -214,6 +223,14 @@ kanban_column_viewmodel_destroy (gpointer vself)
   KanbanColumnViewModel *self = KANBAN_COLUMN_VIEWMODEL (vself);
   g_object_unref (self);
   self = NULL;
+}
+
+void
+kanban_column_viewmodel_set_heading (KanbanColumnViewModel *self,
+                                     const gchar           *text)
+{
+  gtk_text_buffer_set_text (self->column_name, text, NULL_TERMINATED_LENGTH);
+  g_object_notify_by_pspec (G_OBJECT (self), obj_properties[PROP_COLUMN_NAME]);
 }
 
 GSequenceIter *

@@ -134,8 +134,8 @@ kanban_board_presenter_edit_column (void              *vself,
                                     const KanbanData  *column_data)
 {
   KanbanBoardPresenter *self = vself;
-  g_print ("Edited column: ID: %d; HEADING: %s\n",
-           column_data->column_id, column_data->heading);
+  KanbanColumnViewModel *column = get_column_from_id (self, column_data->column_id);
+  kanban_column_viewmodel_set_heading (column, column_data->heading);
 }
 
 static void
@@ -143,8 +143,9 @@ kanban_board_presenter_move_column (void              *vself,
                                     const KanbanData  *column_data)
 {
   KanbanBoardPresenter *self = vself;
-  g_print ("Moved column: ID: %d; HEADING: %s\n",
-           column_data->column_id, column_data->heading);
+  kanban_board_observer_move_column (self->view_observer,
+                                     column_data->column_id,
+                                     column_data->priority);
 }
 
 static ModelObserverInterface *

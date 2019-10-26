@@ -24,6 +24,8 @@
 struct _KanbanBoardView
 {
   GtkGrid         parent_instance;
+
+  GHashTable     *id_column_table;
 };
 
 static void kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface);
@@ -43,25 +45,63 @@ kanban_board_view_add_column (KanbanBoardObserver     *self,
   KanbanColumnView *new_column_widget = kanban_column_view_new (new_column);
   gtk_grid_insert_column (GTK_GRID (self), priority);
   gtk_grid_attach (GTK_GRID (self), GTK_WIDGET (new_column_widget), priority, 0, 1, 1);
+
+  int column_id = kanban_column_observable_get_id (new_column);
+  g_hash_table_insert (KANBAN_BOARD_VIEW (self)->id_column_table,
+                       GINT_TO_POINTER (column_id), new_column_widget);
+}
+
+static void
+kanban_board_view_move_column (KanbanBoardObserver *self,
+                               gint                 column_id,
+                               gint                 priority)
+{
+  gint current_position;
+  GtkWidget *column_widget = g_hash_table_lookup (
+                                 KANBAN_BOARD_VIEW (self)->id_column_table,
+                                 GINT_TO_POINTER (column_id));
+  gtk_container_child_get (GTK_CONTAINER (self), column_widget,
+                           "left-attach", &current_position, NULL);
+  g_object_ref (G_OBJECT (column_widget));
+  gtk_grid_remove_column (GTK_GRID (self), current_position);
+  gtk_grid_insert_column (GTK_GRID (self), priority);
+  gtk_grid_attach (GTK_GRID (self), column_widget, priority, 0, 1, 1);
+  g_object_unref (G_OBJECT (column_widget));
 }
 
 static void
 kanban_board_observer_iface_init (KanbanBoardObserverInterface *iface)
 {
   iface->add_column = kanban_board_view_add_column;
+  iface->move_column = kanban_board_view_move_column;
 }
 
 // KanbanBoardView GObject implementation:
 
 static void
+kanban_board_view_finalize (GObject *object)
+{
+  KanbanBoardView *self = KANBAN_BOARD_VIEW (object);
+
+  g_clear_pointer (&self->id_column_table, g_hash_table_destroy);
+
+  G_OBJECT_CLASS (kanban_board_view_parent_class)->finalize (object);
+}
+
+static void
 kanban_board_view_init (KanbanBoardView *self)
 {
+  self->id_column_table = g_hash_table_new (g_direct_hash, g_direct_equal);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 static void
 kanban_board_view_class_init (KanbanBoardViewClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  object_class->finalize = kanban_board_view_finalize;
+
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
                                                GRESOURCE_PREFIX "board.ui");
 }
@@ -90,10 +130,7 @@ KanbanColumnView *
 kanban_board_view_get_nth_column (KanbanBoardView *self,
                                   gint             priority)
 {
-  GList *columns_list = gtk_container_get_children (GTK_CONTAINER (self));
-  KanbanColumnView *chosen_column = g_list_nth_data (columns_list, priority);
-  g_list_free (columns_list);
-  return chosen_column;
+  return KANBAN_COLUMN_VIEW (gtk_grid_get_child_at (GTK_GRID (self), priority, 0));
 }
 
 #endif /* TESTING_ONLY_ACCESS */

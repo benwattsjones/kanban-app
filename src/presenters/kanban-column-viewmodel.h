@@ -32,6 +32,10 @@ KanbanColumnViewModel  *kanban_column_viewmodel_new
 void                    kanban_column_viewmodel_destroy 
                                               (gpointer                vself);
 
+void                    kanban_column_viewmodel_set_heading 
+                                              (KanbanColumnViewModel  *self,
+                                               const gchar            *text);
+
 GSequenceIter          *kanban_column_viewmodel_new_card
                                               (KanbanColumnViewModel  *self,
                                                const KanbanData       *card_data);
