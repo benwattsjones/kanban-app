@@ -106,7 +106,7 @@ executable(
                link_args: kanban_app_ld_args,
             dependencies: kanban_app_deps,
                      pie: true,
-     include_directories: config_h_inc
+     include_directories: [src_inc, config_h_inc]
 )
 
 test_deps = [

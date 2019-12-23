@@ -15,8 +15,8 @@
 #include "model-observer.h"
 
 #include "model-observer-interface.h"
-#include "../models/model-presenter-interface.h"
-#include "../models/kanban-data.h"
+#include "models/model-presenter-interface.h"
+#include "models/kanban-data.h"
 
 #include <assert.h>
 #include <stddef.h>

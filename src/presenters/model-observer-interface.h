@@ -15,7 +15,7 @@
 #ifndef MODEL_OBSERVER_INTERFACE_H
 #define MODEL_OBSERVER_INTERFACE_H
 
-#include "../models/kanban-data.h"
+#include "models/kanban-data.h"
 
 #include <gtk/gtk.h>
 

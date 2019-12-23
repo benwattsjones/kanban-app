@@ -14,9 +14,8 @@
 
 #include "kanban-column-view.h"
 
-#include "../presenters/kanban-card-viewmodel.h"
-#include "../presenters/kanban-column-observable-interface.h"
-#include "../kanban-utils.h"
+#include "presenters/kanban-card-viewmodel.h"
+#include "presenters/kanban-column-observable-interface.h"
 #include <kanban-config.h>
 
 #include <gtk/gtk.h>
@@ -160,6 +159,8 @@ create_card_widget_func (gpointer item,
 }
 
 #ifdef TESTING_ONLY_ACCESS
+
+#include "kanban-utils.h"
 
 gchar *
 kanban_column_view_get_heading (KanbanColumnView *self)

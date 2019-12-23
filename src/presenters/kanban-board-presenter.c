@@ -20,7 +20,7 @@
 #include "kanban-card-viewmodel.h"
 #include "model-observer.h"
 #include "model-observer-interface.h"
-#include "../models/kanban-data.h"
+#include "models/kanban-data.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>

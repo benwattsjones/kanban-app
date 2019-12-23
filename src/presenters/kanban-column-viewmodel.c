@@ -16,7 +16,7 @@
 
 #include "kanban-column-observable-interface.h"
 #include "kanban-card-viewmodel.h"
-#include "../models/kanban-data.h"
+#include "models/kanban-data.h"
 
 #include <gio/gio.h>
 #include <gtk/gtk.h>

@@ -15,7 +15,7 @@
 #ifndef KANBAN_WINDOW_H
 #define KANBAN_WINDOW_H
 
-#include "../kanban-application.h"
+#include "kanban-application.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS

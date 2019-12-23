@@ -14,7 +14,7 @@
 
 #include "kanban-card-viewmodel.h"
 
-#include "../models/kanban-data.h"
+#include "models/kanban-data.h"
 
 #include <gtk/gtk.h>
 

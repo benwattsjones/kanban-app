@@ -15,7 +15,7 @@
 #ifndef KANBAN_COLUMN_VIEW_H
 #define KANBAN_COLUMN_VIEW_H
 
-#include "../presenters/kanban-column-observable-interface.h"
+#include "presenters/kanban-column-observable-interface.h"
 
 #include <gtk/gtk.h>
 

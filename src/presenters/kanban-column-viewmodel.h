@@ -15,7 +15,7 @@
 #ifndef KANBAN_COLUMN_VIEWMODEL_H
 #define KANBAN_COLUMN_VIEWMODEL_H
 
-#include "../models/kanban-data.h"
+#include "models/kanban-data.h"
 
 #include <gtk/gtk.h>
 
