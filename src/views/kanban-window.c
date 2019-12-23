@@ -64,7 +64,7 @@ kanban_window_class_init (KanbanWindowClass *klass)
 KanbanWindow *
 kanban_window_new (KanbanApplication *app)
 {
-  return g_object_new (KANBAN_WINDOW_TYPE,
+  return g_object_new (KANBAN_TYPE_WINDOW,
                        "application", app,
                        NULL);
 }

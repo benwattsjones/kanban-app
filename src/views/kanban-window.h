@@ -20,7 +20,7 @@
 
 G_BEGIN_DECLS
 
-#define KANBAN_WINDOW_TYPE (kanban_window_get_type ())
+#define KANBAN_TYPE_WINDOW (kanban_window_get_type ())
 
 G_DECLARE_FINAL_TYPE (KanbanWindow, kanban_window, KANBAN, WINDOW, GtkApplicationWindow)
 
