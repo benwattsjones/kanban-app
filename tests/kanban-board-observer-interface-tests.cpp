@@ -45,6 +45,9 @@ extern "C"
                                 KanbanColumnObservable  *new_column,
                                 gint                     priority)
   {
+    (void) self;
+    (void) new_column;
+    (void) priority;
     ++add_column_called;
   }
 

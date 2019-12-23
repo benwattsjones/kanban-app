@@ -1,8 +1,15 @@
 
+kanban_test_c_args = kanban_app_c_args
+kanban_test_c_args += '-DTESTING_ONLY_ACCESS'
+
+# Prevent clang warnings from G_DECLARE_TYPE macros in mocks
+if meson.get_compiler('c').get_id() == 'clang'
+    kanban_test_c_args += ['-Wno-unused-function']
+endif
 
 default_test_args = {
-                 'c_args': [kanban_app_c_args, '-DTESTING_ONLY_ACCESS'],
-               'cpp_args': ['-DTESTING_ONLY_ACCESS'],
+                 'c_args': kanban_test_c_args,
+               'cpp_args': kanban_test_c_args,
               'link_args': kanban_app_ld_args,
     'include_directories': [config_h_inc, src_inc],
            'dependencies': [test_deps, kanban_app_deps],
