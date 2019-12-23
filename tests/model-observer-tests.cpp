@@ -14,10 +14,10 @@
 
 extern "C"
 {
-  #include "../src/presenters/model-observer.h"
-  #include "../src/presenters/model-observer-interface.h"
-  #include "../src/models/kanban-data.h"
-  #include "../src/models/model-presenter-interface.h"
+  #include "presenters/model-observer.h"
+  #include "presenters/model-observer-interface.h"
+  #include "models/kanban-data.h"
+  #include "models/model-presenter-interface.h"
 
   #include <gtk/gtk.h>
 }

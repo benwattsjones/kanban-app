@@ -14,10 +14,10 @@
 
 extern "C"
 {
-  #include "../src/views/kanban-board-view.h"
-  #include "../src/views/kanban-column-view.h"
-  #include "../src/presenters/kanban-board-observer-interface.h"
-  #include "../src/presenters/kanban-column-observable-interface.h"
+  #include "views/kanban-board-view.h"
+  #include "views/kanban-column-view.h"
+  #include "presenters/kanban-board-observer-interface.h"
+  #include "presenters/kanban-column-observable-interface.h"
 
   #include <gtk/gtk.h>
 }

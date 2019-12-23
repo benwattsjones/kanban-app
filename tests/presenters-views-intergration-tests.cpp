@@ -14,13 +14,13 @@
 
 extern "C"
 {
-  #include "../src/kanban-application.h"
-  #include "../src/models/model-presenter-interface.h"
-  #include "../src/presenters/kanban-board-presenter.h"
-  #include "../src/presenters/model-observer-interface.h"
-  #include "../src/presenters/kanban-board-observer-interface.h"
-  #include "../src/views/kanban-board-view.h"
-  #include "../src/views/kanban-column-view.h"
+  #include "kanban-application.h"
+  #include "models/model-presenter-interface.h"
+  #include "presenters/kanban-board-presenter.h"
+  #include "presenters/model-observer-interface.h"
+  #include "presenters/kanban-board-observer-interface.h"
+  #include "views/kanban-board-view.h"
+  #include "views/kanban-column-view.h"
 
   #include <gtk/gtk.h>
 }

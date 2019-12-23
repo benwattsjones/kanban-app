@@ -47,6 +47,8 @@ kanban_app_sources = files(
     'src/main.c'
 )
 
+src_inc = include_directories('src')
+
 kanban_app_gresources = gnome.compile_resources(
     'kanban-app-resources',
     'src/views/kanban-app.gresource.xml',
