@@ -66,7 +66,7 @@ kanban_application_activate (GApplication *app)
 
   self->board_view = kanban_board_view_new();
   self->viewmodel = kanban_board_presenter_new (KANBAN_BOARD_OBSERVER (self->board_view));
-  self->window = kanban_window_new (self);
+  self->window = kanban_window_new (app);
 
   kanban_window_display_board (self->window, GTK_WIDGET (self->board_view));
 

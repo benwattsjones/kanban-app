@@ -37,7 +37,7 @@ static struct _FunctionCallTracker
 
 extern "C"
 {
-  KanbanWindow *kanban_window_new (KanbanApplication *app)
+  KanbanWindow *kanban_window_new (GApplication *app)
   {
     (void) app;
     FunctionCallTracker.initialize_kanban_view_func_count =

@@ -15,7 +15,6 @@
 #ifndef KANBAN_WINDOW_H
 #define KANBAN_WINDOW_H
 
-#include "kanban-application.h"
 #include <gtk/gtk.h>
 
 G_BEGIN_DECLS
@@ -24,7 +23,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (KanbanWindow, kanban_window, KANBAN, WINDOW, GtkApplicationWindow)
 
-KanbanWindow *kanban_window_new           (KanbanApplication *app);
+KanbanWindow *kanban_window_new           (GApplication *app);
 
 void          kanban_window_display_board (KanbanWindow      *self,
                                            GtkWidget         *board);
