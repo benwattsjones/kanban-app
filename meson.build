@@ -102,7 +102,7 @@ elif get_option('buildtype').startswith('debug') # default
 endif
 
 kanban_app_deps = [
-    dependency('gtk+-3.0', version: '>=3.24.10')
+    dependency('gtk+-3.0', version: '>=3.22.0')
 ] 
 
 executable(
