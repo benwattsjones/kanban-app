@@ -1,5 +1,6 @@
 dist: bionic
 os: linux
+services: xvfb  # virtual screen for GUI tests
 
 language: cpp
 
@@ -16,3 +17,4 @@ install:
 
 script:
   - meson builddir && ninja -C builddir && meson test -C builddir
+  - ./builddir/kanban-app --version
