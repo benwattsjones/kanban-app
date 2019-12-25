@@ -62,7 +62,6 @@ kanban_app_c_args = [
     '-fexceptions',                             # hardening options...
     '-fstack-protector-strong',
     '-fpic',
-    '-fcf-protection',
     '-fasynchronous-unwind-tables',             # debuging options...
     '-pipe',                                    # performance options...
     '-O3',
@@ -71,20 +70,27 @@ kanban_app_c_args = [
     '-Wall',                                    # warning options...
     '-Wextra',
     '-Werror=format-security',
-    '-Werror=implicit-function-declaration',
     '-Wpedantic'
 ]
 
-if meson.get_compiler('c').get_id() == 'gcc'
+compiler = meson.get_compiler('c')
+
+if compiler.get_id() == 'gcc'
     kanban_app_c_args += [
-      '-fstack-clash-protection',
       '-shared',
     ]
+    if compiler.version().split('.')[0].to_int() >= 8
+      kanban_app_c_args += [
+        '-fstack-clash-protection',
+        '-fcf-protection',
+      ]
+    endif
 endif
 
 if meson.get_compiler('c').get_id() == 'clang'
     kanban_app_c_args += [
       '-Wno-missing-field-initializers',        # Remove { NULL }; warnings
+      '-fcf-protection',
     ]
 endif
 
