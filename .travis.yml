@@ -9,7 +9,7 @@ compiler:
 
 install:
   - sudo apt-get update
-  - sudo apt-get -y install python3-pip python3-setuptools   # meson requires python >= 3.5.2
+  - sudo apt-get -y install python3-pip python3-setuptools python3-wheel  # meson requires python >= 3.5.2
   - pip3 install meson ninja   # use pip as version in repos < 0.49
   - sudo apt-get -y install libxml2-utils   # for xmllint use in glib-compile-resources
   - sudo apt-get -y install libgtk-3-dev
