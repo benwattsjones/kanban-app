@@ -1,7 +1,7 @@
 dist: bionic
 os: linux
 
-language: python
+language: cpp
 
 compiler:
   - gcc
