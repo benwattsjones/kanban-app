@@ -5,6 +5,7 @@ language: python
 
 compiler:
   - gcc
+  - clang
 
 install:
   - pip install meson ninja   # use pip as version in repos < 0.49
