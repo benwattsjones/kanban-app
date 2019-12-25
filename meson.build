@@ -3,7 +3,7 @@ project(
        ['c', 'cpp'],
     default_options: ['c_std=gnu11', 'cpp_std=c++11', 'b_ndebug=if-release'],
             license: 'GPL-3.0-or-later',
-      meson_version: '>=0.50.0',
+      meson_version: '>=0.49.0',    # 'pie' added in v0.49
             version: '0.0.1'
 )
 
