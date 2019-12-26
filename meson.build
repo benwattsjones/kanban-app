@@ -120,8 +120,14 @@ executable(
      include_directories: [src_inc, config_h_inc]
 )
 
+if not dependency('gtest_main', required: false).found()
+    run_command(['mkdir', 'subprojects'])
+    run_command(['meson', 'wrap', 'install', 'gtest'])
+endif
+
 test_deps = [
-    dependency('gtest_main', main: true, required: false)
+    dependency('gtest_main', fallback: ['gtest', 'gtest_main_dep'],
+               main: true, required: false)
 ]
 
 subdir('tests', if_found: test_deps)
