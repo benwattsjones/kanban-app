@@ -90,7 +90,6 @@ endif
 if meson.get_compiler('c').get_id() == 'clang'
     kanban_app_c_args += [
       '-Wno-missing-field-initializers',        # Remove { NULL }; warnings
-      '-fcf-protection',
     ]
 endif
 
