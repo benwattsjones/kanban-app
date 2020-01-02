@@ -16,5 +16,5 @@ install:
   - sudo apt-get -y install libgtk-3-dev
 
 script:
-  - meson builddir && ninja -C builddir && meson test -C builddir
+  - meson builddir && ninja -C builddir && meson test -C builddir && meson test -C builddir --setup=valgrind
   - ./builddir/kanban-app --version
