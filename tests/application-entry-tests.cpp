@@ -27,21 +27,11 @@ extern "C"
 #include "gtest/gtest.h"
 
 // Stubs:
-static struct _FunctionCallTracker
-{
-  int func_call_counter = 0;
-  int initialize_kanban_view_func_count = 0;
-  int initialize_viewmodel_func_count = 0;
-  int destroy_viewmodel_func_count = 0;
-} FunctionCallTracker, FunctionCallTrackerReset;
-
 extern "C"
 {
   KanbanWindow *kanban_window_new (GApplication *app)
   {
     (void) app;
-    FunctionCallTracker.initialize_kanban_view_func_count =
-        ++FunctionCallTracker.func_call_counter;
     return NULL;
   }
 
@@ -52,16 +42,12 @@ extern "C"
   KanbanBoardPresenter *kanban_board_presenter_new (KanbanBoardObserver *view_observer)
   {
     (void) view_observer;
-    FunctionCallTracker.initialize_viewmodel_func_count =
-        ++FunctionCallTracker.func_call_counter;
     return NULL;
   }
 
   void kanban_board_presenter_destroy (KanbanBoardPresenter *self)
   {
     (void) self;
-    FunctionCallTracker.destroy_viewmodel_func_count =
-        ++FunctionCallTracker.func_call_counter;
   }
 
   KanbanBoardView *kanban_board_view_new ()
@@ -95,7 +81,6 @@ protected:
   {
     printed_string = NULL;
     g_set_print_handler (redirect_gprint);
-    FunctionCallTracker = FunctionCallTrackerReset;
     app = g_object_new (KANBAN_TYPE_APPLICATION,
                         "application-id", APPLICATION_ID,
                         "flags", G_APPLICATION_HANDLES_OPEN,
@@ -112,12 +97,6 @@ protected:
 gchar *ApplicationEntryTests::printed_string = NULL;
 
 // Tests:
-TEST_F (ApplicationEntryTests, checkExitCodeSuccess)
-{
-  int status = g_application_run (G_APPLICATION (app), argc_stub, argv_stub);
-  EXPECT_EQ (status, 0);
-}
-
 TEST_F (ApplicationEntryTests, checkVersionOptionPrints)
 {
   char *prog_name = g_strdup("prog");
@@ -130,18 +109,8 @@ TEST_F (ApplicationEntryTests, checkVersionOptionPrints)
   g_free (cmd_options);
 }
 
-TEST_F (ApplicationEntryTests, checkInitializationCallOrder)
-{
-  int status = g_application_run (G_APPLICATION (app), argc_stub, argv_stub);
-  EXPECT_EQ (status, 0);
-  EXPECT_EQ (FunctionCallTracker.initialize_viewmodel_func_count, 1);
-  EXPECT_EQ (FunctionCallTracker.initialize_kanban_view_func_count, 2);
-  EXPECT_EQ (FunctionCallTracker.destroy_viewmodel_func_count, 3);
-}
-
 TEST_F (ApplicationEntryTests, checkInitializationFunctionReturnsSuccess)
 {
   int status = initialize_kanban_application (argc_stub, argv_stub);
   EXPECT_EQ(status, 0);
 }
-
